@@ -60,6 +60,10 @@ def generate_python_etl(plan: Dict[str, Any], assessment: Dict[str, Any]) -> str
     """Generate one transform_* function per dataset in the plan."""
     _ = assessment  # reserved for future: dtypes / paths from assessment
     plan_id = str(plan.get("plan_id") or "unknown")
+    business_rules: Dict[str, Any] = plan.get("business_rules") or {}
+    valid_values_rules: Dict[str, List[Any]] = business_rules.get("valid_values") or {}
+    non_nullable_cols: List[str] = business_rules.get("non_nullable") or []
+    required_columns: List[str] = business_rules.get("required_columns") or []
 
     lines: List[str] = [
         '"""',
@@ -68,11 +72,12 @@ def generate_python_etl(plan: Dict[str, Any], assessment: Dict[str, Any]) -> str
         '"""',
         "from __future__ import annotations",
         "",
+        "import sys",
         "import pandas as pd",
         "",
     ]
 
-    notes_raw = (plan.get("business_rules") or {}).get("notes") or ""
+    notes_raw = business_rules.get("notes") or ""
     notes = "\n".join(
         line for line in str(notes_raw).strip().splitlines() if line.strip()
     )
@@ -96,6 +101,26 @@ def generate_python_etl(plan: Dict[str, Any], assessment: Dict[str, Any]) -> str
         lines.append(f'    """Clean transforms for dataset: {ds_name}"""')
         ds_var = "out"
         lines.append(f"    {ds_var} = df.copy()")
+
+        # --- Runtime guard: required columns must exist before any transform ---
+        if required_columns:
+            lines.append("")
+            lines.append("    # Required-column guard (business rule)")
+            lines.append(f"    _required = {repr(required_columns)}")
+            lines.append(f"    _missing = [c for c in _required if c not in {ds_var}.columns]")
+            lines.append("    if _missing:")
+            lines.append("        raise ValueError(f\"Required columns missing: {_missing}\"  )")
+
+        # --- Runtime guard: non_nullable columns must not be all-null ---
+        if non_nullable_cols:
+            lines.append("")
+            lines.append("    # Non-nullable guard (business rule)")
+            for col in non_nullable_cols:
+                c = _col_expr(col)
+                lines.append(f"    if {c} in {ds_var}.columns and {ds_var}[{c}].isna().all():")
+                lines.append(f"        raise ValueError(\"Column {col} is entirely null — violates non_nullable rule\")")
+
+        lines.append("")
         steps = sorted(block.get("steps") or [], key=lambda x: int(x.get("order") or 0))
         if not steps:
             lines.append("    # No auto-fixable steps found — check manual_review items above")
@@ -106,6 +131,17 @@ def generate_python_etl(plan: Dict[str, Any], assessment: Dict[str, Any]) -> str
                 lines.append(f"    # Note: {note}")
             for sl in _emit_step(action, st.get("column"), ds_var):
                 lines.append(f"    {sl}")
+
+        # --- valid_values filter: drop rows with disallowed values ---
+        if valid_values_rules:
+            lines.append("")
+            lines.append("    # Valid-values filter (business rule): removes rows with disallowed values")
+            for col, allowed in valid_values_rules.items():
+                c = _col_expr(col)
+                lines.append(f"    if {c} in {ds_var}.columns:")
+                lines.append(f"        _allowed_{_safe_ident(col)} = {repr(list(allowed))}")
+                lines.append(f"        {ds_var} = {ds_var}[{ds_var}[{c}].isin(_allowed_{_safe_ident(col)}) | {ds_var}[{c}].isna()]")
+
         lines.append(f"    return {ds_var}")
         lines.append("")
 
@@ -115,8 +151,29 @@ def generate_python_etl(plan: Dict[str, Any], assessment: Dict[str, Any]) -> str
 
     lines.append("DATASET_NAMES = " + repr(list(ds_plan.keys())))
     lines.append("")
+
+    # --- HOW TO USE: copy-paste ready entry point ---
+    lines.append("# ─────────────────────────────────────────────────────────────")
+    lines.append("# HOW TO USE — copy-paste the block below into your pipeline")
+    lines.append("# ─────────────────────────────────────────────────────────────")
     lines.append("if __name__ == '__main__':")
-    lines.append("    print('Defines transform_* functions — import from your pipeline.')")
+    if ds_plan:
+        first_ds = next(iter(ds_plan))
+        fn_first = f"transform_{_safe_ident(first_ds)}"
+        lines.append(f"    # Example: run the transform for '{first_ds}'")
+        lines.append(f"    import pandas as pd")
+        lines.append(f"    df_raw = pd.read_csv('your_input_file.csv')   # ← replace with your source")
+        lines.append(f"    df_clean = {fn_first}(df_raw)")
+        lines.append(f"    df_clean.to_csv('output_cleaned.csv', index=False)")
+        lines.append(f"    print(f'Done — {{len(df_clean)}} rows written to output_cleaned.csv')")
+        if len(ds_plan) > 1:
+            lines.append(f"")
+            lines.append(f"    # To run ALL datasets:")
+            for ds_nm in list(ds_plan.keys()):
+                fn = f"transform_{_safe_ident(ds_nm)}"
+                lines.append(f"    # {fn}(pd.read_csv('{ds_nm}.csv')).to_csv('{ds_nm}_clean.csv', index=False)")
+    else:
+        lines.append("    print('No datasets were included in this plan.')")
     lines.append("")
 
     return "\n".join(lines)
