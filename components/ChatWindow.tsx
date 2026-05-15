@@ -26,6 +26,7 @@ import Image from 'next/image';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import ReportEnhancements from '@/components/ReportEnhancements';
+import EtlGenerationPanel from '@/components/EtlGenerationPanel';
 import {
   humanizeSeverityLabel,
   humanizeSnakeIdentifier,
@@ -725,6 +726,15 @@ export default function ChatWindow({ gxEnabled = false }: { gxEnabled?: boolean 
               />
             </div>
           )}
+
+          <div className={`pt-6 border-t ${gxEnabled ? 'border-emerald-400/20' : 'border-emerald-500/25'}`}>
+            <EtlGenerationPanel
+              sessionId={sessionId}
+              assessment={result as Record<string, unknown>}
+              variant="chat"
+              darkMode={gxEnabled}
+            />
+          </div>
         </div>
       );
     };

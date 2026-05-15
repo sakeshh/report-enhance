@@ -102,6 +102,26 @@ class SessionContextPayload(BaseModel):
     context: Dict[str, Any]
 
 
+class EtlPlanPayload(BaseModel):
+    session_id: str = "default"
+    business_rules: Optional[Dict[str, Any]] = None
+    assessment_result: Optional[Dict[str, Any]] = None
+    engine: Optional[str] = "python"
+    codegen_engine: Optional[str] = None
+    sql_dialect: Optional[str] = "tsql"
+
+
+class EtlConfirmPayload(BaseModel):
+    session_id: str = "default"
+    plan: Optional[Dict[str, Any]] = None
+
+
+class EtlGeneratePayload(BaseModel):
+    session_id: str = "default"
+    engine: Optional[str] = "python"
+    sql_dialect: Optional[str] = "tsql"
+
+
 setup_logging()
 logger = logging.getLogger("mcp_server")
 
@@ -417,6 +437,41 @@ def api_update_session_context(payload: SessionContextPayload) -> Dict[str, Any]
         ctx[str(k)] = v
     save_session(sess)
     return {"ok": True, "session_id": sid, "context_keys": list(ctx.keys())}
+
+
+@app.post("/etl/plan")
+def api_etl_plan(payload: EtlPlanPayload) -> Dict[str, Any]:
+    """Build ETL plan from assessment + business rules; stores under session.context.etl_flow."""
+    from agent.etl_handlers import etl_plan_start
+
+    return etl_plan_start(
+        payload.session_id,
+        payload.business_rules,
+        assessment_result=payload.assessment_result,
+        engine=payload.engine or "python",
+        codegen_engine=payload.codegen_engine,
+        sql_dialect=payload.sql_dialect or "tsql",
+    )
+
+
+@app.post("/etl/confirm")
+def api_etl_confirm(payload: EtlConfirmPayload) -> Dict[str, Any]:
+    """Confirm (optionally edited) plan and compute impact preview."""
+    from agent.etl_handlers import etl_confirm_plan
+
+    return etl_confirm_plan(payload.session_id, plan_override=payload.plan)
+
+
+@app.post("/etl/generate")
+def api_etl_generate(payload: EtlGeneratePayload) -> Dict[str, Any]:
+    """Generate Python ETL from approved plan; validates with ast.parse."""
+    from agent.etl_handlers import etl_generate_code
+
+    return etl_generate_code(
+        payload.session_id,
+        engine=payload.engine or "python",
+        sql_dialect=payload.sql_dialect or "tsql",
+    )
 
 
 @app.post("/jobs")

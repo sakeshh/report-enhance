@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaDatabase, FaFileAlt, FaChartBar, FaCode, FaCheck, FaArrowLeft, FaDownload, FaEye, FaArrowRight, FaClipboardList } from 'react-icons/fa';
 import { useRouter } from 'next/navigation';
@@ -8,11 +8,9 @@ import AnimatedBackground from '@/components/AnimatedBackground';
 import DatabaseSelector from '@/components/DatabaseSelector';
 import FileSelector from '@/components/FileSelector';
 import DataAssessmentReport from '@/components/DataAssessmentReport';
-import ETLCodeGenerator from '@/components/ETLCodeGenerator';
+import EtlGenerationPanel from '@/components/EtlGenerationPanel';
 import DataCleaner from '@/components/DataCleaner';
 import Confetti from '@/components/Confetti';
-import BusinessRequirements from '@/components/BusinessRequirements';
-
 type Step = 'database' | 'files' | 'requirements' | 'assessment' | 'report' | 'etl' | 'cleaning' | 'complete';
 
 function generateHtmlReportFromBackend(html: string): string {
@@ -36,13 +34,18 @@ export default function DataPipelinePage() {
   const [selectedDatabase, setSelectedDatabase] = useState<string | null>(null);
   const [selectedFiles, setSelectedFiles] = useState<string[]>([]);
   const [availableFiles, setAvailableFiles] = useState<string[]>([]);
-  const [businessRequirements, setBusinessRequirements] = useState<string>('');
   const [assessmentData, setAssessmentData] = useState<any>(null);
   const [reportFormat, setReportFormat] = useState<string | null>(null);
   const [showReportView, setShowReportView] = useState(false);
   const [etlCode, setEtlCode] = useState<string | null>(null);
   const [includeTransformSuggestions, setIncludeTransformSuggestions] = useState<boolean>(true);
   const [includeDqRecommendations, setIncludeDqRecommendations] = useState<boolean>(true);
+  const [etlSessionId, setEtlSessionId] = useState('default');
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    setEtlSessionId(window.localStorage.getItem('dharaSessionId') || 'default');
+  }, [assessmentData]);
   const [userFeedback, setUserFeedback] = useState<Array<{
     step: string;
     liked: boolean;
@@ -109,16 +112,6 @@ export default function DataPipelinePage() {
     setShowReportView(false);
     setDirection('forward');
     setCurrentStep('requirements');
-  };
-
-  const handleProceedFromRequirements = () => {
-    setDirection('forward');
-    setCurrentStep('etl');
-  };
-
-  const handleGenerateETL = () => {
-    setDirection('forward');
-    setCurrentStep('etl');
   };
 
   const handleETLGenerated = (code: string) => {
@@ -350,7 +343,7 @@ export default function DataPipelinePage() {
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
                       >
-                        Continue to Requirements
+                        Continue to ETL rules & plan
                         <FaArrowRight className="w-4 h-4" />
                       </motion.button>
                     )}
@@ -389,7 +382,7 @@ export default function DataPipelinePage() {
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
                       >
-                        Add Requirements
+                        Continue to ETL rules & plan
                         <FaArrowRight className="w-4 h-4" />
                       </motion.button>
                     </div>
@@ -399,22 +392,47 @@ export default function DataPipelinePage() {
             )}
 
             {currentStep === 'requirements' && (
-              <BusinessRequirements
-                value={businessRequirements}
-                onChange={setBusinessRequirements}
-                onNext={handleProceedFromRequirements}
-              />
+              <div className="space-y-6">
+                {!assessmentData ? (
+                  <p className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-950">
+                    Complete assessment and report before defining ETL rules and plan.
+                  </p>
+                ) : (
+                  <EtlGenerationPanel
+                    sessionId={etlSessionId}
+                    assessment={(assessmentData?.result ?? assessmentData) as Record<string, unknown>}
+                    variant="pipeline"
+                    pipelineMode="requirements"
+                    onContinueToEtlStep={() => {
+                      setDirection('forward');
+                      setCurrentStep('etl');
+                    }}
+                  />
+                )}
+              </div>
             )}
 
             {currentStep === 'etl' && (
-              <ETLCodeGenerator
-                files={selectedFiles}
-                assessmentData={assessmentData}
-                businessRequirements={businessRequirements}
-                onGenerated={handleETLGenerated}
-                onNext={handleStartCleaning}
-                onFeedback={(liked, comment) => handleFeedback('etl', liked, comment)}
-              />
+              <div className="space-y-4">
+                {!assessmentData ? (
+                  <p className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-950">
+                    Complete earlier steps before generating ETL code.
+                  </p>
+                ) : (
+                  <EtlGenerationPanel
+                    sessionId={etlSessionId}
+                    assessment={(assessmentData?.result ?? assessmentData) as Record<string, unknown>}
+                    variant="pipeline"
+                    pipelineMode="etl"
+                    onEditPlanInRequirements={() => {
+                      setDirection('back');
+                      setCurrentStep('requirements');
+                    }}
+                    onCodeGenerated={handleETLGenerated}
+                    onContinueAfterCode={handleStartCleaning}
+                  />
+                )}
+              </div>
             )}
 
             {currentStep === 'cleaning' && (

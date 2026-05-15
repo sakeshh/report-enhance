@@ -48,6 +48,8 @@ ISSUE_TO_ACTION = {
     "empty_dataset": "review_manually",
     "duplicate_column_names": "review_manually",
     "case_insensitive_column_collision": "review_manually",
+    # Values differ only by casing — normalize in ETL (aligns with assessment recommendation)
+    "case_inconsistency": "lowercase",
     "very_wide_table": "review_manually",
     "column_name_whitespace": "review_manually",
     "very_high_cardinality": "review_manually",

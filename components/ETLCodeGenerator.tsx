@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { FaCode, FaCopy, FaCheck, FaThumbsUp, FaThumbsDown, FaDownload, FaDatabase, FaUpload, FaEdit } from 'react-icons/fa';
 import { SiPython, SiApachespark } from 'react-icons/si';
@@ -22,25 +22,6 @@ export default function ETLCodeGenerator({ files, assessmentData, businessRequir
   const [copied, setCopied] = useState(false);
   const [showOptions, setShowOptions] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-
-  useEffect(() => {
-    generateCode();
-  }, [selectedLanguage]);
-
-  const generateCode = async () => {
-    setGenerating(true);
-    setProgress(0);
-
-    for (let i = 0; i <= 100; i += 10) {
-      await new Promise(resolve => setTimeout(resolve, 150));
-      setProgress(i);
-    }
-
-    const code = getCodeTemplate(selectedLanguage);
-    setGeneratedCode(code);
-    setGenerating(false);
-    onGenerated(code);
-  };
 
   const getCodeTemplate = (language: string) => {
     const req = (businessRequirements ?? '').trim();
@@ -239,6 +220,25 @@ ${files.map(file => `
 
     return language === 'python' ? pythonCode : language === 'spark' ? sparkCode : sqlCode;
   };
+
+  // getCodeTemplate uses files + businessRequirements from closure
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- getCodeTemplate is recreated when those deps change
+  const generateCode = useCallback(async () => {
+    setGenerating(true);
+    setProgress(0);
+    for (let i = 0; i <= 100; i += 10) {
+      await new Promise((resolve) => setTimeout(resolve, 150));
+      setProgress(i);
+    }
+    const code = getCodeTemplate(selectedLanguage);
+    setGeneratedCode(code);
+    setGenerating(false);
+    onGenerated(code);
+  }, [selectedLanguage, files, businessRequirements, onGenerated]);
+
+  useEffect(() => {
+    void generateCode();
+  }, [generateCode]);
 
   const handleCopy = () => {
     navigator.clipboard.writeText(generatedCode);
