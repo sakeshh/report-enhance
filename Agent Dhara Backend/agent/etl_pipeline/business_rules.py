@@ -54,9 +54,10 @@ def normalize_business_rules(raw: Any) -> Dict[str, Any]:
     return {
         "never_drop_rows": _bool(raw.get("never_drop_rows") or raw.get("neverDropRows"), False),
         "required_columns": req,
-        "non_nullable": [c.lower() for c in nn],
-        "exclude_columns": sorted({c.lower() for c in excl}),
-        "valid_values": {str(k).lower(): list(v) if isinstance(v, list) else [str(v)] for k, v in vv.items()},
+        "non_nullable": nn,
+        "exclude_columns": sorted(set(excl)),
+        "valid_values": {str(k): list(v) if isinstance(v, list) else [str(v)] for k, v in vv.items()},
+        "outlier_strategy": str(raw.get("outlier_strategy") or raw.get("outlierStrategy") or "flag").lower(),
         "notes": notes,
     }
 
@@ -64,5 +65,6 @@ def normalize_business_rules(raw: Any) -> Dict[str, Any]:
 def column_is_excluded(column: str | None, exclude: Any) -> bool:
     if not column or not exclude:
         return False
-    ex = exclude if isinstance(exclude, (set, frozenset)) else set(exclude)
-    return column.strip().lower() in ex
+    # Use lowercase set for matching but preserve original case in rules
+    ex_lower = {str(c).lower() for c in (exclude if isinstance(exclude, (list, set, frozenset)) else list(exclude))}
+    return column.strip().lower() in ex_lower

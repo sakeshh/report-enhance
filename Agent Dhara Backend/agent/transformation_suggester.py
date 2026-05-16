@@ -15,7 +15,7 @@ from typing import Any, Dict, List
 # Full action set: trim, parse_dates, fill_or_drop, coerce_numeric, clip_or_flag, deduplicate,
 # currency_normalize, replace_values, uppercase, lowercase, fill_forward, fill_backward, fill_sequence,
 # standardize_boolean, word_to_number, normalize_phone, regex_replace, range_clip,
-# sanitize_email, flatten_nested, zero_to_null
+# sanitize_email, flatten_nested, zero_to_null, cast_type
 ISSUE_TO_ACTION = {
     "whitespace": "trim",
     "nulls": "fill_or_drop",
@@ -44,7 +44,7 @@ ISSUE_TO_ACTION = {
     "constant_column": "review_manually",
     "dominant_value_skew": "review_manually",
     "skewed_distribution": "review_manually",
-    "integer_stored_as_float": "review_manually",
+    "integer_stored_as_float": "cast_type",
     "empty_dataset": "review_manually",
     "duplicate_column_names": "review_manually",
     "case_insensitive_column_collision": "review_manually",

@@ -23,13 +23,17 @@ def _emit_step(action: str, col: Optional[str], ds_var: str) -> List[str]:
         return lines
 
     c = _col_expr(col)
+    flag_col = _col_expr(f"{col}_outlier_flagged")
+    
     if action == "trim":
         lines.append(f"{ds_var}[{c}] = {ds_var}[{c}].astype(str).str.strip()")
     elif action in ("fill_or_drop", "fill_nulls_simple"):
         lines.append(f"{ds_var}[{c}] = {ds_var}[{c}].fillna(pd.NA)")
     elif action == "coerce_numeric":
         lines.append(f"{ds_var}[{c}] = pd.to_numeric({ds_var}[{c}], errors='coerce')")
-        lines.append(f"{ds_var}[{c}] = {ds_var}[{c}].astype('Int64')  # nullable integer — avoids float drift")
+    elif action == "cast_type":
+        # Supports Int64 for nullable integers as requested by reviewer
+        lines.append(f"{ds_var}[{c}] = {ds_var}[{c}].astype('Int64')")
     elif action == "parse_dates":
         lines.append(f"{ds_var}[{c}] = pd.to_datetime({ds_var}[{c}], errors='coerce')")
     elif action == "sanitize_email":
@@ -47,8 +51,35 @@ def _emit_step(action: str, col: Optional[str], ds_var: str) -> List[str]:
         lines.append(f"{ds_var}[{c}] = _v.isin(('1', 'true', 'yes', 'y', 't')).astype('Int64')")
     elif action == "deduplicate":
         lines.append(f"{ds_var} = {ds_var}.drop_duplicates(subset=[{c}], keep='first')")
-    elif action in ("regex_replace", "clip_or_flag", "range_clip", "replace_values", "zero_to_null"):
-        lines.append(f"# TODO: {action} on column {c} — implement with business approval")
+    elif action == "zero_to_null":
+        lines.append(f"{ds_var}[{c}] = {ds_var}[{c}].replace(0, pd.NA)")
+    elif action in ("clip_or_flag", "flag_outliers"):
+        # For numeric outliers detected by IQR: flag them in a separate column
+        lines.append(f"_q1 = {ds_var}[{c}].quantile(0.25)")
+        lines.append(f"_q3 = {ds_var}[{c}].quantile(0.75)")
+        lines.append(f"_iqr = _q3 - _q1")
+        lines.append(f"_lower = _q1 - 1.5 * _iqr")
+        lines.append(f"_upper = _q3 + 1.5 * _iqr")
+        lines.append(f"{ds_var}[{flag_col}] = ((({ds_var}[{c}] < _lower) | ({ds_var}[{c}] > _upper)) & {ds_var}[{c}].notna()).astype(bool)")
+    elif action == "clip_outliers":
+        lines.append(f"_q1 = {ds_var}[{c}].quantile(0.25)")
+        lines.append(f"_q3 = {ds_var}[{c}].quantile(0.75)")
+        lines.append(f"_iqr = _q3 - _q1")
+        lines.append(f"{ds_var}[{c}] = {ds_var}[{c}].clip(lower=_q1 - 1.5 * _iqr, upper=_q3 + 1.5 * _iqr)")
+    elif action == "cap_outliers":
+        lines.append(f"_median = {ds_var}[{c}].median()")
+        lines.append(f"_q1 = {ds_var}[{c}].quantile(0.25)")
+        lines.append(f"_q3 = {ds_var}[{c}].quantile(0.75)")
+        lines.append(f"_iqr = _q3 - _q1")
+        lines.append(f"_mask = ({ds_var}[{c}] < _q1 - 1.5 * _iqr) | ({ds_var}[{c}] > _q3 + 1.5 * _iqr)")
+        lines.append(f"{ds_var}.loc[_mask, {c}] = _median")
+    elif action == "range_clip":
+        lines.append(f"# Range clip on {c}: preserving rows but bounding values")
+        lines.append(f"{ds_var}[{c}] = pd.to_numeric({ds_var}[{c}], errors='coerce').clip(lower=0)")
+    elif action == "replace_values":
+        lines.append(f"# Replace specific values on column {c} — define mapping in business_rules")
+    elif action == "regex_replace":
+        lines.append(f"{ds_var}[{c}] = {ds_var}[{c}].astype(str).str.replace(r'[^\\w\\s]', '', regex=True)")
     elif action == "validate_referential_integrity_or_stage":
         lines.append(f"# Referential integrity involving {c} — validate in staging/warehouse")
     else:
@@ -74,6 +105,9 @@ def generate_python_etl(plan: Dict[str, Any], assessment: Dict[str, Any]) -> str
         "",
         "import sys",
         "import pandas as pd",
+        "import logging",
+        "",
+        "logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')",
         "",
     ]
 
@@ -109,6 +143,7 @@ def generate_python_etl(plan: Dict[str, Any], assessment: Dict[str, Any]) -> str
             lines.append(f"    _required = {repr(required_columns)}")
             lines.append(f"    _missing = [c for c in _required if c not in {ds_var}.columns]")
             lines.append("    if _missing:")
+            lines.append(f"        logging.error(f'Required columns missing in {ds_name}: {{_missing}}')")
             lines.append("        raise ValueError(f\"Required columns missing: {_missing}\"  )")
 
         # --- Runtime guard: non_nullable columns must not be all-null ---
@@ -118,6 +153,7 @@ def generate_python_etl(plan: Dict[str, Any], assessment: Dict[str, Any]) -> str
             for col in non_nullable_cols:
                 c = _col_expr(col)
                 lines.append(f"    if {c} in {ds_var}.columns and {ds_var}[{c}].isna().all():")
+                lines.append(f"        logging.error(f'Column {col} in {ds_name} is entirely null')")
                 lines.append(f"        raise ValueError(\"Column {col} is entirely null — violates non_nullable rule\")")
 
         lines.append("")
@@ -129,8 +165,24 @@ def generate_python_etl(plan: Dict[str, Any], assessment: Dict[str, Any]) -> str
             note = st.get("note")
             if note:
                 lines.append(f"    # Note: {note}")
+            # Log destructive or major actions
+            if action in ("exclude_column", "drop_nulls", "deduplicate", "cast_type"):
+                lines.append(f"    logging.info(f'Applying {action} to {st.get('column')} in {ds_name}')")
             for sl in _emit_step(action, st.get("column"), ds_var):
                 lines.append(f"    {sl}")
+
+        # --- Exclude columns: drop unwanted columns from output ---
+        exclude_cols = business_rules.get("exclude_columns") or []
+        if exclude_cols:
+            lines.append("")
+            lines.append("    # Exclude columns (business rule): remove unwanted columns from output")
+            exclude_cols_exist = [c for c in exclude_cols if c]
+            if exclude_cols_exist:
+                lines.append(f"    _exclude = {repr(exclude_cols_exist)}")
+                lines.append(f"    _to_drop = [c for c in _exclude if c in {ds_var}.columns]")
+                lines.append(f"    if _to_drop:")
+                lines.append(f"        logging.info(f'Dropping excluded columns in {ds_name}: {{_to_drop}}')")
+                lines.append(f"        {ds_var} = {ds_var}.drop(columns=_to_drop)")
 
         # --- valid_values filter: drop rows with disallowed values ---
         if valid_values_rules:
@@ -140,7 +192,11 @@ def generate_python_etl(plan: Dict[str, Any], assessment: Dict[str, Any]) -> str
                 c = _col_expr(col)
                 lines.append(f"    if {c} in {ds_var}.columns:")
                 lines.append(f"        _allowed_{_safe_ident(col)} = {repr(list(allowed))}")
+                lines.append(f"        _before = len({ds_var})")
                 lines.append(f"        {ds_var} = {ds_var}[{ds_var}[{c}].isin(_allowed_{_safe_ident(col)}) | {ds_var}[{c}].isna()]")
+                lines.append(f"        _dropped = _before - len({ds_var})")
+                lines.append(f"        if _dropped > 0:")
+                lines.append(f"            logging.info(f'Dropped {{_dropped}} rows in {ds_name} due to valid_values rule on {col}')")
 
         lines.append(f"    return {ds_var}")
         lines.append("")

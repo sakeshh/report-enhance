@@ -15,6 +15,7 @@ _ACTION_PRIORITY: Dict[str, int] = {
     "uppercase": 8,
     "fill_or_drop": 20,
     "fill_nulls_simple": 20,
+    "cast_type": 35,
     "coerce_numeric": 40,
     "parse_dates": 45,
     "sanitize_email": 50,
@@ -22,6 +23,9 @@ _ACTION_PRIORITY: Dict[str, int] = {
     "regex_replace": 60,
     "range_clip": 65,
     "clip_or_flag": 65,
+    "flag_outliers": 65,
+    "clip_outliers": 65,
+    "cap_outliers": 65,
     "standardize_boolean": 70,
     "replace_values": 75,
     "deduplicate": 200,
@@ -129,6 +133,16 @@ def build_etl_plan(
             continue
 
         action2, override_note = _apply_rules_to_action(action, col, rules)
+
+        # Route outlier strategy
+        if action2 == "clip_or_flag":
+            strategy = rules.get("outlier_strategy", "flag")
+            if strategy == "clip":
+                action2 = "clip_outliers"
+            elif strategy == "cap":
+                action2 = "cap_outliers"
+            else:
+                action2 = "flag_outliers"
 
         if col and rules.get("non_nullable") and col.strip().lower() in (rules.get("non_nullable") or []):
             if action2 in ("fill_or_drop", "fill_nulls_simple") and not rules.get("never_drop_rows"):

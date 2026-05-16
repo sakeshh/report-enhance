@@ -12,6 +12,8 @@ from agent.etl_pipeline import (
     generate_python_etl,
     normalize_business_rules,
 )
+from agent.etl_pipeline.llm_codegen import generate_etl_with_llm
+
 from agent.etl_pipeline.validate_python import validate_python_source
 
 
@@ -128,10 +130,16 @@ def etl_generate_code(session_id: str, engine: str = "python", sql_dialect: str 
     fname: str = f"etl_{pid}.py"
 
     if eng == "python":
-        code = generate_python_etl(plan, assess)
+        # Try AI generation first to handle natural language notes
+        code = generate_etl_with_llm(plan, assess, engine="python")
+        if code.startswith("# Error"):
+            # Fallback to template if AI fails or no credentials
+            code = generate_python_etl(plan, assess)
+        
         ok, errs = validate_python_source(code)
         fname = f"etl_{pid}.py"
         ext = "python"
+
     elif eng in ("sql", "tsql", "ansi"):
         from agent.etl_pipeline.sql_codegen import generate_sql_etl
         from agent.etl_pipeline.validate_sql import validate_sql_basic
@@ -141,10 +149,16 @@ def etl_generate_code(session_id: str, engine: str = "python", sql_dialect: str 
             dialect = "ansi"
         elif eng == "tsql":
             dialect = "tsql"
-        code = generate_sql_etl(plan, assess, dialect=dialect)
+            
+        # Try AI generation for SQL
+        code = generate_etl_with_llm(plan, assess, engine=f"sql-{dialect}")
+        if code.startswith("# Error"):
+            code = generate_sql_etl(plan, assess, dialect=dialect)
+            
         ok, errs = validate_sql_basic(code)
         fname = f"etl_{pid}.sql"
         ext = "sql"
+
     elif eng in ("spark", "pyspark"):
         from agent.etl_pipeline.pyspark_codegen import generate_pyspark_etl
 
