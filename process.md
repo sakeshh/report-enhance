@@ -372,7 +372,7 @@ LLMs can occasionally omit numbers or re-order them, so the backend router:
 - Routes to `select_tables` / `select_blob_files` / `select_local_files`
 without the LLM
 
-This makes “Select all” reliable.
+This makes “Select all” reliable.+
 
 ### Why HTML is embedded with iframe `srcDoc`
 

@@ -36,6 +36,11 @@ from agent.conversational_intents import (
     fallback_router_intent,
     _is_adversarial,
     _is_ood,
+    _is_etl_generate,
+    _is_etl_show_plan,
+    _is_etl_approve,
+    _is_etl_download,
+    _is_etl_capture_rules,
 )
 from agent.llm_router import classify_intent_for_chat
 from agent.agent_system_prompt import OUT_OF_SCOPE_REPLY, ADVERSARIAL_REPLY
@@ -121,16 +126,17 @@ def route_message(
             "reply": ADVERSARIAL_REPLY,
         }
 
-    # ── Layer 1b: Code generation guard (before keyword matching) ────────────
-    if any(k in low for k in _CODE_KEYWORDS):
-        logger.info("Router: code generation request blocked")
-        return {
-            "intent": 7,
-            "tool": "none",
-            "reason": "code_generation_not_supported",
-            "source": "code_guard",
-            "reply": _CODE_OOS_REPLY,
-        }
+    # ── Layer 1b: ETL pipeline intents (route to etl_handlers via chat graph) ─
+    if _is_etl_download(low):
+        return {"intent": 13, "reason": "etl_download", "source": "etl_router"}
+    if _is_etl_approve(low):
+        return {"intent": 12, "reason": "etl_approve", "source": "etl_router"}
+    if _is_etl_show_plan(low):
+        return {"intent": 11, "reason": "etl_show_plan", "source": "etl_router"}
+    if _is_etl_capture_rules(low):
+        return {"intent": 14, "reason": "etl_capture_rules", "source": "etl_router"}
+    if _is_etl_generate(low) or any(k in low for k in _CODE_KEYWORDS):
+        return {"intent": 10, "reason": "etl_generate", "source": "etl_router"}
 
     # ── Layer 1c: General OOD keyword guard ──────────────────────────────────
     if _is_ood(low):

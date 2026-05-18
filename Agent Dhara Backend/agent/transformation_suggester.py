@@ -267,6 +267,23 @@ def suggest_transformations(assessment_result: Dict[str, Any]) -> Dict[str, Any]
             }
         )
 
+    for row_iss in global_issues.get("relationship_row_issues") or []:
+        if str(row_iss.get("type") or "") != "orphan_foreign_key_rows":
+            continue
+        suggested.append(
+            {
+                "dataset": row_iss.get("dataset"),
+                "column": row_iss.get("column"),
+                "issue_type": "orphan_foreign_key_rows",
+                "severity": row_iss.get("severity", "high"),
+                "message": row_iss.get("message", ""),
+                "suggested_action": "validate_referential_integrity_or_stage",
+                "manual_guidance": row_iss.get("recommendation") or _get_manual_guidance("orphan_foreign_key"),
+                "row_count_affected": row_iss.get("count"),
+                "auto_fixable": False,
+            }
+        )
+
     # Summary
     by_action: Dict[str, int] = {}
     by_dataset_count: Dict[str, int] = {}

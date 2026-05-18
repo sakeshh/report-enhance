@@ -314,8 +314,27 @@ def profile_dataframe(df: pd.DataFrame, job_id: Optional[str] = None) -> Dict[st
             "null_percentage": float(s.isna().mean()),
             "unique_count": safe_nunique(s),
             "semantic_type": semantic,
-            "candidate_primary_key": safe_is_unique(s)
+            "candidate_primary_key": safe_is_unique(s),
         }
+        n_nonnull = int(s.notna().sum())
+        if n_nonnull > 0:
+            dupes = int(s.duplicated(keep=False).sum())
+            if dupes > 0:
+                col_profile["duplicate_value_count"] = dupes
+            try:
+                num = pd.to_numeric(s, errors="coerce")
+                nn = num.dropna()
+                if len(nn) >= 3:
+                    col_profile["mean"] = float(nn.mean())
+                    col_profile["median"] = float(nn.median())
+                    col_profile["std"] = float(nn.std())
+                    if len(nn) >= 8:
+                        sk = float(nn.skew())
+                        col_profile["skew"] = round(sk, 4)
+                        col_profile["p5"] = float(nn.quantile(0.05))
+                        col_profile["p95"] = float(nn.quantile(0.95))
+            except Exception:
+                pass
         return col, col_profile
 
     # Parallelize column profiling for speed on large datasets

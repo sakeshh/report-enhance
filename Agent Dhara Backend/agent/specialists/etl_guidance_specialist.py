@@ -17,7 +17,9 @@ def _generate_sql_for_issue(dataset: str, column: str, issue_type: str) -> str:
         return f"-- Filter invalid emails\nSELECT * FROM {ds} WHERE {col} NOT LIKE '%@%.%';"
     if "format" in t or "type" in t:
         return f"-- Cast {column} to correct type (example: INT)\nSELECT TRY_CAST({col} AS INT) AS {col}_Cleaned FROM {ds};"
-    
+    if "case" in t or "inconsist" in t:
+        return f"-- Normalize case on {column}\nUPDATE {ds} SET {col} = LOWER({col}) WHERE {col} IS NOT NULL;"
+
     return f"-- General clean-up for {issue_type}\nSELECT DISTINCT {col} FROM {ds};"
 
 
@@ -51,16 +53,22 @@ def format_etl_guidance(assessment: Dict[str, Any], message: str = "", context: 
     if not per_ds:
         return "The last assessment didn't find any major data quality issues, so no specific cleaning code is required!"
 
-    # Reliable source detection
-    source_type = "sql"
-    
+    msg_low = (message or "").lower()
+    # User explicitly asking for SQL snippets (scenario 14) — not full pipeline codegen
+    force_sql = "sql" in msg_low or "t-sql" in msg_low or "tsql" in msg_low
+
+    source_type = "sql" if force_sql else "sql"
+
     # 1. Check if dataset names look like files
     first_ds = list(per_ds.keys())[0].lower() if per_ds else ""
-    if any(first_ds.endswith(ext) for ext in [".csv", ".json", ".xml", ".parquet", ".txt", ".xlsx", ".jsonl"]) or "abfss://" in first_ds:
+    if not force_sql and (
+        any(first_ds.endswith(ext) for ext in [".csv", ".json", ".xml", ".parquet", ".txt", ".xlsx", ".jsonl"])
+        or "abfss://" in first_ds
+    ):
         source_type = "file"
         
-    # 2. Check context if available
-    if context:
+    # 2. Check context if available (unless user asked for SQL snippets explicitly)
+    if context and not force_sql:
         if len(context.get("selected_blob_files") or []) > 0:
             source_type = "file"
         elif len(context.get("selected_local_files") or []) > 0:

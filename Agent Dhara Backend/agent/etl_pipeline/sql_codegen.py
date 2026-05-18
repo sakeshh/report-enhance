@@ -3,6 +3,8 @@ from __future__ import annotations
 import re
 from typing import Any, Dict, List
 
+from agent.etl_pipeline.join_emitters import emit_sql_joins
+
 
 def _brk(ident: str) -> str:
     """T-SQL style bracket quoting."""
@@ -156,6 +158,22 @@ def generate_sql_etl(plan: Dict[str, Any], assessment: Dict[str, Any], *, dialec
                     f"UPDATE {tbl} SET {c} = REPLACE(REPLACE(REPLACE(REPLACE(CAST({c} AS NVARCHAR(200)), N'-', N''), N' ', N''), N'(', N''), N')', N'') "
                     f"WHERE {c} IS NOT NULL;"
                 )
+            elif action == "hash_phone":
+                if dialect == "tsql":
+                    lines.append(
+                        f"-- Privacy: hash {c} (one-way); adjust algorithm per policy"
+                    )
+                    lines.append(
+                        f"UPDATE {tbl} SET {c} = CONVERT(NVARCHAR(64), HASHBYTES('SHA2_256', CAST({c} AS NVARCHAR(MAX))), 2) "
+                        f"WHERE {c} IS NOT NULL;"
+                    )
+                else:
+                    lines.append(f"-- hash_phone on {tbl}.{c} — use engine-specific SHA2 function")
+            elif action == "mask_phone":
+                lines.append(
+                    f"UPDATE {tbl} SET {c} = N'***' + RIGHT(REPLACE(REPLACE(CAST({c} AS NVARCHAR(200)), N'-', N''), N' ', N''), 4) "
+                    f"WHERE {c} IS NOT NULL;"
+                )
             elif action == "lowercase":
                 lines.append(f"UPDATE {tbl} SET {c} = LOWER(CAST({c} AS NVARCHAR(MAX))) WHERE {c} IS NOT NULL;")
             elif action == "uppercase":
@@ -233,9 +251,45 @@ def generate_sql_etl(plan: Dict[str, Any], assessment: Dict[str, Any], *, dialec
             elif action == "range_clip":
                 lines.append(f"UPDATE {tbl} SET {c} = CASE WHEN TRY_CAST({c} AS FLOAT) < 0 THEN 0 ELSE TRY_CAST({c} AS FLOAT) END WHERE {c} IS NOT NULL;")
             elif action == "deduplicate":
-                lines.append(f"-- Deduplicate {tbl} on {c} -- add business key to PARTITION BY")
+                col_clean = str(col).replace("'", "''")
+                if dialect == "tsql":
+                    lines.append(f";WITH _dedup AS (")
+                    lines.append(
+                        f"    SELECT *, ROW_NUMBER() OVER (PARTITION BY {c} ORDER BY (SELECT NULL)) AS _rn"
+                    )
+                    lines.append(f"    FROM {tbl} WHERE {c} IS NOT NULL")
+                    lines.append(f")")
+                    lines.append(f"DELETE FROM _dedup WHERE _rn > 1;")
+                else:
+                    lines.append(f"-- Deduplicate {tbl} on {c} using ROW_NUMBER / DISTINCT per engine")
+            elif action == "regex_replace":
+                if dialect == "tsql":
+                    lines.append(
+                        f"UPDATE {tbl} SET {c} = "
+                        f"REPLACE(REPLACE(CAST({c} AS NVARCHAR(MAX)), N'''', N''), N'\"', N'') "
+                        f"WHERE {c} IS NOT NULL;"
+                    )
+                else:
+                    lines.append(f"-- regex_replace on {c}: use REGEXP_REPLACE per your SQL dialect")
+            elif action == "replace_values":
+                mapping = (business_rules.get("replace_values") or {}).get(col) or {}
+                if isinstance(mapping, dict) and mapping:
+                    lines.append(f"UPDATE {tbl} SET {c} = CASE")
+                    for old_v, new_v in list(mapping.items())[:20]:
+                        ov = str(old_v).replace("'", "''")
+                        nv = str(new_v).replace("'", "''")
+                        lines.append(f"    WHEN CAST({c} AS NVARCHAR(MAX)) = N'{ov}' THEN N'{nv}'")
+                    lines.append(f"    ELSE {c} END WHERE {c} IS NOT NULL;")
+                else:
+                    lines.append(
+                        f"-- replace_values on {c}: add business_rules.replace_values['{col}'] mapping"
+                    )
+            elif action == "validate_referential_integrity_or_stage":
+                lines.append(
+                    f"-- Referential integrity for {c}: validate orphans in staging before warehouse load"
+                )
             else:
-                lines.append(f"-- TODO: {action} on {tbl}.{c}")
+                lines.append(f"-- Unsupported action in SQL template v1: {action} on {tbl}.{c}")
         if dialect == "tsql":
             lines.append(f"    COMMIT;")
             lines.append(f"END TRY")
@@ -247,5 +301,11 @@ def generate_sql_etl(plan: Dict[str, Any], assessment: Dict[str, Any], *, dialec
 
     for st in plan.get("global_steps") or []:
         lines.append(f"-- global: {st.get('action')} {st.get('column') or ''}")
+
+    manifest = plan.get("connector_manifest") or {}
+    rel = plan.get("relationships") or {}
+    if rel.get("joins") or rel.get("many_to_many") or manifest.get("datasets"):
+        lines.append("")
+        lines.extend(emit_sql_joins(plan, manifest, dialect=dialect))
 
     return "\n".join(lines).strip() + "\n"

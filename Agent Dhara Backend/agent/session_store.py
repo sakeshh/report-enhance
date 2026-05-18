@@ -31,6 +31,8 @@ def _db_path() -> str:
 
 def _connect() -> sqlite3.Connection:
     conn = sqlite3.connect(_db_path(), timeout=30)
+    conn.execute("PRAGMA journal_mode=WAL")
+    conn.execute("PRAGMA synchronous=NORMAL")
     conn.execute(
         """
         CREATE TABLE IF NOT EXISTS sessions (

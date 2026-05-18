@@ -1,0 +1,38 @@
+# Business rules — multi-tenant / multi-project configuration
+#
+# Resolution order:
+#   1. tenants.<tenant_id>.defaults
+#   2. tenants.<tenant_id>.datasets.<dataset_name>
+#   3. Legacy top-level defaults / datasets (tenant: default)
+#   4. UI or chat overrides (highest priority)
+#
+# Set tenant via API: { "tenant_id": "acme", ... } on POST /etl/plan
+# Or session context: context.etl_tenant_id
+
+tenants:
+  default:
+    defaults:
+      never_drop_rows: false
+      outlier_strategy: flag
+    datasets: {}
+
+  # Example tenant — uncomment and customize:
+  # acme:
+  #   defaults:
+  #     never_drop_rows: true
+  #     required_columns: []
+  #   datasets:
+  #     customers:
+  #       required_columns: [customer_id, email]
+  #       non_nullable: [customer_id]
+  #       valid_values:
+  #         status: [ACTIVE, INACTIVE, PENDING]
+  #     orders:
+  #       non_nullable: [order_id, customer_id]
+
+# Legacy flat config (maps to tenant "default" if tenants block is empty)
+defaults:
+  never_drop_rows: false
+  outlier_strategy: flag
+
+datasets: {}

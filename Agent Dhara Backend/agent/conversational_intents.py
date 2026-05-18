@@ -11,6 +11,11 @@ Intent IDs:
   7 OUT_OF_SCOPE
   8 ADVERSARIAL
   9 ETL_GUIDANCE
+ 10 ETL_GENERATE
+ 11 ETL_SHOW_PLAN
+ 12 ETL_APPROVE
+ 13 ETL_DOWNLOAD
+ 14 ETL_CAPTURE_RULES
 """
 from __future__ import annotations
 import re
@@ -169,13 +174,58 @@ def _is_issue_list(low: str) -> bool:
     return False
 
 
+def _is_etl_build_plan(low: str) -> bool:
+    return any(k in low for k in (
+        "build etl plan", "build the etl plan", "create etl plan",
+        "create transformation plan", "build transformation plan",
+        "make etl plan", "plan the etl", "plan transformations",
+    ))
+
+
+def _is_etl_generate(low: str) -> bool:
+    return any(k in low for k in (
+        "generate etl", "generate the code", "generate transformation",
+        "create cleaning script", "cleaning script",
+        "write the pipeline", "produce etl", "etl script",
+        "run etl codegen", "generate code",
+    ))
+
+
+def _is_etl_show_plan(low: str) -> bool:
+    return any(k in low for k in (
+        "show etl plan", "show me the plan", "what transformations",
+        "what steps", "show plan", "etl steps", "view the plan",
+        "what will be done", "show the etl",
+    ))
+
+
+def _is_etl_approve(low: str) -> bool:
+    return any(k in low for k in (
+        "approve the plan", "approve plan", "confirm plan",
+        "looks good proceed", "go ahead and generate",
+        "yes generate", "approve etl",
+    )) or low.strip() in ("approve", "approved")
+
+
+def _is_etl_download(low: str) -> bool:
+    return any(k in low for k in (
+        "download etl code", "download the code", "get the script",
+        "download script", "get etl file", "download file", "get the etl",
+    ))
+
+
+def _is_etl_capture_rules(low: str) -> bool:
+    return any(k in low for k in (
+        "business rules", "never drop", "required columns",
+        "capture rules", "set rules for",
+    ))
+
+
 def _is_etl_guidance(low: str) -> bool:
     return any(k in low for k in (
-        "etl code", "generate code", "write code", "generate etl",
-        "sql code", "sql script", "write sql", "clean code",
         "how to clean in sql", "sql cleaning", "azure sql cleaning",
-        "code to fix", "remediation script", "python code",
-        "pandas code", "spark code", "dbt code",
+        "code to fix", "remediation script", "how do i fix",
+        "clean in sql", "fix in sql",
     ))
 
 
@@ -249,6 +299,18 @@ def classify_intent(message: str, context: Dict[str, Any]) -> Optional[Dict[str,
             return {"intent": 2, "reason": "issue_list"}
         if _is_full_report(low):
             return {"intent": 1, "reason": "full_report"}
+        if _is_etl_download(low):
+            return {"intent": 13, "reason": "etl_download"}
+        if _is_etl_approve(low):
+            return {"intent": 12, "reason": "etl_approve"}
+        if _is_etl_show_plan(low):
+            return {"intent": 11, "reason": "etl_show_plan"}
+        if _is_etl_generate(low):
+            return {"intent": 10, "reason": "etl_generate"}
+        if _is_etl_build_plan(low):
+            return {"intent": 15, "reason": "etl_build_plan"}
+        if _is_etl_capture_rules(low):
+            return {"intent": 14, "reason": "etl_capture_rules"}
         if _is_etl_guidance(low):
             return {"intent": 9, "reason": "etl_guidance"}
 

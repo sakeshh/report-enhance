@@ -123,6 +123,12 @@ preview_local_file
 preview_blob_file
 show_selection_status
 convo_etl_guidance
+build_etl_plan
+generate_etl_code
+show_etl_plan
+confirm_etl_plan
+capture_business_rules
+download_etl_code
 
 Output schema:
 {
@@ -149,8 +155,14 @@ Behavior rules:
   choose summarize_report (not dq_overview).
 - If the user asks about relationships between datasets/files, cardinality (one-to-many, many-to-one, etc.), how tables link or join,
   foreign keys, overlaps between keys, or orphan / dangling key hints, choose relationships_overview (not dq_overview).
-- If the user asks for ETL code, SQL cleaning scripts, how to fix data in SQL, or step-by-step guidance for Azure SQL cleaning,
-  choose convo_etl_guidance.
+- If the user says "build ETL plan", "create transformation plan", or "plan the ETL", choose action=build_etl_plan.
+- If the user says "generate ETL code", "generate transformations", "create cleaning script", or similar,
+  choose action=generate_etl_code.
+- If the user says "show ETL plan" or "what transformations are planned", choose action=show_etl_plan.
+- If the user says "approve" or "approve the plan", choose action=confirm_etl_plan.
+- If the user says "modify the plan", choose action=confirm_etl_plan with plan overrides in args when possible.
+- If the user says "download ETL code" or "download the script", choose action=download_etl_code.
+- If the user asks how to fix data in SQL without generating a full pipeline, choose convo_etl_guidance.
 - If the user asks a data-quality question (nulls, duplicates, outliers, per-dataset issue totals) AFTER a report was generated,
   choose a DQ action (dq_overview / show_null_columns / dq_duplicates) and answer from the latest assessment.
 - If the user asks for extraction (show columns, show top rows, preview data) for selected datasets, choose an extraction action.
@@ -170,6 +182,11 @@ Examples (JSON only):
 {"action":"show_selection_status","args":{}}
 {"action":"extract_columns","args":{}}
 {"action":"convo_etl_guidance","args":{}}
+{"action":"build_etl_plan","args":{"engine":"python"}}
+{"action":"generate_etl_code","args":{"engine":"python"}}
+{"action":"show_etl_plan","args":{}}
+{"action":"confirm_etl_plan","args":{}}
+{"action":"download_etl_code","args":{}}
 """
 
 
@@ -1784,6 +1801,26 @@ def _node_route(state: ChatState) -> ChatState:
     if _user_asks_selection_status(raw):
         return {"action": "show_selection_status", "action_args": {}}
 
+    # ETL pipeline (deterministic — same handlers as Pipeline UI)
+    from agent.conversational_intents import (
+        _is_etl_download,
+        _is_etl_approve,
+        _is_etl_show_plan,
+        _is_etl_generate,
+        _is_etl_build_plan,
+    )
+
+    if _is_etl_download(raw):
+        return {"action": "download_etl_code", "action_args": {}}
+    if _is_etl_approve(raw):
+        return {"action": "confirm_etl_plan", "action_args": {}}
+    if _is_etl_show_plan(raw):
+        return {"action": "show_etl_plan", "action_args": {}}
+    if _is_etl_build_plan(raw):
+        return {"action": "build_etl_plan", "action_args": {}}
+    if _is_etl_generate(raw):
+        return {"action": "generate_etl_code", "action_args": {}}
+
     # Conversational intent routing (before generic DQ shortcuts: OOD, clarify, top-issues, etc.).
     sess_c = state.get("session") or {}
     ctx_c = sess_c.get("context", {}) if isinstance(sess_c, dict) else {}
@@ -1808,6 +1845,13 @@ def _node_route(state: ChatState) -> ChatState:
                 6: "convo_clarify",
                 7: "convo_boundary_ood",
                 8: "convo_boundary_adv",
+                9: "convo_etl_guidance",
+                10: "generate_etl_code",
+                11: "show_etl_plan",
+                12: "confirm_etl_plan",
+                13: "download_etl_code",
+                14: "capture_business_rules",
+                15: "build_etl_plan",
             }
             act = route_map.get(intent)
             if act:
@@ -3790,6 +3834,66 @@ def _node_convo_etl_guidance(state: ChatState) -> ChatState:
     }
 
 
+def _node_build_etl_plan(state: ChatState) -> ChatState:
+    from agent.etl_chat_router import chat_build_etl_plan
+
+    sid = state.get("session_id") or "default"
+    args = state.get("action_args") or {}
+    reply = chat_build_etl_plan(
+        sid,
+        engine=str(args.get("engine") or "python"),
+    )
+    return {"reply": reply, "payload": {"step": "etl", "intent": "build_etl_plan"}}
+
+
+def _node_generate_etl_code(state: ChatState) -> ChatState:
+    from agent.etl_chat_router import chat_generate_etl_code
+
+    sid = state.get("session_id") or "default"
+    args = state.get("action_args") or {}
+    reply = chat_generate_etl_code(
+        sid,
+        engine=str(args.get("engine") or "python"),
+        sql_dialect=str(args.get("sql_dialect") or "tsql"),
+    )
+    return {"reply": reply, "payload": {"step": "etl", "intent": "generate_etl_code"}}
+
+
+def _node_show_etl_plan(state: ChatState) -> ChatState:
+    from agent.etl_chat_router import chat_show_etl_plan
+
+    sid = state.get("session_id") or "default"
+    reply = chat_show_etl_plan(sid)
+    return {"reply": reply, "payload": {"step": "etl", "intent": "show_etl_plan"}}
+
+
+def _node_confirm_etl_plan(state: ChatState) -> ChatState:
+    from agent.etl_chat_router import chat_confirm_etl_plan
+
+    sid = state.get("session_id") or "default"
+    args = state.get("action_args") or {}
+    plan_override = args.get("plan") if isinstance(args.get("plan"), dict) else None
+    reply = chat_confirm_etl_plan(sid, plan_override=plan_override)
+    return {"reply": reply, "payload": {"step": "etl", "intent": "confirm_etl_plan"}}
+
+
+def _node_capture_business_rules(state: ChatState) -> ChatState:
+    from agent.etl_chat_router import chat_capture_business_rules
+
+    sid = state.get("session_id") or "default"
+    msg = state.get("message") or ""
+    reply = chat_capture_business_rules(sid, msg)
+    return {"reply": reply, "payload": {"step": "etl", "intent": "capture_business_rules"}}
+
+
+def _node_download_etl_code(state: ChatState) -> ChatState:
+    from agent.etl_chat_router import chat_download_etl_code
+
+    sid = state.get("session_id") or "default"
+    reply = chat_download_etl_code(sid)
+    return {"reply": reply, "payload": {"step": "etl", "intent": "download_etl_code"}}
+
+
 def build_chat_graph():
     if StateGraph is None or END is None:
         raise ImportError("LangGraph not available")
@@ -3842,6 +3946,12 @@ def build_chat_graph():
     g.add_node("convo_boundary_ood", _node_convo_boundary_ood)
     g.add_node("convo_boundary_adv", _node_convo_boundary_adv)
     g.add_node("convo_etl_guidance", _node_convo_etl_guidance)
+    g.add_node("build_etl_plan", _node_build_etl_plan)
+    g.add_node("generate_etl_code", _node_generate_etl_code)
+    g.add_node("show_etl_plan", _node_show_etl_plan)
+    g.add_node("confirm_etl_plan", _node_confirm_etl_plan)
+    g.add_node("capture_business_rules", _node_capture_business_rules)
+    g.add_node("download_etl_code", _node_download_etl_code)
     g.add_node("save_session", _node_save_session)
 
     g.set_entry_point("load_session")
@@ -3900,6 +4010,12 @@ def build_chat_graph():
             "convo_boundary_ood": "convo_boundary_ood",
             "convo_boundary_adv": "convo_boundary_adv",
             "convo_etl_guidance": "convo_etl_guidance",
+            "build_etl_plan": "build_etl_plan",
+            "generate_etl_code": "generate_etl_code",
+            "show_etl_plan": "show_etl_plan",
+            "confirm_etl_plan": "confirm_etl_plan",
+            "capture_business_rules": "capture_business_rules",
+            "download_etl_code": "download_etl_code",
         },
     )
 
@@ -3950,6 +4066,12 @@ def build_chat_graph():
         "convo_boundary_ood",
         "convo_boundary_adv",
         "convo_etl_guidance",
+        "build_etl_plan",
+        "generate_etl_code",
+        "show_etl_plan",
+        "confirm_etl_plan",
+        "capture_business_rules",
+        "download_etl_code",
     ):
         g.add_edge(n, "save_session")
     g.add_edge("save_session", END)

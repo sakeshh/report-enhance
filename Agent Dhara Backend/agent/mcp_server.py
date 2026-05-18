@@ -18,7 +18,7 @@ import time
 from typing import Any, Dict, List, Optional
 
 from fastapi import FastAPI, HTTPException, Request, UploadFile, File
-from fastapi.responses import JSONResponse
+from fastapi.responses import FileResponse, JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
@@ -109,6 +109,11 @@ class EtlPlanPayload(BaseModel):
     engine: Optional[str] = "python"
     codegen_engine: Optional[str] = None
     sql_dialect: Optional[str] = "tsql"
+    target_destination: Optional[str] = "dataframe_only"
+    target_path: Optional[str] = None
+    tenant_id: Optional[str] = "default"
+    source_context: Optional[Dict[str, Any]] = None
+    engine_user_override: Optional[bool] = False
 
 
 class EtlConfirmPayload(BaseModel):
@@ -116,10 +121,18 @@ class EtlConfirmPayload(BaseModel):
     plan: Optional[Dict[str, Any]] = None
 
 
+class EtlApplyManualResolutionsPayload(BaseModel):
+    session_id: str = "default"
+    plan: Optional[Dict[str, Any]] = None
+    resolutions: List[Dict[str, Any]] = []
+
+
 class EtlGeneratePayload(BaseModel):
     session_id: str = "default"
     engine: Optional[str] = "python"
     sql_dialect: Optional[str] = "tsql"
+    codegen_mode: Optional[str] = None  # template | llm | llm_then_template
+    run_gx_on_generate: Optional[bool] = None
 
 
 setup_logging()
@@ -451,6 +464,45 @@ def api_etl_plan(payload: EtlPlanPayload) -> Dict[str, Any]:
         engine=payload.engine or "python",
         codegen_engine=payload.codegen_engine,
         sql_dialect=payload.sql_dialect or "tsql",
+        target_destination=payload.target_destination or "dataframe_only",
+        target_path=payload.target_path,
+        tenant_id=payload.tenant_id or "default",
+        source_context=payload.source_context,
+        engine_user_override=bool(payload.engine_user_override),
+    )
+
+
+@app.get("/etl/tenants")
+def api_etl_tenants() -> Dict[str, Any]:
+    from agent.etl_handlers import etl_list_tenants
+
+    return etl_list_tenants()
+
+
+class EtlGxCheckpointPayload(BaseModel):
+    session_id: str = "default"
+    run_gx_if_available: Optional[bool] = True
+
+
+@app.post("/etl/gx-checkpoint")
+def api_etl_gx_checkpoint(payload: EtlGxCheckpointPayload) -> Dict[str, Any]:
+    from agent.etl_handlers import etl_run_gx_checkpoint
+
+    return etl_run_gx_checkpoint(
+        payload.session_id,
+        run_gx_if_available=bool(payload.run_gx_if_available),
+    )
+
+
+@app.post("/etl/apply-manual-resolutions")
+def api_etl_apply_manual_resolutions(payload: EtlApplyManualResolutionsPayload) -> Dict[str, Any]:
+    """Promote user-selected manual review resolutions into plan steps."""
+    from agent.etl_handlers import etl_apply_manual_resolutions
+
+    return etl_apply_manual_resolutions(
+        payload.session_id,
+        payload.resolutions or [],
+        plan_override=payload.plan,
     )
 
 
@@ -464,13 +516,118 @@ def api_etl_confirm(payload: EtlConfirmPayload) -> Dict[str, Any]:
 
 @app.post("/etl/generate")
 def api_etl_generate(payload: EtlGeneratePayload) -> Dict[str, Any]:
-    """Generate Python ETL from approved plan; validates with ast.parse."""
+    """Generate ETL from approved plan; LLM + template fallback with validation."""
     from agent.etl_handlers import etl_generate_code
 
-    return etl_generate_code(
+    result = etl_generate_code(
         payload.session_id,
         engine=payload.engine or "python",
         sql_dialect=payload.sql_dialect or "tsql",
+        codegen_mode=payload.codegen_mode,
+        run_gx_on_generate=payload.run_gx_on_generate,
+    )
+    if not result.get("ok") and result.get("http_status") == 409:
+        raise HTTPException(status_code=409, detail=result)
+    return result
+
+
+def _etl_safe_segment(s: str) -> str:
+    import re
+
+    t = re.sub(r"[^a-zA-Z0-9_-]+", "_", (s or "default").strip())[:80]
+    return t or "default"
+
+
+@app.get("/etl/lineage")
+def api_etl_lineage(session_id: str) -> Dict[str, Any]:
+    """Column lineage map (source → transforms → target) after plan confirm."""
+    from agent.etl_handlers import etl_get_lineage
+
+    return etl_get_lineage(session_id)
+
+
+@app.get("/etl/download/{plan_id}")
+def api_etl_download_by_plan_id(plan_id: str):
+    """Download ETL artifact by plan_id (path-traversal safe)."""
+    from agent.session_store import load_session, save_session
+
+    base_dir = os.environ.get(
+        "DHARA_ETL_OUTPUT_DIR",
+        os.path.join(os.path.dirname(os.path.abspath(__file__)), "output", "etl_code"),
+    )
+    safe_pid = _etl_safe_segment(plan_id)
+    file_path = os.path.join(base_dir, f"{safe_pid}.py")
+
+    real_base = os.path.realpath(base_dir)
+    real_file = os.path.realpath(file_path)
+    if not real_file.startswith(real_base):
+        raise HTTPException(status_code=403, detail={"error": "PATH_TRAVERSAL_BLOCKED"})
+
+    if not os.path.exists(file_path):
+        raise HTTPException(
+            status_code=404,
+            detail={"error": "ETL_NOT_FOUND", "message": "ETL code not found"},
+        )
+
+    return FileResponse(file_path, filename=f"etl_{safe_pid}.py", media_type="application/octet-stream")
+
+
+@app.get("/etl/download")
+def api_etl_download(session_id: str):
+    """Download validated ETL artifact for a session (path-traversal safe)."""
+    from agent.session_store import load_session
+
+    sid = (session_id or "default").strip() or "default"
+    sess = load_session(sid)
+    flow = (sess.get("context") or {}).get("etl_flow") or {}
+
+    if not flow.get("validation_ok"):
+        raise HTTPException(
+            status_code=409,
+            detail={
+                "error": "CODE_NOT_VALIDATED",
+                "message": "Code did not pass validation. Download blocked.",
+                "is_draft": flow.get("is_draft", False),
+                "validation_errors": flow.get("validation_errors") or [],
+            },
+        )
+
+    rel_path = flow.get("artifact_rel_path")
+    if not rel_path:
+        raise HTTPException(
+            status_code=404,
+            detail={"error": "NO_ARTIFACT", "message": "No code artifact. Run POST /etl/generate first."},
+        )
+
+    root = os.path.dirname(os.path.abspath(__file__))
+    safe_root = os.path.realpath(os.path.join(root, "output", "etl_code"))
+    abs_path = os.path.realpath(os.path.join(root, rel_path))
+
+    if not abs_path.startswith(safe_root):
+        raise HTTPException(status_code=403, detail={"error": "PATH_TRAVERSAL_BLOCKED"})
+
+    if _etl_safe_segment(sid) not in abs_path and sid not in abs_path:
+        raise HTTPException(status_code=403, detail={"error": "SESSION_MISMATCH"})
+
+    if not os.path.exists(abs_path):
+        raise HTTPException(
+            status_code=404,
+            detail={"error": "FILE_NOT_FOUND", "message": "Artifact file missing from disk."},
+        )
+
+    from agent.etl_handlers import _can_transition, _transition
+
+    if _can_transition(flow.get("phase", "code_ready"), "downloadable"):
+        try:
+            _transition(flow, "downloadable", by="user", reason="download_requested")
+            save_session(sess)
+        except ValueError:
+            pass
+
+    return FileResponse(
+        abs_path,
+        filename=os.path.basename(abs_path),
+        media_type="application/octet-stream",
     )
 
 

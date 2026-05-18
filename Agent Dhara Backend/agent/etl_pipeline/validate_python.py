@@ -3,37 +3,86 @@ from __future__ import annotations
 import ast
 from typing import List, Tuple
 
+FORBIDDEN_IMPORTS = {"os", "subprocess", "sys", "shlex", "pty", "socket", "shutil", "ctypes"}
+_BANNED_MODULES = FORBIDDEN_IMPORTS
+_BANNED_CALLS = {"system", "popen", "run"}
+_BANNED_BUILTINS = {"eval", "exec"}
 
-def validate_python_source(source: str) -> Tuple[bool, List[str]]:
-    errors: List[str] = []
-    if not source or not source.strip():
-        return False, ["empty source"]
-    try:
-        ast.parse(source)
-    except SyntaxError as e:
-        return False, [f"syntax: {e.msg} at line {e.lineno}"]
+
+def validate_python_source_dict(source: str) -> dict:
+    """AST validation returning a structured dict (spec-friendly)."""
     try:
         tree = ast.parse(source)
-    except SyntaxError:
-        return False, errors
+    except SyntaxError as e:
+        return {"valid": False, "error": f"Syntax error: {e}", "issues": [f"Syntax error: {e}"]}
 
-    # Disallow obvious risky constructs in generated ETL v1
+    issues: List[str] = []
     for node in ast.walk(tree):
-        if isinstance(node, (ast.Import, ast.ImportFrom)):
-            for n in getattr(node, "names", []) or []:
-                mod = getattr(n, "name", "") or ""
-                low = mod.lower()
-                if low in ("os", "subprocess", "socket", "shutil") or low.startswith("ctypes"):
-                    errors.append(f"disallowed import pattern: {mod}")
-        if isinstance(node, ast.Call):
-            # Disallow os.system / subprocess.run / popen style calls
-            if isinstance(node.func, ast.Attribute):
-                if node.func.attr in ("system", "popen", "run"):
-                    errors.append(f"disallowed call: .{node.func.attr}")
-            # Disallow bare eval / exec calls
-            if isinstance(node.func, ast.Name):
-                if node.func.id in ("eval", "exec"):
-                    errors.append(f"disallowed call: {node.func.id}")
-    if errors:
-        return False, errors
+        if isinstance(node, ast.Import):
+            for alias in node.names:
+                root_mod = (alias.name or "").split(".")[0]
+                if root_mod in FORBIDDEN_IMPORTS:
+                    issues.append(f"Forbidden import: {alias.name}")
+        elif isinstance(node, ast.ImportFrom):
+            if node.module and node.module.split(".")[0] in FORBIDDEN_IMPORTS:
+                issues.append(f"Forbidden import from: {node.module}")
+            if node.module in FORBIDDEN_IMPORTS and any(a.name == "*" for a in (node.names or [])):
+                issues.append(f"Forbidden wildcard import from: {node.module}")
+        elif isinstance(node, ast.Call):
+            if isinstance(node.func, ast.Attribute) and node.func.attr in _BANNED_CALLS:
+                issues.append(f"Forbidden call: .{node.func.attr}()")
+            elif isinstance(node.func, ast.Name) and node.func.id in _BANNED_BUILTINS:
+                issues.append(f"Forbidden builtin: {node.func.id}()")
+
+    return {"valid": len(issues) == 0, "issues": issues}
+
+
+def validate_etl_python_source(source: str) -> Tuple[bool, List[str]]:
+    """
+    ETL template scripts may import os for path resolution (connector manifest).
+    Still blocks eval/exec/subprocess and dangerous os calls.
+    """
+    result = validate_python_source_dict(source)
+    if not result.get("valid") and result.get("error") and not result.get("issues"):
+        return False, [str(result["error"])]
+
+    issues = list(result.get("issues") or [])
+    etl_allowed_roots = {"os", "sys"}
+    filtered = []
+    for e in issues:
+        if any(e == f"Forbidden import: {m}" for m in etl_allowed_roots):
+            continue
+        if e.startswith("Forbidden import from:"):
+            mod = e.split(":", 1)[-1].strip().split(".")[0]
+            if mod in etl_allowed_roots:
+                continue
+        filtered.append(e)
+    dangerous = (
+        "os.system",
+        "os.popen",
+        "os.remove",
+        "os.unlink",
+        "os.rmdir",
+        "shutil",
+        "subprocess",
+    )
+    low = source or ""
+    for d in dangerous:
+        if d in low:
+            filtered.append(f"disallowed usage: {d}")
+    return (len(filtered) == 0), filtered
+
+
+def validate_python_source(source: str) -> Tuple[bool, List[str]]:
+    """Strict validation for untrusted Python (no os allowance)."""
+    if not source or not source.strip():
+        return False, ["empty source"]
+
+    result = validate_python_source_dict(source)
+    if not result.get("valid") and result.get("error"):
+        return False, list(result.get("issues") or [str(result["error"])])
+
+    issues = list(result.get("issues") or [])
+    if issues:
+        return False, issues
     return True, []
