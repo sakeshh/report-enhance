@@ -172,6 +172,7 @@ def enrich_step_record(
         reason_parts.append(f"Linked to assessment finding: {issue_type.replace('_', ' ')}")
 
     evidence_text = message or str(ev.get("why_this_action") or "")
+    params = dict(st.get("params") or {})
     out = dict(st)
     out.update(
         {
@@ -180,8 +181,8 @@ def enrich_step_record(
             "target_columns": [col] if col else [],
             "target_datasets": [ds] if ds else [],
             "reason": " — ".join(p for p in reason_parts if p) or f"Apply {action} per assessment.",
-            "evidence": evidence_text,
-            "evidence_profile": ev,
+            "evidence": ev,
+            "evidence_text": evidence_text,
             "risk": _norm_severity(sev),
             "row_impact": row_impact,
             "alternatives": alternatives,
@@ -189,6 +190,7 @@ def enrich_step_record(
             "requires_user_choice": requires,
             "privacy_action": privacy_action,
             "join_required": False,
+            "params": params,
             "column": col,
             "dataset": ds,
             "bucket": bucket,

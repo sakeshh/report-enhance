@@ -166,6 +166,22 @@ def pyspark_write_snippet(entry: Dict[str, Any]) -> str:
     return f'df.write.mode("overwrite").option("header", "true").csv({path_expr})'
 
 
+def pyspark_iqr_bounds_helper() -> str:
+    return '''
+def _iqr_bounds(df, col: str, multiplier: float = 1.5):
+    """Return (stats_row, iqr, lower, upper) for outlier transforms."""
+    row = df.select(
+        F.percentile_approx(F.col(col), 0.25).alias("q1"),
+        F.percentile_approx(F.col(col), 0.75).alias("q3"),
+        F.percentile_approx(F.col(col), 0.50).alias("median"),
+    ).first()
+    iqr = float(row["q3"] - row["q1"])
+    lower = float(row["q1"] - multiplier * iqr)
+    upper = float(row["q3"] + multiplier * iqr)
+    return row, iqr, lower, upper
+'''.strip()
+
+
 def pyspark_production_helpers() -> str:
     return '''
 def _require_columns(df, required: list, label: str) -> None:

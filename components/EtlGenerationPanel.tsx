@@ -379,6 +379,24 @@ export default function EtlGenerationPanel({
     [manualReviewItems]
   );
 
+  const planApproveReady = useMemo(() => {
+    if (!plan) return false;
+    if (Array.isArray(plan.blocked) && (plan.blocked as unknown[]).length > 0) return false;
+    if (pendingManualCount > 0) return false;
+    const dsPlan = (plan.datasets || {}) as Record<
+      string,
+      { steps?: Array<{ classification?: string; bucket?: string; requires_user_choice?: boolean }> }
+    >;
+    for (const block of Object.values(dsPlan)) {
+      for (const st of block.steps || []) {
+        const cls = String(st.classification || st.bucket || 'auto').toLowerCase();
+        if (cls === 'blocked') return false;
+        if (cls === 'review' && st.requires_user_choice) return false;
+      }
+    }
+    return true;
+  }, [plan, pendingManualCount]);
+
   const applyManualResolutions = async (
     resolutions: Array<{ item_id: string; resolution_id: string }>
   ) => {
@@ -698,24 +716,6 @@ export default function EtlGenerationPanel({
 
   const { engineRecommendation, narration: planNarration, relationships: planRelationships } =
     getPlanFromRecord(plan);
-
-  const planApproveReady = useMemo(() => {
-    if (!plan) return false;
-    if (Array.isArray(plan.blocked) && (plan.blocked as unknown[]).length > 0) return false;
-    if (pendingManualCount > 0) return false;
-    const dsPlan = (plan.datasets || {}) as Record<
-      string,
-      { steps?: Array<{ classification?: string; bucket?: string; requires_user_choice?: boolean }> }
-    >;
-    for (const block of Object.values(dsPlan)) {
-      for (const st of block.steps || []) {
-        const cls = String(st.classification || st.bucket || 'auto').toLowerCase();
-        if (cls === 'blocked') return false;
-        if (cls === 'review' && st.requires_user_choice) return false;
-      }
-    }
-    return true;
-  }, [plan, pendingManualCount]);
 
   const useRecommendedEngine = () => {
     const applied = applyEngineRecommendation(engineRecommendation);

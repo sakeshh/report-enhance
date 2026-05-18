@@ -49,16 +49,24 @@ def emit_python_load_and_join(
 
     joins = [j for j in (rel.get("joins") or []) if j.get("join_type") != "review"]
     if joins:
+        lines.append("def _prefix_columns_python(df, prefix: str, keep: list):")
+        lines.append("    import pandas as pd")
+        lines.append("    ren = {c: f'{prefix}_{c}' for c in df.columns if c not in keep}")
+        lines.append("    return df.rename(columns=ren)")
+        lines.append("")
         lines.append("def run_joins(dfs: dict) -> dict:")
         for j in joins:
             p, c = j.get("parent_dataset"), j.get("child_dataset")
             pk, ck = j.get("parent_key"), j.get("child_key")
             how = j.get("join_type") or "left"
+            sfx = _safe(c)
+            jname = f"joined_{_safe(p)}_{_safe(c)}"
             lines.append(f"    if {repr(p)} in dfs and {repr(c)} in dfs:")
+            lines.append(f"        _right = _prefix_columns_python(dfs[{repr(c)}], {repr(sfx)}, [{repr(ck)}])")
             lines.append(
-                f"        dfs[{repr(c)}] = dfs[{repr(p)}].merge("
-                f"dfs[{repr(c)}], left_on={repr(pk)}, right_on={repr(ck)}, "
-                f"how={repr(how)}, suffixes=('_parent', '_child'))"
+                f"        dfs[{repr(jname)}] = dfs[{repr(p)}].merge("
+                f"_right, left_on={repr(pk)}, right_on={repr(ck)}, "
+                f"how={repr(how)}, suffixes=('', '_dup'))"
             )
         lines.append("    return dfs")
         lines.append("")
@@ -81,6 +89,14 @@ def emit_python_load_and_join(
 
     lines.append("def write_outputs(dfs: dict) -> None:")
     lines.append("    import os")
+    if joins:
+        for j in joins:
+            p, c = j.get("parent_dataset"), j.get("child_dataset")
+            jname = f"joined_{_safe(p)}_{_safe(c)}"
+            op = f"cleaned/{jname}.parquet"
+            lines.append(f"    if {repr(jname)} in dfs:")
+            lines.append(f"        os.makedirs(os.path.dirname(r'{op}') or '.', exist_ok=True)")
+            lines.append(f"        dfs[{repr(jname)}].to_parquet(r'{op}', index=False)")
     for ds_name, ent in m_ds.items():
         op = ent.get("output_path") or f"cleaned/{_safe(ds_name)}.parquet"
         wsnip = ent.get("write_snippet_python") or f"dfs[{repr(ds_name)}].to_parquet(r'{op}', index=False)"
@@ -297,29 +313,40 @@ def emit_adf_join_transformations(
     transformations: List[Dict[str, Any]],
     tid: int,
     rel: Dict[str, Any],
+    *,
+    stream_upstream: Optional[Dict[str, str]] = None,
 ) -> tuple[List[Dict[str, Any]], int, List[str]]:
-    """Append Join transforms to ADF mapping flow."""
+    """Append Join transforms to ADF mapping flow (uses post-transform stream names when provided)."""
     script: List[str] = []
+    upstream_map = stream_upstream or {}
     for j in rel.get("joins") or []:
         if j.get("join_type") == "review":
             continue
         tid += 1
-        tname = f"join_{tid}"
         p, c = j.get("parent_dataset"), j.get("child_dataset")
+        tname = f"join_{_safe(p)}_{_safe(c)}"
+        left = upstream_map.get(p, f"source_{_safe(p)}")
+        right = upstream_map.get(c, f"source_{_safe(c)}")
+        how = j.get("join_type") or "left"
         transformations.append(
             {
                 "name": tname,
                 "description": f"Join {p} to {c} on {j.get('parent_key')}={j.get('child_key')}",
                 "type": "join",
-                "joinType": j.get("join_type") or "left",
-                "leftStream": f"source_{_safe(p)}",
-                "rightStream": f"source_{_safe(c)}",
+                "joinType": how,
+                "leftStream": left,
+                "rightStream": right,
                 "leftKey": j.get("parent_key"),
                 "rightKey": j.get("child_key"),
                 "column": None,
                 "action": "join_datasets",
-                "upstream": [f"source_{_safe(p)}", f"source_{_safe(c)}"],
+                "upstream": [left, right],
+                "typeProperties": {
+                    "joinType": how,
+                    "leftKey": [j.get("parent_key")],
+                    "rightKey": [j.get("child_key")],
+                },
             }
         )
-        script.append(f"// {tname}: {p} JOIN {c}")
+        script.append(f"// {tname}: {p} ({how}) JOIN {c}")
     return transformations, tid, script

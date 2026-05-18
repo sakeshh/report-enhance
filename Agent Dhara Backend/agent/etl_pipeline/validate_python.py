@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 import ast
-from typing import List, Tuple
+from typing import Any, Dict, List, Optional, Set, Tuple
+
+from agent.etl_pipeline.codegen_shared import plan_actions
 
 FORBIDDEN_IMPORTS = {"os", "subprocess", "sys", "shlex", "pty", "socket", "shutil", "ctypes"}
 _BANNED_MODULES = FORBIDDEN_IMPORTS
@@ -37,7 +39,56 @@ def validate_python_source_dict(source: str) -> dict:
     return {"valid": len(issues) == 0, "issues": issues}
 
 
-def validate_etl_python_source(source: str) -> Tuple[bool, List[str]]:
+_ACTION_CODE_MARKERS: Dict[str, List[str]] = {
+    "lowercase": [".str.lower()", "F.lower(", "lower("],
+    "uppercase": [".str.upper()", "F.upper(", "upper("],
+    "trim": [".str.strip()", "F.trim("],
+    "fill_nulls_simple": [".fillna(", "coalesce("],
+    "fill_or_drop": [".fillna(", "coalesce("],
+    "hash_phone": ["hashlib.sha256", "F.sha2("],
+    "mask_phone": ["'***'", 'F.lit("***")'],
+    "flag_outliers": ["_outlier_flagged", "_iqr_bounds", "_lower"],
+    "clip_outliers": [".clip(", "F.lit(_lower)"],
+    "cap_outliers": ["_median", "_iqr_bounds"],
+    "coerce_numeric": ["to_numeric", "cast('double')"],
+    "parse_dates": ["to_datetime", "to_timestamp"],
+    "sanitize_email": ["contains('@'"],
+    "normalize_phone": ["regexp_replace", r"\\D"],
+    "deduplicate": ["drop_duplicates", "dropDuplicates"],
+    "exclude_column": [".drop(columns=", ".drop("],
+    "drop_column": [".drop(columns=", ".drop("],
+}
+
+
+def _action_reflected_in_source(source: str, action: str) -> bool:
+    if f"Unsupported in codegen v1: {action}" in source:
+        return True
+    if action in source:
+        return True
+    for marker in _ACTION_CODE_MARKERS.get(action, []):
+        if marker in source:
+            return True
+    if action == "validate_referential_integrity_or_stage":
+        return "Referential integrity" in source or "RI " in source
+    return False
+
+
+def validate_python_implements_plan(source: str, plan: Optional[Dict[str, Any]] = None) -> List[str]:
+    """Ensure each plan action is implemented or marked unsupported in generated code."""
+    if not plan:
+        return []
+    missing: List[str] = []
+    seen: Set[str] = set()
+    for action in plan_actions(plan):
+        if not action or action in seen:
+            continue
+        seen.add(action)
+        if not _action_reflected_in_source(source, action):
+            missing.append(f"plan action not reflected in code: {action}")
+    return missing
+
+
+def validate_etl_python_source(source: str, plan: Optional[Dict[str, Any]] = None) -> Tuple[bool, List[str]]:
     """
     ETL template scripts may import os for path resolution (connector manifest).
     Still blocks eval/exec/subprocess and dangerous os calls.
@@ -70,6 +121,7 @@ def validate_etl_python_source(source: str) -> Tuple[bool, List[str]]:
     for d in dangerous:
         if d in low:
             filtered.append(f"disallowed usage: {d}")
+    filtered.extend(validate_python_implements_plan(source, plan))
     return (len(filtered) == 0), filtered
 
 

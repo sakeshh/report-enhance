@@ -641,7 +641,7 @@ def _template_fallback(
 ) -> tuple[str, bool, List[str]]:
     if eng == "python":
         code = generate_python_etl(plan, assess)
-        return code, *validate_etl_python_source(code)
+        return code, *validate_etl_python_source(code, plan)
 
     if eng in ("sql", "tsql", "ansi"):
         from agent.etl_pipeline.sql_codegen import generate_sql_etl
@@ -659,11 +659,11 @@ def _template_fallback(
 
     if eng == "adf":
         from agent.etl_pipeline.adf_codegen import generate_adf_mapping_flow
-        from agent.etl_pipeline.validate_adf import validate_adf_json
+        from agent.etl_pipeline.validate_adf import validate_adf_bundle
 
         obj = generate_adf_mapping_flow(plan, assess)
         code = json.dumps(obj, indent=2)
-        return code, *validate_adf_json(obj)
+        return code, *validate_adf_bundle(obj)
 
     return "", False, [f"Unsupported engine: {eng}"]
 

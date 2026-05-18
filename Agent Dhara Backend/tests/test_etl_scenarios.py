@@ -349,6 +349,10 @@ class TestEtlScenarios(unittest.TestCase):
         self.assertIn("data_1.xml", plan.get("datasets") or {})
         ok, _ = validate_etl_plan(plan, self.assess, rules)
         self.assertTrue(ok)
+        steps = _steps_for(plan, "data_1.json")
+        if steps:
+            self.assertIn("params", steps[0])
+            self.assertIn("invariants", plan)
 
 
 if __name__ == "__main__":

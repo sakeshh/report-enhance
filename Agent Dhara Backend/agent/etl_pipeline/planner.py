@@ -15,6 +15,7 @@ from agent.etl_pipeline.step_metadata import (
     enrich_relationship_plan_joins,
     finalize_dataset_steps,
 )
+from agent.etl_pipeline.step_params import build_ri_step_params, build_step_params
 
 # Lower number = earlier in pipeline (per column / global)
 _ACTION_PRIORITY: Dict[str, int] = {
@@ -494,6 +495,14 @@ def build_etl_plan(
         row_est = s.get("row_count_affected")
         col_stats = _col_stats_for_step(assessment, ds or "", col)
         evidence = _build_evidence(s, col_stats, action2, rules)
+        params = build_step_params(
+            action2,
+            column=col,
+            col_stats=col_stats,
+            evidence=evidence,
+            rules=rules,
+            issue_type=str(s.get("issue_type") or ""),
+        )
         entry = {
             "dataset": ds or "_global",
             "column": col,
@@ -503,6 +512,7 @@ def build_etl_plan(
             "estimated_affected_rows": row_est,
             "priority": pri,
             "note": override_note,
+            "params": params,
             "evidence": evidence,
             "message": s.get("message"),
         }
@@ -515,6 +525,8 @@ def build_etl_plan(
             continue
         key = (ds, col, act)
         if key not in step_map:
+            cstats = _col_stats_for_step(assessment, ds, col)
+            ev = {"why_this_action": note, "confidence": 0.9}
             step_map[key] = {
                 "dataset": ds,
                 "column": col,
@@ -523,7 +535,8 @@ def build_etl_plan(
                 "severity": "medium",
                 "priority": _ACTION_PRIORITY.get(act, 56),
                 "note": note,
-                "evidence": {"why_this_action": note, "confidence": 0.9},
+                "params": build_step_params(act, column=col, col_stats=cstats, evidence=ev, rules=rules),
+                "evidence": ev,
                 "message": note,
             }
 
@@ -563,6 +576,7 @@ def build_etl_plan(
             col = rstep.get("column")
             key = (ds, (col or "*"), act)
             if key not in step_map:
+                ri_ev = rstep.get("evidence") or {}
                 step_map[key] = {
                     "dataset": ds,
                     "column": col,
@@ -571,8 +585,9 @@ def build_etl_plan(
                     "estimated_affected_rows": rstep.get("estimated_affected_rows"),
                     "priority": _ACTION_PRIORITY.get(act, 300),
                     "note": f"FK to {rstep.get('related_dataset')}.{rstep.get('related_column')}",
-                    "evidence": rstep.get("evidence") or {},
-                    "message": (rstep.get("evidence") or {}).get("why_this_action"),
+                    "params": build_ri_step_params(rstep, rules),
+                    "evidence": ri_ev,
+                    "message": ri_ev.get("why_this_action"),
                 }
                 datasets_out.setdefault(ds, []).append(step_map[key])
 

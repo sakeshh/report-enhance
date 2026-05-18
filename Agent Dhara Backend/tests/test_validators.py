@@ -1,6 +1,6 @@
 from agent.etl_pipeline.validate_python import validate_etl_python_source, validate_python_source
 from agent.etl_pipeline.validate_sql import validate_sql_basic
-from agent.etl_pipeline.validate_adf import validate_adf_json
+from agent.etl_pipeline.validate_adf import validate_adf_bundle, validate_adf_json
 
 
 def test_python_valid_passes():
@@ -81,13 +81,20 @@ def test_adf_valid_passes():
         "name": "MyFlow",
         "properties": {
             "type": "MappingDataFlow",
-            "sources": [],
-            "transformations": [],
-            "sinks": [],
+            "sources": [{"name": "src1", "dataset": {"referenceName": "DS_in"}}],
+            "transformations": [
+                {
+                    "name": "derive1",
+                    "type": "derivedColumn",
+                    "upstream": ["src1"],
+                    "typeProperties": {"columns": [{"name": "id", "expression": "id"}]},
+                }
+            ],
+            "sinks": [{"name": "sink1", "dataset": {"referenceName": "DS_out"}}],
         },
     }
     ok, errs = validate_adf_json(obj)
-    assert ok
+    assert ok, errs
 
 
 def test_adf_missing_name():
@@ -116,3 +123,46 @@ def test_adf_missing_flow_keys():
     }
     ok, errs = validate_adf_json(obj)
     assert not ok
+
+
+def test_adf_bundle_valid():
+    primary = {
+        "name": "flow_clean",
+        "properties": {
+            "type": "MappingDataFlow",
+            "sources": [{"name": "s1", "dataset": {"referenceName": "DS_a"}}],
+            "transformations": [
+                {
+                    "name": "derive1",
+                    "type": "derivedColumn",
+                    "upstream": ["s1"],
+                    "typeProperties": {"columns": [{"name": "id", "expression": "id"}]},
+                }
+            ],
+            "sinks": [{"name": "sink1", "dataset": {"referenceName": "DS_a_cleaned"}, "dependsOn": ["derive1"]}],
+        },
+    }
+    joined = {
+        "name": "flow_joined",
+        "role": "clean_and_joined",
+        "properties": {
+            "type": "MappingDataFlow",
+            "sources": [{"name": "s1", "dataset": {"referenceName": "DS_a"}}],
+            "transformations": [
+                {
+                    "name": "derive1",
+                    "type": "derivedColumn",
+                    "upstream": ["s1"],
+                    "typeProperties": {"columns": [{"name": "id", "expression": "id"}]},
+                },
+                {"name": "j1", "type": "join", "upstream": ["derive1", "s1"]},
+            ],
+            "sinks": [{"name": "sink1", "dataset": {"referenceName": "DS_joined"}, "dependsOn": ["j1"]}],
+        },
+    }
+    obj = {
+        **primary,
+        "bundle": {"plan_id": "p1", "flows": [{**primary, "role": "clean_only"}, joined]},
+    }
+    ok, errs = validate_adf_bundle(obj)
+    assert ok, errs

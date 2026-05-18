@@ -167,7 +167,7 @@ def validate_pyspark_source(
     except SyntaxError as e:
         return False, [f"syntax: {e.msg} at line {e.lineno}"]
 
-    ok_py, py_errs = validate_etl_python_source(source)
+    ok_py, py_errs = validate_etl_python_source(source, plan)
     if not ok_py:
         errs.extend(
             e

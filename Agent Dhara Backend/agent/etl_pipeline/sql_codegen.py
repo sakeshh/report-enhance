@@ -3,6 +3,12 @@ from __future__ import annotations
 import re
 from typing import Any, Dict, List
 
+from agent.etl_pipeline.codegen_shared import (
+    outlier_multiplier,
+    sql_fill_update_lines,
+    step_params,
+    tsql_qualified_name,
+)
 from agent.etl_pipeline.join_emitters import emit_sql_joins
 
 
@@ -28,6 +34,11 @@ def generate_sql_etl(plan: Dict[str, Any], assessment: Dict[str, Any], *, dialec
         f"-- dialect={dialect} — review before executing against production.",
         "",
     ]
+    if dialect != "tsql":
+        lines.insert(
+            1,
+            "-- ANSI mode is template-only; adjust statements to your SQL engine before running.",
+        )
 
     notes_raw = business_rules.get("notes") or ""
     notes = "\n".join(
@@ -102,7 +113,7 @@ def generate_sql_etl(plan: Dict[str, Any], assessment: Dict[str, Any], *, dialec
         lines.append("-- No datasets found in plan.")
 
     for ds_name, block in ds_plan.items():
-        tbl = _brk(ds_name)
+        tbl = tsql_qualified_name(ds_name) if dialect == "tsql" else _brk(ds_name)
         lines.append(f"-- === dataset: {ds_name} ===")
         if dialect == "tsql":
             lines.append(f"BEGIN TRY")
@@ -132,7 +143,7 @@ def generate_sql_etl(plan: Dict[str, Any], assessment: Dict[str, Any], *, dialec
             if action == "trim":
                 lines.append(f"UPDATE {tbl} SET {c} = LTRIM(RTRIM(CAST({c} AS NVARCHAR(MAX)))) WHERE {c} IS NOT NULL;")
             elif action in ("fill_or_drop", "fill_nulls_simple"):
-                lines.append(f"UPDATE {tbl} SET {c} = COALESCE({c}, N'') WHERE {c} IS NULL;")
+                lines.extend(sql_fill_update_lines(tbl, c, st, dialect=dialect))
             elif action == "coerce_numeric":
                 if dialect == "tsql":
                     lines.append(
@@ -228,12 +239,20 @@ def generate_sql_etl(plan: Dict[str, Any], assessment: Dict[str, Any], *, dialec
                     lines.append(f"-- ANSI: clip {c} to [Q1 - 1.5*IQR, Q3 + 1.5*IQR]")
             elif action == "cap_outliers":
                 col_clean = str(col).replace("'", "''")
-                lines.append(f"-- Cap outliers for {c} with median replacement")
+                p = step_params(st)
+                mult = outlier_multiplier(p)
+                lines.append(f"-- Cap outliers for {c} with median replacement (IQR x {mult})")
                 if dialect == "tsql":
+                    med_init = ""
+                    if p.get("fill_value") is not None:
+                        med_init = f"SET @median_{col_clean} = {p['fill_value']};"
                     lines.append(f"DECLARE @q1_{col_clean} FLOAT, @q3_{col_clean} FLOAT, @median_{col_clean} FLOAT;")
+                    if med_init:
+                        lines.append(med_init)
+                    else:
+                        lines.append(f"SELECT @median_{col_clean} = PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY {c}) FROM {tbl} WHERE {c} IS NOT NULL;")
                     lines.append(f"SELECT @q1_{col_clean} = PERCENTILE_CONT(0.25) WITHIN GROUP (ORDER BY {c}),")
-                    lines.append(f"       @q3_{col_clean} = PERCENTILE_CONT(0.75) WITHIN GROUP (ORDER BY {c}),")
-                    lines.append(f"       @median_{col_clean} = PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY {c})")
+                    lines.append(f"       @q3_{col_clean} = PERCENTILE_CONT(0.75) WITHIN GROUP (ORDER BY {c})")
                     lines.append(f"FROM {tbl} WHERE {c} IS NOT NULL;")
                     lines.append(f"")
                     lines.append(f"UPDATE {tbl} SET {c} = @median_{col_clean}")

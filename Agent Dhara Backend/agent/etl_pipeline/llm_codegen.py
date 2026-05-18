@@ -17,11 +17,23 @@ except ImportError:
     OpenAI = None
 
 from agent.model_config import load_llm_config
+from agent.etl_pipeline.codegen_policy import llm_codegen_extra_context, plan_policy_block
 from agent.etl_pipeline.io_snippets import resolve_path_pyspark_helper
 
 LLM_ERROR_PREFIX = "# Error"
 
 # Actions the planner may emit — LLM must implement each one correctly for the target engine.
+_PLAN_PARAMS = """
+Each plan step includes a "params" dict — use it as the source of truth (not only evidence):
+- params.fill_strategy: "mean" | "median" | "value" — for fill_or_drop / fill_nulls_simple
+- params.fill_value: scalar when fill_strategy is "value" or precomputed mean/median
+- params.outlier_method: "flag" | "clip" | "cap"
+- params.outlier_iqr_multiplier: float (default 1.5)
+- params.privacy: "hash" | "mask" | "exclude" for phone/privacy columns
+- params.enforcement_mode: "flag" | "quarantine" for referential integrity steps
+- params.execution_mode: "in_place" | "new_column" | "new_table"
+"""
+
 _PLAN_ACTIONS = """
 Supported plan step actions (implement ALL steps in order per dataset):
 - trim: strip whitespace on strings
@@ -49,17 +61,19 @@ Supported plan step actions (implement ALL steps in order per dataset):
 _BASE_RULES = """
 UNIVERSAL RULES (mandatory):
 1. Implement EVERY step in plan.datasets[*].steps in ascending "order". Do not skip or merge steps.
-2. Honor business_rules: never_drop_rows, required_columns, exclude_columns, non_nullable, valid_values, notes.
-3. Preserve exact column name casing from the plan.
-4. Add clear comments for manual_review items from the plan.
-5. Production quality: logging, guards for missing required columns, no placeholder TODOs for listed actions.
-6. Output ONLY the artifact — no markdown fences, no prose before/after.
+2. Read step["params"] for fill/outlier/privacy — match template codegen semantics.
+3. Honor business_rules: never_drop_rows, required_columns, exclude_columns, non_nullable, valid_values, notes.
+4. Preserve exact column name casing from the plan.
+5. Add clear comments for manual_review items from the plan.
+6. Production quality: logging.getLogger("agent_dhara"), guards for required columns, no placeholder TODOs for listed actions.
+7. Output ONLY the artifact — no markdown fences, no prose before/after.
 """
 
 SYSTEM_PROMPTS: Dict[str, str] = {
     "python": f"""You are a senior data engineer writing production Python ETL with pandas.
 
 {_BASE_RULES}
+{_PLAN_PARAMS}
 {_PLAN_ACTIONS}
 
 PYTHON REQUIREMENTS:
@@ -78,6 +92,7 @@ PYTHON REQUIREMENTS:
     "sql-tsql": f"""You are a senior data engineer writing production T-SQL ETL scripts.
 
 {_BASE_RULES}
+{_PLAN_PARAMS}
 {_PLAN_ACTIONS}
 
 T-SQL REQUIREMENTS:
@@ -105,6 +120,7 @@ ANSI SQL REQUIREMENTS:
     "pyspark": f"""You are a senior data engineer writing production PySpark ETL.
 
 {_BASE_RULES}
+{_PLAN_PARAMS}
 {_PLAN_ACTIONS}
 
 PYSPARK REQUIREMENTS:
@@ -130,27 +146,16 @@ PYSPARK REQUIREMENTS:
     "adf": f"""You are a senior Azure Data Factory engineer.
 
 {_BASE_RULES}
+{_PLAN_PARAMS}
 {_PLAN_ACTIONS}
 
 ADF REQUIREMENTS:
-- Output a single JSON object only (no markdown).
-- Root structure:
-  {{
-    "name": "AgentDhara_ETL_<plan_id>",
-    "type": "Microsoft.DataFactory/factories/dataflows",
-    "properties": {{
-      "type": "MappingDataFlow",
-      "sources": [...],
-      "transformations": [...],
-      "sinks": [...],
-      "annotations": [{{"plan_id": "...", "generator": "AgentDhara"}}]
-    }}
-  }}
-- One source per dataset in the plan; chain transformations in step order with dependsOn links.
-- Each transformation: name, description, type (DerivedColumn, Filter, Aggregate, etc.), column, action, dependsOn.
-- Map each plan action to an appropriate ADF mapping data flow transformation type.
-- Final sink depends on last transformation.
-- Valid JSON only.
+- Output JSON with bundle.flows: [clean_only flow, clean_and_joined flow] when relationships.joins exist.
+- Use ADF expression language: toLower, toUpper, trim, coalesce, iif, percentile, sha2, regexpReplace.
+- derivedColumn transformations: typeProperties.columns[] with name + expression per step params.
+- Join transforms: joinType left (never inner when never_drop_rows), leftStream/rightStream from upstream chain.
+- Linked services: LS_AzureBlob, datasets DS_<dataset>, DS_<dataset>_cleaned.
+- Valid JSON only (no markdown).
 """,
 }
 
@@ -230,7 +235,7 @@ def _build_codegen_payload(
                 if isinstance(cmeta, dict)
             },
         }
-    return {
+    base = {
         "plan_id": plan.get("plan_id"),
         "engine": plan.get("engine"),
         "output_mode": output_mode,
@@ -247,6 +252,8 @@ def _build_codegen_payload(
         "relationships": plan.get("relationships") or {},
         "etl_intent": plan.get("etl_intent") or {},
     }
+    base.update(llm_codegen_extra_context(plan))
+    return base
 
 
 _READ_TEMPLATES: Dict[str, str] = {
@@ -310,6 +317,7 @@ def _call_llm(
     system = SYSTEM_PROMPTS.get(engine_key, SYSTEM_PROMPTS["python"])
     user_parts = [
         f"Target engine: {engine_key}",
+        f"ETL policy (must follow):\n{payload.get('policy') or ''}",
         f"Generate complete ETL for this approved plan:\n{json.dumps(payload, indent=2, default=str)}",
     ]
     manifest = payload.get("connector_manifest") or {}

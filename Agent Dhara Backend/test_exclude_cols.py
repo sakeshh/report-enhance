@@ -24,7 +24,6 @@ test_plan = {
 }
 
 code = generate_python_etl(test_plan, {})
-print('=== GENERATED CODE ===')
-print(code)
-print()
-print('✓ Code generation with exclude_columns successful!')
+assert "_to_drop" in code or "Dropping excluded" in code
+assert "OrderAmount" in code
+print("OK: Code generation with exclude_columns successful!")
