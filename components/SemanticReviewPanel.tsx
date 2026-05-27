@@ -55,9 +55,19 @@ export default function SemanticReviewPanel({ database, files, onComplete, onBac
         const inferredSemantics = data.semantics || {};
         const sampleValues = data.samples || {};
 
+        // Helper to normalize table keys (case-insensitive and ignores all non-alphanumeric characters)
+        const normalizeKey = (key: string) => {
+          return String(key || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+        };
+
         files.forEach((table) => {
-          const colTags = inferredSemantics[table] || {};
-          const colSamples = sampleValues[table] || {};
+          const normTable = normalizeKey(table);
+          const matchedKey = Object.keys(inferredSemantics).find(
+            (k) => normalizeKey(k) === normTable
+          ) || table;
+
+          const colTags = inferredSemantics[matchedKey] || {};
+          const colSamples = sampleValues[matchedKey] || {};
           
           tableMap[table] = Object.keys(colTags).map((col) => ({
             name: col,

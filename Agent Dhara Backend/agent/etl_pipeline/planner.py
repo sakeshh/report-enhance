@@ -432,11 +432,14 @@ def build_etl_plan(
             if found:
                 break
         if not found:
-            blocked.append(
+            manual_review.append(
                 {
-                    "type": "missing_required_column",
+                    "dataset": "global",
                     "column": rc,
+                    "issue_type": "missing_required_column",
+                    "severity": "HIGH",
                     "message": f"Required column '{rc}' not found in any assessed dataset.",
+                    "guidance": "Provide the column in a source dataset or choose 'skip_requirement' to remove it from requirements.",
                 }
             )
 

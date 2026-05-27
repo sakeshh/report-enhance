@@ -55,6 +55,59 @@ def validate_sql_basic_dict(source: str) -> dict:
     issues.extend(_bracket_balance(source))
     issues.extend(_tsql_transaction_blocks(source))
 
+    # Strict DQ Rules Validation
+    # 1. Reject pipeline defined but not used
+    if "etl_rejects" in low:
+        pattern_rejects = r"insert\s+into\s+(?:dbo\s*\.\s*)?\[?etl_rejects\]?"
+        if not re.search(pattern_rejects, low):
+            issues.append("etl_rejects table is defined but never inserted into (reject pipeline not used)")
+        
+    # 2. Fake default values
+    if "'99999'" in low or "'10120631.5'" in low or "'1900-01-01'" in low or "'19000101'" in low:
+        issues.append("contains hardcoded fake default values ('99999', '10120631.5', or '1900-01-01')")
+        
+    # 3. Wrong deduplication ordering/columns
+    if re.search(r"over\s*\([^\)]*etl_created_at", low):
+        issues.append("deduplication partitions or orders by etl_created_at instead of a business column")
+        
+    # 4. SELECT DISTINCT * used for dedup
+    if "select distinct *" in low:
+        issues.append("contains SELECT DISTINCT * instead of key-aware CTE deduplication")
+        
+    # 5. Non-production safe SELECT INTO
+    into_matches = re.finditer(r"\bselect\b(?:(?!insert|update|delete|create|procedure|\bgo\b|declare|begin|end|commit|rollback)\b[\s\S])*?\binto\s+([\w\.\_\[\]#]+)", low)
+    for match in into_matches:
+        tbl = match.group(1).strip("[]")
+        if not tbl.startswith("#") and not any(x in tbl for x in ("temp_", "staging", "log", "watermark", "reject")):
+            issues.append(f"contains SELECT INTO on clean/joined table '{tbl}' instead of CREATE VIEW or INSERT INTO")
+
+    # 6. Destructive multi-column NULL update (data wipe pattern)
+    if re.search(r"set\s+[\w\.\_\[\]#]+\s*=\s*null\s*,\s*[\w\.\_\[\]#]+\s*=\s*null", low):
+        issues.append("contains destructive multi-column NULL update statement (data wipe pattern)")
+
+    # 7. Redundant/double casting
+    if re.search(r"cast\(\s*(?:try_)?cast\(", low) or re.search(r"try_cast\(\s*(?:try_)?cast\(", low):
+        issues.append("contains redundant double CAST statements (e.g. CAST(CAST(...)))")
+    if re.search(r"lower\(\s*cast\(\s*(?:ltrim|rtrim|replace|lower|upper|coalesce)", low):
+        issues.append("contains redundant nested CAST operations inside LOWER/LTRIM string wrappers")
+        
+    # 8. Email validation constraint check
+    if "email" in low:
+        if not any(pat in low for pat in ("%_@_%._%", "%_@_%._%")):
+            issues.append("Email column detected but missing format check constraint (e.g. Email LIKE '%_@_%._%')")
+            
+    # 9. Phone normalization & validation check
+    if "phone" in low:
+        if "replace" not in low:
+            issues.append("Phone column detected but missing symbol cleaning operations (nested REPLACE for spaces/dashes)")
+        if not any(x in low for x in ("len(", "length(", "[^0-9]")):
+            issues.append("Phone column detected but missing validation checks (length >= 7 or only numeric digits)")
+
+    # 10. Date parsing checks for OrderDate / CreatedDate
+    if "orderdate" in low or "createddate" in low:
+        if not any(x in low for x in ("try_convert(", "try_cast(", "to_date(", "to_datetime(")):
+            issues.append("Date columns detected but missing TRY_CAST/TRY_CONVERT date parsing or validation")
+
     if issues:
         return {"valid": False, "issues": issues}
     return {"valid": True, "issues": []}

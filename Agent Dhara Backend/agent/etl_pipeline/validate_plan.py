@@ -86,7 +86,16 @@ def validate_etl_plan(
                     )
 
     req = business_rules.get("required_columns") or []
+    pending_missing_cols = {
+        str(m.get("column")).lower()
+        for m in (plan.get("manual_review") or [])
+        if isinstance(m, dict)
+        and str(m.get("status") or "pending").lower() == "pending"
+        and str(m.get("issue_type") or "").lower() == "missing_required_column"
+    }
     for rc in req:
+        if str(rc).lower() in pending_missing_cols:
+            continue
         found = False
         for ds_name in known_ds:
             cols_lower = {c.lower() for c in _columns_for_dataset(assessment, ds_name)}

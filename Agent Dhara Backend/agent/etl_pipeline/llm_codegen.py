@@ -133,7 +133,13 @@ T-SQL REQUIREMENTS:
 - Active Curated Views: Generate active view layers `CREATE VIEW dbo.vw_<table_base>_Fact AS` (instead of commented templates) explicitly listing selected fields from Clean tables and prefixing duplicate fields as `[parent_prefix_col]` to prevent duplicate column view compilation errors.
 - Use bracket quoting [column] and TRY_CAST / TRY_CONVERT for safe casts.
 - never_drop_rows: UPDATE/SET only, no DELETE FROM for data quality fixes (except when logging to rejects table).
-- ANSI-compatible where possible within T-SQL.
+- Email Validation: For Email columns, check for valid email syntax using the exact SQL pattern `NOT LIKE '%_@_%._%'`. If invalid, quarantine any invalid emails into `dbo.etl_rejects` and delete them from the staging table.
+- Phone Normalization and Validation: For Phone columns, strip symbols `-`, ` `, `(`, `)` using nested `REPLACE` functions. If the cleaned phone number length is less than 7 or contains non-numeric characters (tested using `LIKE '%[^0-9]%'`), treat it as an invalid phone validation failure, quarantine it to `dbo.etl_rejects`, and delete it from the staging table.
+- No Redundant Casts: Prohibit redundant string castings. Do not emit nested castings like `LOWER(CAST(LTRIM(RTRIM(CAST(col AS NVARCHAR(MAX)))) AS NVARCHAR(MAX)))`. If a column is already cast to a string type, or is the result of string functions (`LOWER`, `LTRIM`, `REPLACE`), do not wrap it in additional `CAST` statements.
+- Orders Pipeline: Do not make the Orders pipeline a simple copy. Enforce strict date parsing (via coalesced `TRY_CONVERT` chains), status normalization (trim and case normalization), and invalid/null values handling.
+- Duplicates Deduplication ordering: Never use non-existent columns (like `etl_created_at`) in `ROW_NUMBER() OVER (PARTITION BY LOWER(LTRIM(RTRIM(CAST([pk] AS NVARCHAR(400))))) ORDER BY ...)` inside the staging copy CTE. Use a business column (like `CreatedDate DESC` or `OrderDate DESC`) for ordering.
+- No SELECT DISTINCT * for deduplication: Avoid using expensive, non-key-aware `SELECT DISTINCT` statements. Deduplication must be key-aware using CTE `ROW_NUMBER()`.
+- Idempotent and Production-Safe views/joins: Ensure join views use `CREATE VIEW` instead of `SELECT ... INTO` to prevent duplicate view compilation failures or schema write conflicts.
 """,
     "sql-ansi": f"""You are a senior data engineer writing portable ANSI SQL ETL scripts.
 
@@ -164,7 +170,13 @@ ANSI SQL REQUIREMENTS:
 - Safe casts (CAST/TRY semantics via CASE WHERE not available).
 - IQR outlier logic with subqueries or CTEs, not dialect-specific hacks unless noted in comments. Only run outlier checks on numeric/metric columns.
 - never_drop_rows: no DELETE for quality fixes (except when logging to rejects table).
-- Comment dialect-specific assumptions where needed.
+- Email Validation: For Email columns, check for valid email syntax using the exact SQL pattern `NOT LIKE '%_@_%._%'`. If invalid, quarantine any invalid emails into `etl_rejects` and delete them from the staging table.
+- Phone Normalization and Validation: For Phone columns, strip symbols `-`, ` `, `(`, `)` using nested `REPLACE` functions. If the cleaned phone number length is less than 7 or contains non-numeric characters (tested using `LIKE '%[^0-9]%'`), treat it as an invalid phone validation failure, quarantine it to `etl_rejects`, and delete it from the staging table.
+- No Redundant Casts: Prohibit redundant string castings. Do not emit nested castings like `LOWER(CAST(LTRIM(RTRIM(CAST(col AS VARCHAR(MAX)))) AS VARCHAR(MAX)))`. If a column is already cast to a string type, or is the result of string functions (`LOWER`, `LTRIM`, `REPLACE`), do not wrap it in additional `CAST` statements.
+- Orders Pipeline: Do not make the Orders pipeline a simple copy. Enforce strict date parsing (via coalesced `TRY_CONVERT` chains), status normalization (trim and case normalization), and invalid/null values handling.
+- Duplicates Deduplication ordering: Never use non-existent columns (like `etl_created_at`) in `ROW_NUMBER() OVER (PARTITION BY LOWER(LTRIM(RTRIM(CAST([pk] AS VARCHAR(400))))) ORDER BY ...)` inside the staging copy CTE. Use a business column (like `CreatedDate DESC` or `OrderDate DESC`) for ordering.
+- No SELECT DISTINCT * for deduplication: Avoid using expensive, non-key-aware `SELECT DISTINCT` statements. Deduplication must be key-aware using CTE `ROW_NUMBER()`.
+- Idempotent and Production-Safe views/joins: Ensure join views use `CREATE VIEW` instead of `SELECT ... INTO` to prevent duplicate view compilation failures or schema write conflicts.
 """,
     "pyspark": f"""You are a senior data engineer writing production PySpark ETL.
 

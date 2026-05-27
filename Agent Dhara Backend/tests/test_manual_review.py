@@ -140,5 +140,84 @@ class TestManualReviewPromote(unittest.TestCase):
         self.assertIn("r.[email] IS NULL AND r.[phone] IS NULL", code_sql)
 
 
+class TestBlockerManualReview(unittest.TestCase):
+    def test_missing_required_column_pending_and_resolved(self) -> None:
+        plan = {
+            "plan_id": "test_missing_col",
+            "datasets": {"dbo.customers_raw": {"steps": []}},
+            "manual_review": [
+                enrich_manual_review_item(
+                    {
+                        "dataset": "global",
+                        "column": "CreatedDate",
+                        "issue_type": "missing_required_column",
+                        "message": "Required column CreatedDate not found",
+                    }
+                )
+            ],
+            "business_rules": {"required_columns": ["CreatedDate", "CustomerID"]},
+        }
+        assess = {"datasets": {"dbo.customers_raw": {"columns": {"CustomerID": {}}}}}
+        
+        # Test 1: validate_etl_plan should succeed (ok=True) even if missing_required_column is pending
+        from agent.etl_pipeline.validate_plan import validate_etl_plan
+        ok, errs = validate_etl_plan(plan, assess, plan["business_rules"])
+        self.assertTrue(ok, f"Expected validation to pass while pending: {errs}")
+        
+        # Test 2: validate_etl_plan_for_confirm should fail (ok=False) while pending
+        ok, errs = validate_etl_plan_for_confirm(plan, assess, plan["business_rules"])
+        self.assertFalse(ok)
+        self.assertTrue(any("manual review" in e.lower() for e in errs))
+        
+        # Test 3: Apply skip_requirement resolution
+        item_id = plan["manual_review"][0]["id"]
+        updated, errs = apply_manual_resolutions(
+            plan,
+            [{"item_id": item_id, "resolution_id": "skip_requirement"}],
+        )
+        self.assertEqual(errs, [])
+        self.assertEqual(count_pending_manual_review(updated), 0)
+        self.assertNotIn("CreatedDate", updated["business_rules"]["required_columns"])
+        
+        # Test 4: validate_etl_plan_for_confirm should pass now
+        ok, errs = validate_etl_plan_for_confirm(updated, assess, updated["business_rules"])
+        self.assertTrue(ok, f"Expected validation for confirm to pass: {errs}")
+
+    def test_business_key_duplicate_to_custom_deduplicate(self) -> None:
+        plan = {
+            "plan_id": "test_bk_dup",
+            "datasets": {"dbo.customers_raw": {"steps": []}},
+            "manual_review": [
+                enrich_manual_review_item(
+                    {
+                        "dataset": "dbo.customers_raw",
+                        "column": "CustomerID, Email",
+                        "issue_type": "business_key_duplicate",
+                        "message": "Duplicates in CustomerID, Email",
+                    }
+                )
+            ],
+            "business_rules": {},
+        }
+        assess = {"datasets": {"dbo.customers_raw": {"columns": {"CustomerID": {}, "Email": {}, "ModifiedDate": {}}}}}
+        
+        # Apply deduplicate resolution
+        item_id = plan["manual_review"][0]["id"]
+        updated, errs = apply_manual_resolutions(
+            plan,
+            [{"item_id": item_id, "resolution_id": "deduplicate"}],
+        )
+        self.assertEqual(errs, [])
+        
+        # Test Python codegen custom deduplication columns list formatting
+        code_py = generate_python_etl(updated, assess)
+        self.assertIn("drop_duplicates(subset=['CustomerID', 'Email']", code_py)
+        
+        # Test T-SQL codegen custom deduplication partition keys
+        from agent.etl_pipeline.sql_codegen import generate_sql_etl
+        code_sql = generate_sql_etl(updated, assess)
+        self.assertIn("ROW_NUMBER() OVER (PARTITION BY LOWER(LTRIM(RTRIM(CAST([CustomerID] AS NVARCHAR(400))))), LOWER(LTRIM(RTRIM(CAST([Email] AS NVARCHAR(400)))))", code_sql)
+
+
 if __name__ == "__main__":
     unittest.main()

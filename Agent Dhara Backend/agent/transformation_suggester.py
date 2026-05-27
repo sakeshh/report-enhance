@@ -50,6 +50,7 @@ ISSUE_TO_ACTION = {
     "case_insensitive_column_collision": "review_manually",
     # Values differ only by casing — normalize in ETL (aligns with assessment recommendation)
     "case_inconsistency": "lowercase",
+    "punctuation_only_value": "zero_to_null",
     "very_wide_table": "review_manually",
     "column_name_whitespace": "review_manually",
     "very_high_cardinality": "review_manually",
@@ -232,6 +233,92 @@ def suggest_transformations(assessment_result: Dict[str, Any]) -> Dict[str, Any]
             )
             if col and action in ("coerce_numeric", "parse_dates"):
                 trim_columns.add((ds_name, col))
+
+    # Proactive Semantic-Based Upgrades (Email, Phone, Date, Categorical, Text)
+    for ds_name, ds_meta in datasets_meta.items():
+        if not isinstance(ds_meta, dict):
+            continue
+        columns_meta = ds_meta.get("columns") or {}
+        for col_name, col_info in columns_meta.items():
+            if not isinstance(col_info, dict):
+                continue
+            sem_type = (col_info.get("semantic_type") or "").lower().strip()
+            col_lower = col_name.lower()
+            
+            # 1. Date columns -> parse_dates
+            if sem_type == "date" or any(x in col_lower for x in ("date", "time", "dob", "stamp")) or col_lower.endswith("_at"):
+                if not any(s["dataset"] == ds_name and s["column"] == col_name and s["suggested_action"] == "parse_dates" for s in suggested):
+                    suggested.append({
+                        "dataset": ds_name,
+                        "column": col_name,
+                        "issue_type": "proactive_parse_dates",
+                        "severity": "medium",
+                        "message": f"Ensure date format parsing and validation for [{col_name}]",
+                        "suggested_action": "parse_dates",
+                        "manual_guidance": "",
+                        "row_count_affected": None,
+                        "auto_fixable": True,
+                    })
+                    trim_columns.add((ds_name, col_name))
+                    
+            # 2. Email columns -> sanitize_email
+            elif sem_type == "id" and "email" in col_lower:
+                if not any(s["dataset"] == ds_name and s["column"] == col_name and s["suggested_action"] == "sanitize_email" for s in suggested):
+                    suggested.append({
+                        "dataset": ds_name,
+                        "column": col_name,
+                        "issue_type": "proactive_sanitize_email",
+                        "severity": "medium",
+                        "message": f"Ensure email syntax validation and quarantine for [{col_name}]",
+                        "suggested_action": "sanitize_email",
+                        "manual_guidance": "",
+                        "row_count_affected": None,
+                        "auto_fixable": True,
+                    })
+                    trim_columns.add((ds_name, col_name))
+                    
+            # 3. Phone columns -> normalize_phone
+            elif sem_type == "id" and "phone" in col_lower:
+                if not any(s["dataset"] == ds_name and s["column"] == col_name and (s["suggested_action"] in ("normalize_phone", "hash_phone", "mask_phone")) for s in suggested):
+                    suggested.append({
+                        "dataset": ds_name,
+                        "column": col_name,
+                        "issue_type": "proactive_normalize_phone",
+                        "severity": "medium",
+                        "message": f"Ensure phone cleaning, validation and normalization for [{col_name}]",
+                        "suggested_action": "normalize_phone",
+                        "manual_guidance": "",
+                        "row_count_affected": None,
+                        "auto_fixable": True,
+                    })
+                    trim_columns.add((ds_name, col_name))
+
+            # 4. Categorical and text columns -> trim and case normalization (trim + lowercase)
+            elif sem_type in ("categorical", "text") or any(x in col_lower for x in ("city", "status", "state", "category", "gender", "country", "name")):
+                if not any(s["dataset"] == ds_name and s["column"] == col_name and s["suggested_action"] == "trim" for s in suggested):
+                    suggested.append({
+                        "dataset": ds_name,
+                        "column": col_name,
+                        "issue_type": "proactive_trim",
+                        "severity": "low",
+                        "message": f"Trim whitespace for [{col_name}]",
+                        "suggested_action": "trim",
+                        "manual_guidance": "",
+                        "row_count_affected": None,
+                        "auto_fixable": True,
+                    })
+                if not any(s["dataset"] == ds_name and s["column"] == col_name and s["suggested_action"] == "lowercase" for s in suggested):
+                    suggested.append({
+                        "dataset": ds_name,
+                        "column": col_name,
+                        "issue_type": "proactive_lowercase",
+                        "severity": "low",
+                        "message": f"Normalize case to lowercase for [{col_name}]",
+                        "suggested_action": "lowercase",
+                        "manual_guidance": "",
+                        "row_count_affected": None,
+                        "auto_fixable": True,
+                    })
 
     # Robust: add trim before coerce/parse (handles " 123 ", " 2024-01-15 ")
     for (ds_name, col) in trim_columns:

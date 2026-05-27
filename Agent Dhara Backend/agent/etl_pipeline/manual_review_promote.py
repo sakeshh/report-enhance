@@ -111,6 +111,15 @@ def apply_manual_resolutions(
 
         item["selected_resolution"] = rid
         item["resolved_action"] = action
+        col = item.get("column")
+
+        if action == "skip_requirement":
+            req_cols = rules.get("required_columns") or []
+            rules["required_columns"] = [rc for rc in req_cols if str(rc).lower() != str(col).lower()]
+            plan["business_rules"] = rules
+            item["status"] = "resolved"
+            resolved_log.append({**item, "promoted": True})
+            continue
 
         if is_skip_action(action):
             item["status"] = "skipped"

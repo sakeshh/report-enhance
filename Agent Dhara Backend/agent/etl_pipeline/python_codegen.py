@@ -176,6 +176,9 @@ def _emit_standardize_boolean(col: str, ds_var: str, _p: Dict[str, Any]) -> List
 
 
 def _emit_deduplicate_col(col: str, ds_var: str, _p: Dict[str, Any]) -> List[str]:
+    if "," in col:
+        cols_list = ", ".join(repr(c.strip()) for c in col.split(",") if c.strip())
+        return [f"{ds_var} = {ds_var}.drop_duplicates(subset=[{cols_list}], keep='first')"]
     return [f"{ds_var} = {ds_var}.drop_duplicates(subset=[{_col_expr(col)}], keep='first')"]
 
 

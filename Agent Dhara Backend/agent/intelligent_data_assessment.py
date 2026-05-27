@@ -4006,12 +4006,20 @@ def load_and_profile(
         metadata[name] = meta
 
     if approved_semantics:
+        import re
+        def _norm_key(k: str) -> str:
+            return re.sub(r"[^\w]+", "", str(k).lower())
+
+        norm_metadata = {_norm_key(k): k for k in metadata.keys()}
         for name, table_sem in approved_semantics.items():
-            if name in metadata:
-                meta = metadata[name]
+            norm_name = _norm_key(name)
+            if norm_name in norm_metadata:
+                meta = metadata[norm_metadata[norm_name]]
+                norm_cols = {_norm_key(c): c for c in meta.get("columns", {})}
                 for col, tag in table_sem.items():
-                    if col in meta.get("columns", {}):
-                        meta["columns"][col]["semantic_type"] = tag
+                    norm_col = _norm_key(col)
+                    if norm_col in norm_cols:
+                        meta["columns"][norm_cols[norm_col]]["semantic_type"] = tag
 
     if len(datasets) >= 2:
         try:

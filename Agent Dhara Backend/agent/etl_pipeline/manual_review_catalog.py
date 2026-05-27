@@ -141,6 +141,22 @@ _CATALOG: Dict[str, List[ResolutionOption]] = {
         _opt("quarantine_all_null", "Quarantine rows where all are null", "at_least_one", recommended=True, description="Move rows to rejects table where all specified columns are NULL."),
         _opt("keep_as_is", "Keep as-is (skip in ETL)", "noop"),
     ],
+    "missing_required_column": [
+        _opt("skip_requirement", "Skip requirement (remove from rules)", "skip_requirement", recommended=True, description="Remove this column from the list of required columns for this ingestion."),
+        _opt("keep_as_is", "Keep as-is (requires external fix)", "noop", description="Accept the requirement without resolving it in the pipeline (will fail validation)."),
+    ],
+    "business_key_duplicate": [
+        _opt("deduplicate", "Deduplicate on business key", "deduplicate", recommended=True, description="Add a deduplication step to group by this key and keep the first/last record."),
+        _opt("keep_as_is", "Keep duplicates (allow in output)", "noop", description="Accept duplicates and pass them to target without filtering."),
+    ],
+    "high_null_percentage": [
+        _opt("fill_nulls", "Fill nulls (median/mean/mode)", "fill_nulls_simple", recommended=True, description="Impute null values using median, mean, or mode based on column type."),
+        _opt("keep_as_is", "Keep as-is (accept risk)", "noop", description="Allow nulls in the output column."),
+    ],
+    "orphan_foreign_keys": [
+        _opt("reject_orphans", "Validate referential integrity (reject/stage)", "validate_referential_integrity_or_stage", recommended=True, description="Filter out/delete records where foreign key does not exist in target."),
+        _opt("keep_as_is", "Keep raw (allow orphans)", "noop", description="Accept orphan keys and pass them to target."),
+    ],
 }
 
 

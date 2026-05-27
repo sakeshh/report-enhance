@@ -317,12 +317,32 @@ def etl_plan_start(
         "target_path": target_path,
     }
 
-    # Compute ETL readiness and inject blockers if present
+    # Compute ETL readiness and map blockers to manual review
     from agent.etl_readiness_scorer import compute_etl_readiness
     readiness = compute_etl_readiness(assess)
     assess["etl_readiness"] = readiness
     if readiness["blockers"]:
-        plan["blocked"] = (plan.get("blocked") or []) + readiness["blockers"]
+        existing = plan.get("manual_review") or []
+        for blocker in readiness["blockers"]:
+            b_ds = blocker.get("dataset")
+            b_col = blocker.get("column")
+            b_it = blocker.get("issue_type") or "unknown"
+            if not any(
+                str(m.get("dataset")).lower() == str(b_ds).lower() and
+                str(m.get("column")).lower() == str(b_col).lower() and
+                str(m.get("issue_type")).lower() == str(b_it).lower()
+                for m in existing if isinstance(m, dict)
+            ):
+                plan.setdefault("manual_review", []).append({
+                    "dataset": b_ds,
+                    "column": b_col,
+                    "issue_type": b_it,
+                    "severity": blocker.get("severity") or "HIGH",
+                    "message": blocker.get("issue"),
+                    "guidance": blocker.get("fix") or "",
+                })
+        plan = enrich_plan_manual_review(plan)
+    plan["blocked"] = []
 
     flow = ctx.setdefault("etl_flow", {})
     narr_mode = os.getenv("ETL_NARRATOR_MODE", "tiered").strip().lower()
