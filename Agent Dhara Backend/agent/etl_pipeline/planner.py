@@ -634,6 +634,17 @@ def build_etl_plan(
                 + f" Multi-dataset ({ds_count} sources, {rel_plan['join_count']} join(s) detected)."
             )
 
+    # Build explicit semantic schema layer
+    sem_schema = {}
+    for ds_name, ds_meta in (assessment.get("datasets") or {}).items():
+        if isinstance(ds_meta, dict):
+            cols = ds_meta.get("columns") or {}
+            for col_name, col in cols.items():
+                if isinstance(col, dict):
+                    hints = col.get("llm_hints") or {}
+                    sem_type = hints.get("semantic_type") or col.get("semantic_type") or "unknown"
+                    sem_schema[f"{ds_name}.{col_name}"] = str(sem_type).lower().strip()
+
     plan = {
         "plan_version": 1,
         "plan_id": _plan_id(),
@@ -650,6 +661,7 @@ def build_etl_plan(
         "engine_recommendation": engine_rec,
         "source_context": source_context or {},
         "relationships": rel_plan,
+        "semantic_schema": sem_schema,
     }
 
     if rules.get("auto_resolve_pending") and plan.get("manual_review"):

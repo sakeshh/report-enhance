@@ -100,7 +100,7 @@ class TestEtlScenarios(unittest.TestCase):
                 _has_action(steps, "department", "lowercase"),
                 f"{ds} missing lowercase department",
             )
-            ev = next(s["evidence"] for s in steps if s.get("column") == "name")
+            ev = next(s["evidence"] for s in steps if s.get("column") == "name" and s.get("action") == "lowercase")
             why = (ev.get("why_this_action") or "").lower()
             self.assertTrue(
                 "case" in why or "inconsist" in why,
@@ -215,9 +215,11 @@ class TestEtlScenarios(unittest.TestCase):
 
     def test_scenario_05_typo_required_column_blocked(self) -> None:
         plan, rules = _build_plan(self.assess, {"required_columns": ["customer_id"]})
-        ok, errs = validate_etl_plan(plan, self.assess, rules)
+        from agent.etl_pipeline.validate_plan import validate_etl_plan_for_confirm
+        ok, errs = validate_etl_plan_for_confirm(plan, self.assess, rules)
         self.assertFalse(ok)
-        self.assertTrue(any("customer_id" in e for e in errs))
+        manual = plan.get("manual_review") or []
+        self.assertTrue(any(m.get("column") == "customer_id" for m in manual))
 
     # ── Scenario 6: never drop + valid values ───────────────────────────────
 

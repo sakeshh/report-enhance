@@ -1,4 +1,4 @@
--- ETL SQL — Agent Dhara — plan_id=plan_1779706919
+-- ETL SQL — Agent Dhara — plan_id=plan_1779876861
 -- dialect=tsql — review before executing against production.
 
 -- ⚠ 1 item(s) flagged for manual review before production run.
@@ -20,15 +20,6 @@ BEGIN
 END;
 GO
 
-IF OBJECT_ID('dbo.etl_default_values', 'U') IS NULL
-BEGIN
-    CREATE TABLE dbo.etl_default_values (
-        column_name VARCHAR(256) PRIMARY KEY,
-        default_value VARCHAR(256) NOT NULL,
-        data_type VARCHAR(50) NOT NULL
-    );
-END;
-GO
 
 IF OBJECT_ID('dbo.etl_invalid_values', 'U') IS NULL
 BEGIN
@@ -96,23 +87,52 @@ AS BEGIN
             CREATE NONCLUSTERED INDEX idx_json_Clean_id ON [data_1].[json_Clean]([id]);
         END
 
-        -- Create Staging Table matching Clean structure
+        -- Create Staging Table with raw column types to preserve raw strings
         IF OBJECT_ID('tempdb..#json_Staging') IS NOT NULL DROP TABLE #json_Staging;
-        SELECT * INTO #json_Staging FROM [data_1].[json_Clean] WHERE 1=0;
+        CREATE TABLE #json_Staging ([id] NVARCHAR(MAX) NULL, [name] NVARCHAR(MAX) NULL, [department] NVARCHAR(MAX) NULL, [phone] NVARCHAR(MAX) NULL, [email] NVARCHAR(MAX) NULL, [age] NVARCHAR(MAX) NULL, [salary] NVARCHAR(MAX) NULL, etl_batch_id INT NULL);
 
         -- Copy data from Raw to Staging
-            ;WITH _raw_dedup AS (
-                SELECT [id], [name], [department], [phone], [email], [age], [salary], ROW_NUMBER() OVER (PARTITION BY [id], [email] ORDER BY (SELECT NULL)) AS _rn
-                FROM [data_1].[json]
-            )
             INSERT INTO #json_Staging ([id], [name], [department], [phone], [email], [age], [salary], etl_batch_id)
-            SELECT [id], [name], [department], [phone], [email], [age], [salary], @run_id FROM _raw_dedup WHERE _rn = 1;
+            SELECT [id], [name], [department], [phone], [email], [age], [salary], @run_id FROM [data_1].[json];
 
         -- Single-Pass expression updates on #json_Staging
         UPDATE #json_Staging
-        SET [department] = LOWER(CAST([department] AS NVARCHAR(MAX))),
-            [name] = LOWER(CAST([name] AS NVARCHAR(MAX)))
+        SET [age] = LOWER(LTRIM(RTRIM(CAST([age] AS NVARCHAR(MAX))))),
+            [department] = LOWER(LTRIM(RTRIM(CAST([department] AS NVARCHAR(MAX))))),
+            [email] = LOWER(LTRIM(RTRIM(LTRIM(RTRIM(CAST([email] AS NVARCHAR(MAX))))))),
+            [name] = LOWER(LTRIM(RTRIM(CAST([name] AS NVARCHAR(MAX))))),
+            [phone] = REPLACE(REPLACE(REPLACE(REPLACE(LTRIM(RTRIM(CAST([phone] AS NVARCHAR(MAX)))), N'-', N''), N' ', N''), N'(', N''), N')', N'')
         WHERE 1=1;
+
+        -- Quarantine rows where primary key [id] is NULL to dbo.etl_rejects
+        INSERT INTO dbo.etl_rejects (process_name, table_name, row_data, error_reason)
+        SELECT 'etl_clean_json', 'data_1.json_Clean',
+               (SELECT r.* FOR JSON PATH, WITHOUT_ARRAY_WRAPPER),
+               'Primary key [id] is NULL'
+        FROM #json_Staging r
+        WHERE r.[id] IS NULL;
+
+        DELETE FROM #json_Staging WHERE [id] IS NULL;
+
+        -- Quarantine invalid emails from #json_Staging.[email] to dbo.etl_rejects
+        INSERT INTO dbo.etl_rejects (process_name, table_name, row_data, error_reason)
+        SELECT 'etl_clean_json', 'data_1.json_Clean',
+               (SELECT r.* FOR JSON PATH, WITHOUT_ARRAY_WRAPPER),
+               'Column [email] with value ' + CAST(r.[email] AS NVARCHAR(MAX)) + ' is not a valid email format'
+        FROM #json_Staging r
+        WHERE r.[email] IS NOT NULL AND NOT (CAST(r.[email] AS NVARCHAR(MAX)) LIKE '%_@_%._%');
+
+        DELETE FROM #json_Staging WHERE [email] IS NOT NULL AND NOT (CAST([email] AS NVARCHAR(MAX)) LIKE '%_@_%._%');
+
+        -- Quarantine invalid phones from #json_Staging.[phone] to dbo.etl_rejects
+        INSERT INTO dbo.etl_rejects (process_name, table_name, row_data, error_reason)
+        SELECT 'etl_clean_json', 'data_1.json_Clean',
+               (SELECT r.* FOR JSON PATH, WITHOUT_ARRAY_WRAPPER),
+               'Column [phone] with value ' + CAST(r.[phone] AS NVARCHAR(MAX)) + ' is not a valid phone format'
+        FROM #json_Staging r
+        WHERE r.[phone] IS NOT NULL AND (LEN(REPLACE(REPLACE(REPLACE(REPLACE(CAST(r.[phone] AS NVARCHAR(200)), N'-', N''), N' ', N''), N'(', N''), N')', N'')) < 7 OR REPLACE(REPLACE(REPLACE(REPLACE(CAST(r.[phone] AS NVARCHAR(200)), N'-', N''), N' ', N''), N'(', N''), N')', N'') LIKE '%[^0-9]%');
+
+        DELETE FROM #json_Staging WHERE [phone] IS NOT NULL AND (LEN(REPLACE(REPLACE(REPLACE(REPLACE(CAST([phone] AS NVARCHAR(200)), N'-', N''), N' ', N''), N'(', N''), N')', N'')) < 7 OR REPLACE(REPLACE(REPLACE(REPLACE(CAST([phone] AS NVARCHAR(200)), N'-', N''), N' ', N''), N'(', N''), N')', N'') LIKE '%[^0-9]%');
 
         -- Copy fully transformed data from Staging to target Clean table
         IF @load_type = 'FULL' OR @last_run IS NULL
@@ -192,23 +212,52 @@ AS BEGIN
             CREATE NONCLUSTERED INDEX idx_xml_Clean_id ON [data_1].[xml_Clean]([id]);
         END
 
-        -- Create Staging Table matching Clean structure
+        -- Create Staging Table with raw column types to preserve raw strings
         IF OBJECT_ID('tempdb..#xml_Staging') IS NOT NULL DROP TABLE #xml_Staging;
-        SELECT * INTO #xml_Staging FROM [data_1].[xml_Clean] WHERE 1=0;
+        CREATE TABLE #xml_Staging ([id] NVARCHAR(MAX) NULL, [name] NVARCHAR(MAX) NULL, [department] NVARCHAR(MAX) NULL, [phone] NVARCHAR(MAX) NULL, [email] NVARCHAR(MAX) NULL, [age] NVARCHAR(MAX) NULL, [salary] NVARCHAR(MAX) NULL, etl_batch_id INT NULL);
 
         -- Copy data from Raw to Staging
-            ;WITH _raw_dedup AS (
-                SELECT [id], [name], [department], [phone], [email], [age], [salary], ROW_NUMBER() OVER (PARTITION BY [id], [email] ORDER BY (SELECT NULL)) AS _rn
-                FROM [data_1].[xml]
-            )
             INSERT INTO #xml_Staging ([id], [name], [department], [phone], [email], [age], [salary], etl_batch_id)
-            SELECT [id], [name], [department], [phone], [email], [age], [salary], @run_id FROM _raw_dedup WHERE _rn = 1;
+            SELECT [id], [name], [department], [phone], [email], [age], [salary], @run_id FROM [data_1].[xml];
 
         -- Single-Pass expression updates on #xml_Staging
         UPDATE #xml_Staging
-        SET [department] = LOWER(CAST([department] AS NVARCHAR(MAX))),
-            [name] = LOWER(CAST([name] AS NVARCHAR(MAX)))
+        SET [age] = LOWER(LTRIM(RTRIM(CAST([age] AS NVARCHAR(MAX))))),
+            [department] = LOWER(LTRIM(RTRIM(CAST([department] AS NVARCHAR(MAX))))),
+            [email] = LOWER(LTRIM(RTRIM(LTRIM(RTRIM(CAST([email] AS NVARCHAR(MAX))))))),
+            [name] = LOWER(LTRIM(RTRIM(CAST([name] AS NVARCHAR(MAX))))),
+            [phone] = REPLACE(REPLACE(REPLACE(REPLACE(LTRIM(RTRIM(CAST([phone] AS NVARCHAR(MAX)))), N'-', N''), N' ', N''), N'(', N''), N')', N'')
         WHERE 1=1;
+
+        -- Quarantine rows where primary key [id] is NULL to dbo.etl_rejects
+        INSERT INTO dbo.etl_rejects (process_name, table_name, row_data, error_reason)
+        SELECT 'etl_clean_xml', 'data_1.xml_Clean',
+               (SELECT r.* FOR JSON PATH, WITHOUT_ARRAY_WRAPPER),
+               'Primary key [id] is NULL'
+        FROM #xml_Staging r
+        WHERE r.[id] IS NULL;
+
+        DELETE FROM #xml_Staging WHERE [id] IS NULL;
+
+        -- Quarantine invalid emails from #xml_Staging.[email] to dbo.etl_rejects
+        INSERT INTO dbo.etl_rejects (process_name, table_name, row_data, error_reason)
+        SELECT 'etl_clean_xml', 'data_1.xml_Clean',
+               (SELECT r.* FOR JSON PATH, WITHOUT_ARRAY_WRAPPER),
+               'Column [email] with value ' + CAST(r.[email] AS NVARCHAR(MAX)) + ' is not a valid email format'
+        FROM #xml_Staging r
+        WHERE r.[email] IS NOT NULL AND NOT (CAST(r.[email] AS NVARCHAR(MAX)) LIKE '%_@_%._%');
+
+        DELETE FROM #xml_Staging WHERE [email] IS NOT NULL AND NOT (CAST([email] AS NVARCHAR(MAX)) LIKE '%_@_%._%');
+
+        -- Quarantine invalid phones from #xml_Staging.[phone] to dbo.etl_rejects
+        INSERT INTO dbo.etl_rejects (process_name, table_name, row_data, error_reason)
+        SELECT 'etl_clean_xml', 'data_1.xml_Clean',
+               (SELECT r.* FOR JSON PATH, WITHOUT_ARRAY_WRAPPER),
+               'Column [phone] with value ' + CAST(r.[phone] AS NVARCHAR(MAX)) + ' is not a valid phone format'
+        FROM #xml_Staging r
+        WHERE r.[phone] IS NOT NULL AND (LEN(REPLACE(REPLACE(REPLACE(REPLACE(CAST(r.[phone] AS NVARCHAR(200)), N'-', N''), N' ', N''), N'(', N''), N')', N'')) < 7 OR REPLACE(REPLACE(REPLACE(REPLACE(CAST(r.[phone] AS NVARCHAR(200)), N'-', N''), N' ', N''), N'(', N''), N')', N'') LIKE '%[^0-9]%');
+
+        DELETE FROM #xml_Staging WHERE [phone] IS NOT NULL AND (LEN(REPLACE(REPLACE(REPLACE(REPLACE(CAST([phone] AS NVARCHAR(200)), N'-', N''), N' ', N''), N'(', N''), N')', N'')) < 7 OR REPLACE(REPLACE(REPLACE(REPLACE(CAST([phone] AS NVARCHAR(200)), N'-', N''), N' ', N''), N'(', N''), N')', N'') LIKE '%[^0-9]%');
 
         -- Copy fully transformed data from Staging to target Clean table
         IF @load_type = 'FULL' OR @last_run IS NULL
@@ -287,9 +336,9 @@ AS BEGIN
             USING (SELECT 'etl_main' AS process_name) AS source
             ON target.process_name = source.process_name
             WHEN MATCHED THEN
-                UPDATE SET last_run_time = GETDATE()
+                UPDATE SET last_run_time = COALESCE((SELECT MAX(last_run_time) FROM dbo.etl_watermark WHERE process_name LIKE 'etl_clean_%'), GETDATE())
             WHEN NOT MATCHED THEN
-                INSERT (process_name, last_run_time) VALUES (source.process_name, GETDATE());
+                INSERT (process_name, last_run_time) VALUES (source.process_name, COALESCE((SELECT MAX(last_run_time) FROM dbo.etl_watermark WHERE process_name LIKE 'etl_clean_%'), GETDATE()));
         END
 
         UPDATE dbo.etl_log

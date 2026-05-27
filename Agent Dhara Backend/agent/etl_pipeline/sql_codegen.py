@@ -116,16 +116,21 @@ def compile_column_expression(col_name: str, transforms: List[dict], col_meta: d
         
         if action == "trim":
             if col_class not in ("metric", "date"):
-                expr = f"LTRIM(RTRIM({_wrap_string_cast(expr)}))"
+                if not (expr.strip().upper().startswith("LTRIM(RTRIM(") or expr.strip().upper().startswith("RTRIM(LTRIM(")):
+                    expr = f"LTRIM(RTRIM({_wrap_string_cast(expr)}))"
         elif action == "lowercase":
             if col_class not in ("metric", "date"):
-                expr = f"LOWER({_wrap_string_cast(expr)})"
+                if not expr.strip().upper().startswith("LOWER("):
+                    expr = f"LOWER({_wrap_string_cast(expr)})"
         elif action == "uppercase":
             if col_class not in ("metric", "date"):
-                expr = f"UPPER({_wrap_string_cast(expr)})"
+                if not expr.strip().upper().startswith("UPPER("):
+                    expr = f"UPPER({_wrap_string_cast(expr)})"
         elif action == "sanitize_email":
             if col_class not in ("metric", "date"):
-                expr = f"LOWER(LTRIM(RTRIM({_wrap_string_cast(expr)})))"
+                expr_upper = expr.strip().upper()
+                if not (expr_upper.startswith("LOWER(LTRIM(RTRIM(") or expr_upper.startswith("LOWER(RTRIM(LTRIM(")):
+                    expr = f"LOWER(LTRIM(RTRIM({_wrap_string_cast(expr)})))"
         elif action == "normalize_phone":
             inner_cast = expr if is_already_string(expr) else f"CAST({expr} AS NVARCHAR(200))"
             expr = f"REPLACE(REPLACE(REPLACE(REPLACE({inner_cast}, N'-', N''), N' ', N''), N'(', N''), N')', N'')"
@@ -233,16 +238,7 @@ def generate_sql_etl(plan: Dict[str, Any], assessment: Dict[str, Any], *, dialec
         lines.append("END;")
         lines.append("GO")
         lines.append("")
-        lines.append("IF OBJECT_ID('dbo.etl_default_values', 'U') IS NULL")
-        lines.append("BEGIN")
-        lines.append("    CREATE TABLE dbo.etl_default_values (")
-        lines.append("        column_name VARCHAR(256) PRIMARY KEY,")
-        lines.append("        default_value VARCHAR(256) NOT NULL,")
-        lines.append("        data_type VARCHAR(50) NOT NULL")
-        lines.append("    );")
-        lines.append("END;")
-        lines.append("GO")
-        lines.append("")
+        lines.append("-- __DEFAULT_VALUES_DDL_PLACEHOLDER__")
         lines.append("IF OBJECT_ID('dbo.etl_invalid_values', 'U') IS NULL")
         lines.append("BEGIN")
         lines.append("    CREATE TABLE dbo.etl_invalid_values (")
@@ -253,19 +249,20 @@ def generate_sql_etl(plan: Dict[str, Any], assessment: Dict[str, Any], *, dialec
         lines.append("END;")
         lines.append("GO")
         lines.append("")
-        lines.append("IF OBJECT_ID('dbo.etl_rejects', 'U') IS NULL")
-        lines.append("BEGIN")
-        lines.append("    CREATE TABLE dbo.etl_rejects (")
-        lines.append("        id INT IDENTITY(1,1) PRIMARY KEY,")
-        lines.append("        process_name VARCHAR(100) NOT NULL,")
-        lines.append("        table_name VARCHAR(100) NOT NULL,")
-        lines.append("        row_data VARCHAR(MAX) NOT NULL,")
-        lines.append("        error_reason VARCHAR(MAX) NOT NULL,")
-        lines.append("        rejected_at DATETIME DEFAULT GETDATE()")
-        lines.append("    );")
-        lines.append("END;")
-        lines.append("GO")
-        lines.append("")
+        if not bool(business_rules.get("never_drop_rows")):
+            lines.append("IF OBJECT_ID('dbo.etl_rejects', 'U') IS NULL")
+            lines.append("BEGIN")
+            lines.append("    CREATE TABLE dbo.etl_rejects (")
+            lines.append("        id INT IDENTITY(1,1) PRIMARY KEY,")
+            lines.append("        process_name VARCHAR(100) NOT NULL,")
+            lines.append("        table_name VARCHAR(100) NOT NULL,")
+            lines.append("        row_data VARCHAR(MAX) NOT NULL,")
+            lines.append("        error_reason VARCHAR(MAX) NOT NULL,")
+            lines.append("        rejected_at DATETIME DEFAULT GETDATE()")
+            lines.append("    );")
+            lines.append("END;")
+            lines.append("GO")
+            lines.append("")
         lines.append("IF OBJECT_ID('dbo.etl_watermark', 'U') IS NULL")
         lines.append("BEGIN")
         lines.append("    CREATE TABLE dbo.etl_watermark (")
@@ -465,9 +462,12 @@ def generate_sql_etl(plan: Dict[str, Any], assessment: Dict[str, Any], *, dialec
 
         never_drop = bool(business_rules.get("never_drop_rows"))
         local_excluded_columns = set(excluded_columns)
+        skipped_comments = []
         for st in steps:
             if st.get("action") in ("exclude_column", "drop_column") and st.get("column"):
-                local_excluded_columns.add(st.get("column"))
+                col_name = st.get("column")
+                local_excluded_columns.add(col_name)
+                skipped_comments.append(f"-- Column {col_name} skipped via exclude_column transform step")
         
         # Meta extraction for keys, indexing and incremental loading
         cols = []
@@ -510,6 +510,7 @@ def generate_sql_etl(plan: Dict[str, Any], assessment: Dict[str, Any], *, dialec
         
         # Stored Procedure boundary setup for T-SQL
         proc_lines: List[str] = []
+        proc_lines.extend(skipped_comments)
         if dialect == "tsql":
             lines.append(f"IF OBJECT_ID('dbo.etl_clean_{tbl_base}', 'P') IS NOT NULL DROP PROCEDURE dbo.etl_clean_{tbl_base};")
             lines.append("GO")
@@ -538,16 +539,38 @@ def generate_sql_etl(plan: Dict[str, Any], assessment: Dict[str, Any], *, dialec
             for st in steps
         )
 
+        non_nullable_cols = business_rules.get("non_nullable") or []
         if dialect == "tsql":
             proc_lines.append(f"-- Initialize Clean Table Structure")
             proc_lines.append(f"IF OBJECT_ID('{tbl_clean}', 'U') IS NULL")
             proc_lines.append("BEGIN")
-            proc_lines.append(f"    SELECT * INTO {clean_tbl} FROM {raw_tbl} WHERE 1=0;")
-            proc_lines.append(f"    ALTER TABLE {clean_tbl} ADD etl_created_at DATETIME DEFAULT GETDATE();")
-            proc_lines.append(f"    ALTER TABLE {clean_tbl} ADD etl_updated_at DATETIME DEFAULT GETDATE();")
-            proc_lines.append(f"    ALTER TABLE {clean_tbl} ADD etl_batch_id INT;")
+            
+            # Explicit CREATE TABLE
+            create_cols = []
+            for c in cols:
+                c_meta = cols_info.get(c) or {}
+                c_type = c_meta.get("dtype") or c_meta.get("target_dtype") or ""
+                target_type = get_sql_cast_type(c_type, c)
+                
+                # Check nullability
+                if c == pk_col or c in non_nullable_cols:
+                    null_str = "NOT NULL"
+                else:
+                    null_str = "NULL"
+                create_cols.append(f"        [{c}] {target_type} {null_str}")
+            
+            # Add metadata columns
+            create_cols.append("        etl_created_at DATETIME DEFAULT GETDATE()")
+            create_cols.append("        etl_updated_at DATETIME DEFAULT GETDATE()")
+            create_cols.append("        etl_batch_id INT NULL")
+            
+            # Add primary key constraint inline if pk_col exists
             if pk_col:
-                proc_lines.append(f"    ALTER TABLE {clean_tbl} ADD CONSTRAINT [PK_{tbl_base}_Clean] PRIMARY KEY ([{pk_col}]);")
+                create_cols.append(f"        CONSTRAINT [PK_{tbl_base}_Clean] PRIMARY KEY ([{pk_col}])")
+                
+            proc_lines.append(f"    CREATE TABLE {clean_tbl} (")
+            proc_lines.append(",\n".join(create_cols))
+            proc_lines.append("    );")
             
             # Setup index keys
             index_keys = []
@@ -590,75 +613,50 @@ def generate_sql_etl(plan: Dict[str, Any], assessment: Dict[str, Any], *, dialec
                 lines.append("")
 
         if dialect == "tsql":
-            proc_lines.append(f"-- Create Staging Table matching Clean structure")
+            proc_lines.append(f"-- Create Staging Table with raw column types to preserve raw strings")
             proc_lines.append(f"IF OBJECT_ID('tempdb..{tbl_staging}') IS NOT NULL DROP TABLE {tbl_staging};")
-            proc_lines.append(f"SELECT * INTO {tbl_staging} FROM {clean_tbl} WHERE 1=0;")
+            staging_cols_ddl = []
+            for col_name in cols:
+                staging_cols_ddl.append(f"[{col_name}] NVARCHAR(MAX) NULL")
+            staging_cols_ddl.append("etl_batch_id INT NULL")
+            for st in steps:
+                if st.get("action") in ("flag_outliers", "clip_or_flag") and st.get("column") and st.get("column") not in excluded_columns:
+                    staging_cols_ddl.append(f"[{st.get('column')}_outlier_flagged] INT NULL")
+                if st.get("action") == "cast_type" and st.get("column") and st.get("column") not in excluded_columns:
+                    staging_cols_ddl.append(f"[{st.get('column')}_int] BIGINT NULL")
+            ddl_joined = ", ".join(staging_cols_ddl)
+            proc_lines.append(f"CREATE TABLE {tbl_staging} ({ddl_joined});")
             proc_lines.append("")
 
         # Data copy logic
         if dialect == "tsql":
             proc_lines.append("-- Copy data from Raw to Staging")
             
-            # Determine deduplication partition & order keys
-            explicit_dedup_step = next(
-                (st for st in steps if str(st.get("action") or "").lower() == "deduplicate"),
-                None
-            )
-            should_dedup_on_insert = has_row_dedup or (pk_col is not None) or (explicit_dedup_step is not None)
-            if should_dedup_on_insert:
-                partition_keys = []
-                if explicit_dedup_step:
-                    col_val = str(explicit_dedup_step.get("column") or "")
-                    if col_val and col_val.lower() not in ("row-level", "[row-level]"):
-                        partition_keys = [c.strip() for c in col_val.split(",") if c.strip()]
-                
-                if not partition_keys:
-                    if pk_col:
-                        partition_keys.append(pk_col)
-                    for c_name in cols:
-                        c_lower = c_name.lower()
-                        if c_name != pk_col and any(x in c_lower for x in ("id", "key", "email", "code")):
-                            if not any(x in c_lower for x in ("row_number", "_rn", "row_num")):
-                                partition_keys.append(c_name)
-                if not partition_keys:
-                    if pk_col:
-                        partition_keys = [pk_col]
-                    elif cols:
-                        partition_keys = [cols[0]]
-                    else:
-                        partition_keys = ["column1", "column2"]
-                
-                partition_by = ", ".join(f"LOWER(LTRIM(RTRIM(CAST([{pk}] AS NVARCHAR(400)))))" for pk in partition_keys)
-                order_by_clause = f"[{watermark_col}] DESC" if watermark_col else "(SELECT NULL)"
-            
             def get_copy_sql_lines(where_cond: str = "") -> List[str]:
-                select_cols = ", ".join(f"[{c}]" for c in cols) if cols else "*"
                 where_clause = f" WHERE {where_cond}" if where_cond else ""
                 col_target_list = f" ({col_list}, etl_batch_id)" if col_list != "*" else ""
                 select_list = f"{col_list}, @run_id" if col_list != "*" else "*, @run_id"
-                if should_dedup_on_insert:
-                    return [
-                        f"    ;WITH _raw_dedup AS (",
-                        f"        SELECT {select_cols}, ROW_NUMBER() OVER (PARTITION BY {partition_by} ORDER BY {order_by_clause}) AS _rn",
-                        f"        FROM {raw_tbl}{where_clause}",
-                        f"    )",
-                        f"    INSERT INTO {tbl_staging}{col_target_list}",
-                        f"    SELECT {select_cols}, @run_id FROM _raw_dedup WHERE _rn = 1;"
-                    ]
-                else:
-                    return [
-                        f"    INSERT INTO {tbl_staging}{col_target_list}",
-                        f"    SELECT {select_list} FROM {raw_tbl}{where_clause};"
-                    ]
+                return [
+                    f"    INSERT INTO {tbl_staging}{col_target_list}",
+                    f"    SELECT {select_list} FROM {raw_tbl}{where_clause};"
+                ]
 
-            if pk_col and watermark_col:
+            if watermark_col:
+                parsed_watermark = (
+                    f"COALESCE("
+                    f"TRY_CONVERT(datetime, [{watermark_col}], 120), "
+                    f"TRY_CONVERT(datetime, [{watermark_col}], 103), "
+                    f"TRY_CONVERT(datetime, [{watermark_col}], 101), "
+                    f"TRY_CONVERT(datetime, [{watermark_col}], 111)"
+                    f")"
+                )
                 proc_lines.append("IF @load_type = 'FULL' OR @last_run IS NULL")
                 proc_lines.append("BEGIN")
                 proc_lines.extend(get_copy_sql_lines())
                 proc_lines.append("END")
                 proc_lines.append("ELSE")
                 proc_lines.append("BEGIN")
-                proc_lines.extend(get_copy_sql_lines(f"[{watermark_col}] > @last_run"))
+                proc_lines.extend(get_copy_sql_lines(f"{parsed_watermark} > @last_run"))
                 proc_lines.append("END")
             else:
                 proc_lines.extend(get_copy_sql_lines())
@@ -669,18 +667,70 @@ def generate_sql_etl(plan: Dict[str, Any], assessment: Dict[str, Any], *, dialec
         
         step_lines = []
         
+        # Step 0: Normalize empty strings to NULL before validation
+        if dialect == "tsql" and cols:
+            nullify_clauses = [f"[{c}] = NULLIF(LTRIM(RTRIM([{c}])), '')" for c in cols]
+            step_lines.append(f"-- Normalize empty strings to NULL before validation")
+            step_lines.append(f"UPDATE {tbl_staging}")
+            step_lines.append(f"SET " + ",\n    ".join(nullify_clauses) + ";")
+            step_lines.append(f"")
+
         # Phase 1: Validations and Quarantines (deletes/rejects) on the Staging Table
         if pk_col and dialect == "tsql" and not never_drop:
             step_lines.append(f"-- Quarantine rows where primary key [{pk_col}] is NULL to dbo.etl_rejects")
             step_lines.append(f"INSERT INTO dbo.etl_rejects (process_name, table_name, row_data, error_reason)")
             step_lines.append(f"SELECT 'etl_clean_{tbl_base}', '{tbl_clean}',")
-            step_lines.append(f"       (SELECT TOP 1 * FROM {tbl_staging} r2 WHERE r2.[{pk_col}] IS NULL FOR JSON PATH, WITHOUT_ARRAY_WRAPPER),")
+            step_lines.append(f"       (SELECT r.* FOR JSON PATH, WITHOUT_ARRAY_WRAPPER),")
             step_lines.append(f"       'Primary key [{pk_col}] is NULL'")
             step_lines.append(f"FROM {tbl_staging} r")
             step_lines.append(f"WHERE r.[{pk_col}] IS NULL;")
             step_lines.append(f"")
             step_lines.append(f"DELETE FROM {tbl_staging} WHERE [{pk_col}] IS NULL;")
             step_lines.append(f"")
+
+        # Reject non-numeric IDs and decimals/floats
+        if dialect == "tsql":
+            for c_name in cols:
+                c_meta = cols_info.get(c_name) or {}
+                c_type = c_meta.get("dtype") or c_meta.get("target_dtype") or ""
+                sql_t = get_sql_cast_type(c_type, c_name)
+                c_brk = _brk(c_name)
+                
+                # Check for BIGINT IDs
+                if sql_t == "BIGINT" and (c_name.lower().endswith("id") or c_name.lower().endswith("key")):
+                    if not never_drop:
+                        step_lines.append(f"-- Quarantine rows where ID column [{c_name}] is not numeric to dbo.etl_rejects")
+                        step_lines.append(f"INSERT INTO dbo.etl_rejects (process_name, table_name, row_data, error_reason)")
+                        step_lines.append(f"SELECT 'etl_clean_{tbl_base}', '{tbl_clean}',")
+                        step_lines.append(f"       (SELECT r.* FOR JSON PATH, WITHOUT_ARRAY_WRAPPER),")
+                        step_lines.append(f"       '{c_name} is not numeric'")
+                        step_lines.append(f"FROM {tbl_staging} r")
+                        step_lines.append(f"WHERE r.{c_brk} IS NOT NULL AND TRY_CAST(r.{c_brk} AS BIGINT) IS NULL;")
+                        step_lines.append(f"")
+                        step_lines.append(f"DELETE FROM {tbl_staging} WHERE {c_brk} IS NOT NULL AND TRY_CAST({c_brk} AS BIGINT) IS NULL;")
+                        step_lines.append(f"")
+                    else:
+                        step_lines.append(f"-- Nullify invalid non-numeric ID values for [{c_name}]")
+                        step_lines.append(f"UPDATE {tbl_staging} SET {c_brk} = NULL WHERE {c_brk} IS NOT NULL AND TRY_CAST({c_brk} AS BIGINT) IS NULL;")
+                        step_lines.append(f"")
+                
+                # Check for decimals/floats (e.g. OrderAmount)
+                elif sql_t.startswith("DECIMAL") or sql_t in ("FLOAT", "REAL"):
+                    if not never_drop:
+                        step_lines.append(f"-- Quarantine rows where numeric column [{c_name}] is not numeric to dbo.etl_rejects")
+                        step_lines.append(f"INSERT INTO dbo.etl_rejects (process_name, table_name, row_data, error_reason)")
+                        step_lines.append(f"SELECT 'etl_clean_{tbl_base}', '{tbl_clean}',")
+                        step_lines.append(f"       (SELECT r.* FOR JSON PATH, WITHOUT_ARRAY_WRAPPER),")
+                        step_lines.append(f"       '{c_name} is not numeric'")
+                        step_lines.append(f"FROM {tbl_staging} r")
+                        step_lines.append(f"WHERE r.{c_brk} IS NOT NULL AND TRY_CAST(r.{c_brk} AS {sql_t}) IS NULL;")
+                        step_lines.append(f"")
+                        step_lines.append(f"DELETE FROM {tbl_staging} WHERE {c_brk} IS NOT NULL AND TRY_CAST({c_brk} AS {sql_t}) IS NULL;")
+                        step_lines.append(f"")
+                    else:
+                        step_lines.append(f"-- Nullify invalid non-numeric values for [{c_name}]")
+                        step_lines.append(f"UPDATE {tbl_staging} SET {c_brk} = NULL WHERE {c_brk} IS NOT NULL AND TRY_CAST({c_brk} AS {sql_t}) IS NULL;")
+                        step_lines.append(f"")
             
         non_nullable_cols = business_rules.get("non_nullable") or []
         for nn_col in non_nullable_cols:
@@ -690,7 +740,7 @@ def generate_sql_etl(plan: Dict[str, Any], assessment: Dict[str, Any], *, dialec
                     step_lines.append(f"-- Quarantine rows where non-nullable [{nn_col}] is NULL to dbo.etl_rejects")
                     step_lines.append(f"INSERT INTO dbo.etl_rejects (process_name, table_name, row_data, error_reason)")
                     step_lines.append(f"SELECT 'etl_clean_{tbl_base}', '{tbl_clean}',")
-                    step_lines.append(f"       (SELECT TOP 1 * FROM {tbl_staging} r2 WHERE r2.[{pk_col}] = r.[{pk_col}] FOR JSON PATH, WITHOUT_ARRAY_WRAPPER),")
+                    step_lines.append(f"       (SELECT r.* FOR JSON PATH, WITHOUT_ARRAY_WRAPPER),")
                     step_lines.append(f"       'Required column [{nn_col}] is NULL'")
                     step_lines.append(f"FROM {tbl_staging} r")
                     step_lines.append(f"WHERE r.{nn_c} IS NULL;")
@@ -708,10 +758,34 @@ def generate_sql_etl(plan: Dict[str, Any], assessment: Dict[str, Any], *, dialec
             if action == "parse_dates":
                 if dialect == "tsql":
                     if not never_drop:
+                        # 1. Reject NULL dates if it is a high-severity DQ issue (Option A)
+                        has_high_null = False
+                        if assessment:
+                            dq_issues = assessment.get("data_quality_issues", {}).get("datasets", {}).get(ds_name, {}).get("issues", [])
+                            has_high_null = any(
+                                str(iss.get("column")).lower() == str(col).lower()
+                                and str(iss.get("type")).lower() == "nulls"
+                                and str(iss.get("severity")).lower() == "high"
+                                for iss in dq_issues
+                            )
+                        
+                        if has_high_null:
+                            step_lines.append(f"-- Quarantine null dates from {tbl_staging}.{c} to dbo.etl_rejects")
+                            step_lines.append(f"INSERT INTO dbo.etl_rejects (process_name, table_name, row_data, error_reason)")
+                            step_lines.append(f"SELECT 'etl_clean_{tbl_base}', '{tbl_clean}',")
+                            step_lines.append(f"       (SELECT r.* FOR JSON PATH, WITHOUT_ARRAY_WRAPPER),")
+                            step_lines.append(f"       'Required date column [{col}] is NULL'")
+                            step_lines.append(f"FROM {tbl_staging} r")
+                            step_lines.append(f"WHERE r.{c} IS NULL;")
+                            step_lines.append(f"")
+                            step_lines.append(f"DELETE FROM {tbl_staging} WHERE {c} IS NULL;")
+                            step_lines.append(f"")
+
+                        # 2. Reject invalid format dates
                         step_lines.append(f"-- Quarantine invalid dates from {tbl_staging}.{c} to dbo.etl_rejects")
                         step_lines.append(f"INSERT INTO dbo.etl_rejects (process_name, table_name, row_data, error_reason)")
                         step_lines.append(f"SELECT 'etl_clean_{tbl_base}', '{tbl_clean}',")
-                        step_lines.append(f"       (SELECT TOP 1 * FROM {tbl_staging} r2 WHERE r2.[{pk_col}] = r.[{pk_col}] FOR JSON PATH, WITHOUT_ARRAY_WRAPPER),")
+                        step_lines.append(f"       (SELECT r.* FOR JSON PATH, WITHOUT_ARRAY_WRAPPER),")
                         step_lines.append(f"       'Column [{col}] with value ' + CAST(r.{c} AS NVARCHAR(MAX)) + ' is not a valid date format'")
                         step_lines.append(f"FROM {tbl_staging} r")
                         step_lines.append(f"WHERE r.{c} IS NOT NULL AND COALESCE(")
@@ -731,11 +805,12 @@ def generate_sql_etl(plan: Dict[str, Any], assessment: Dict[str, Any], *, dialec
                         step_lines.append(f"")
             elif action == "sanitize_email":
                 if dialect == "tsql":
-                    if not never_drop:
+                    is_required = col in non_nullable_cols
+                    if not never_drop and is_required:
                         step_lines.append(f"-- Quarantine invalid emails from {tbl_staging}.{c} to dbo.etl_rejects")
                         step_lines.append(f"INSERT INTO dbo.etl_rejects (process_name, table_name, row_data, error_reason)")
                         step_lines.append(f"SELECT 'etl_clean_{tbl_base}', '{tbl_clean}',")
-                        step_lines.append(f"       (SELECT TOP 1 * FROM {tbl_staging} r2 WHERE r2.[{pk_col}] = r.[{pk_col}] FOR JSON PATH, WITHOUT_ARRAY_WRAPPER),")
+                        step_lines.append(f"       (SELECT r.* FOR JSON PATH, WITHOUT_ARRAY_WRAPPER),")
                         step_lines.append(f"       'Column [{col}] with value ' + CAST(r.{c} AS NVARCHAR(MAX)) + ' is not a valid email format'")
                         step_lines.append(f"FROM {tbl_staging} r")
                         step_lines.append(f"WHERE r.{c} IS NOT NULL AND NOT (CAST(r.{c} AS NVARCHAR(MAX)) LIKE '%_@_%._%');")
@@ -743,16 +818,19 @@ def generate_sql_etl(plan: Dict[str, Any], assessment: Dict[str, Any], *, dialec
                         step_lines.append(f"DELETE FROM {tbl_staging} WHERE {c} IS NOT NULL AND NOT (CAST({c} AS NVARCHAR(MAX)) LIKE '%_@_%._%');")
                         step_lines.append(f"")
                     else:
+                        step_lines.append(f"-- Nullify invalid email format for optional column [{col}]")
                         step_lines.append(f"UPDATE {tbl_staging} SET {c} = NULL WHERE {c} IS NOT NULL AND NOT (CAST({c} AS NVARCHAR(MAX)) LIKE '%_@_%._%');")
+                        step_lines.append(f"")
             elif action == "normalize_phone":
                 if dialect == "tsql":
                     cleaned_expr = f"REPLACE(REPLACE(REPLACE(REPLACE(CAST(r.{c} AS NVARCHAR(200)), N'-', N''), N' ', N''), N'(', N''), N')', N'')"
                     cleaned_expr_del = f"REPLACE(REPLACE(REPLACE(REPLACE(CAST({c} AS NVARCHAR(200)), N'-', N''), N' ', N''), N'(', N''), N')', N'')"
-                    if not never_drop:
+                    is_required = col in non_nullable_cols
+                    if not never_drop and is_required:
                         step_lines.append(f"-- Quarantine invalid phones from {tbl_staging}.{c} to dbo.etl_rejects")
                         step_lines.append(f"INSERT INTO dbo.etl_rejects (process_name, table_name, row_data, error_reason)")
                         step_lines.append(f"SELECT 'etl_clean_{tbl_base}', '{tbl_clean}',")
-                        step_lines.append(f"       (SELECT TOP 1 * FROM {tbl_staging} r2 WHERE r2.[{pk_col}] = r.[{pk_col}] FOR JSON PATH, WITHOUT_ARRAY_WRAPPER),")
+                        step_lines.append(f"       (SELECT r.* FOR JSON PATH, WITHOUT_ARRAY_WRAPPER),")
                         step_lines.append(f"       'Column [{col}] with value ' + CAST(r.{c} AS NVARCHAR(MAX)) + ' is not a valid phone format'")
                         step_lines.append(f"FROM {tbl_staging} r")
                         step_lines.append(f"WHERE r.{c} IS NOT NULL AND (LEN({cleaned_expr}) < 7 OR {cleaned_expr} LIKE '%[^0-9]%');")
@@ -760,7 +838,9 @@ def generate_sql_etl(plan: Dict[str, Any], assessment: Dict[str, Any], *, dialec
                         step_lines.append(f"DELETE FROM {tbl_staging} WHERE {c} IS NOT NULL AND (LEN({cleaned_expr_del}) < 7 OR {cleaned_expr_del} LIKE '%[^0-9]%');")
                         step_lines.append(f"")
                     else:
+                        step_lines.append(f"-- Nullify invalid phone format for optional column [{col}]")
                         step_lines.append(f"UPDATE {tbl_staging} SET {c} = NULL WHERE {c} IS NOT NULL AND (LEN({cleaned_expr_del}) < 7 OR {cleaned_expr_del} LIKE '%[^0-9]%');")
+                        step_lines.append(f"")
             elif action == "at_least_one":
                 cols_split = [str(x).strip() for x in str(col).split(",")]
                 cols_brackets = [_brk(x) for x in cols_split]
@@ -771,7 +851,7 @@ def generate_sql_etl(plan: Dict[str, Any], assessment: Dict[str, Any], *, dialec
                         step_lines.append(f"-- Quarantine rows where all of {col} are NULL to dbo.etl_rejects")
                         step_lines.append(f"INSERT INTO dbo.etl_rejects (process_name, table_name, row_data, error_reason)")
                         step_lines.append(f"SELECT 'etl_clean_{tbl_base}', '{tbl_clean}',")
-                        step_lines.append(f"       (SELECT * FROM {tbl_staging} r2 WHERE r2.[{pk_col}] = r.[{pk_col}] FOR JSON PATH, WITHOUT_ARRAY_WRAPPER),")
+                        step_lines.append(f"       (SELECT r.* FOR JSON PATH, WITHOUT_ARRAY_WRAPPER),")
                         step_lines.append(f"       'All of columns [{col}] are NULL'")
                         step_lines.append(f"FROM {tbl_staging} r")
                         step_lines.append(f"WHERE {all_null_cond};")
@@ -791,7 +871,7 @@ def generate_sql_etl(plan: Dict[str, Any], assessment: Dict[str, Any], *, dialec
                         if not never_drop:
                             step_lines.append(f"INSERT INTO dbo.etl_rejects (process_name, table_name, row_data, error_reason)")
                             step_lines.append(f"SELECT 'etl_clean_{tbl_base}', '{tbl_clean}',")
-                            step_lines.append(f"       (SELECT * FROM {tbl_staging} r2 WHERE r2.[{pk_col}] = r.[{pk_col}] FOR JSON PATH, WITHOUT_ARRAY_WRAPPER),")
+                            step_lines.append(f"       (SELECT r.* FOR JSON PATH, WITHOUT_ARRAY_WRAPPER),")
                             step_lines.append(f"       'Referential integrity violation: [{col}] value ' + CAST(r.{c} AS NVARCHAR(MAX)) + ' does not exist in {parent_tbl}.[{rel_col}]'")
                             step_lines.append(f"FROM {tbl_staging} r")
                             step_lines.append(f"WHERE r.{c} IS NOT NULL AND NOT EXISTS (SELECT 1 FROM {parent_tbl} p WHERE p.[{rel_col}] = r.{c});")
@@ -810,6 +890,32 @@ def generate_sql_etl(plan: Dict[str, Any], assessment: Dict[str, Any], *, dialec
                         step_lines.append(f"WHERE r.{c} IS NOT NULL AND NOT EXISTS (SELECT 1 FROM {parent_tbl} p WHERE p.[{rel_col}] = r.{c});")
                         step_lines.append(f"")
 
+        phase_validate_lines = list(step_lines)
+        step_lines = []
+
+        # Post-validation type parsing phase (runs AFTER validation to preserve raw values for reject logging)
+        parse_update_clauses = []
+        parsed_cols_seen = set()
+        for st in steps:
+            col = st.get("column")
+            if not col or col in local_excluded_columns:
+                continue
+            if st.get("action") == "parse_dates" and col not in parsed_cols_seen:
+                parsed_cols_seen.add(col)
+                col_meta = cols_info.get(col) or {}
+                compiled_expr = compile_column_expression(col, [st], col_meta, business_rules)
+                if compiled_expr != f"[{col}]":
+                    parse_update_clauses.append(f"[{col}] = {compiled_expr}")
+
+        if parse_update_clauses:
+            step_lines.append(f"-- Post-validation date/type parsing on {tbl_staging}")
+            update_sql = f"UPDATE {tbl_staging}\nSET " + ",\n    ".join(parse_update_clauses) + "\nWHERE 1=1;"
+            step_lines.extend(update_sql.splitlines())
+            step_lines.append("")
+
+        phase_parse_lines = list(step_lines)
+        step_lines = []
+
         # Phase 2: Expression-Based Chained Transformations (Single-Pass Update)
         column_transforms = {}
         for st in steps:
@@ -818,7 +924,7 @@ def generate_sql_etl(plan: Dict[str, Any], assessment: Dict[str, Any], *, dialec
                 continue
             action = st.get("action")
             # Only expressions
-            if action in ("trim", "lowercase", "uppercase", "sanitize_email", "normalize_phone", "hash_phone", "mask_phone", "standardize_boolean", "regex_replace", "range_clip", "coerce_numeric", "cast_type", "parse_dates", "replace_values"):
+            if action in ("trim", "lowercase", "uppercase", "sanitize_email", "normalize_phone", "hash_phone", "mask_phone", "standardize_boolean", "regex_replace", "range_clip", "coerce_numeric", "cast_type", "replace_values"):
                 if col not in column_transforms:
                     column_transforms[col] = []
                 column_transforms[col].append(st)
@@ -842,6 +948,9 @@ def generate_sql_etl(plan: Dict[str, Any], assessment: Dict[str, Any], *, dialec
             step_lines.extend(update_sql.splitlines())
             step_lines.append("")
 
+        phase_trim_lines = list(step_lines)
+        step_lines = []
+
         # Phase 3: Outlier Flags dynamically processed via stored procedure
         for st in steps:
             col = st.get("column")
@@ -855,6 +964,9 @@ def generate_sql_etl(plan: Dict[str, Any], assessment: Dict[str, Any], *, dialec
                     step_lines.append(f"EXEC dbo.sp_flag_outliers_iqr '{tbl_staging}', '{col_clean}';")
                 else:
                     step_lines.append(f"-- ANSI outlier flagging placeholder")
+
+        phase_outlier_lines = list(step_lines)
+        step_lines = []
 
         # Phase 4: Config-driven Default Seed & Single-Pass Join-based updates (defaults + invalid value replacements)
         config_fill_columns = []
@@ -906,7 +1018,8 @@ def generate_sql_etl(plan: Dict[str, Any], assessment: Dict[str, Any], *, dialec
                         val = None
                         
                 has_invalid = col in config_invalid_columns
-                tbl_key = f"{tbl_base}_Clean"
+                clean_tbl_base = tbl_clean.split(".")[-1].strip("[]")
+                tbl_key = clean_tbl_base
                 key = f"{tbl_key}.{col_clean_name}"
                 expr = f"c.{col_bracket}"
                 
@@ -917,9 +1030,14 @@ def generate_sql_etl(plan: Dict[str, Any], assessment: Dict[str, Any], *, dialec
                     invalid_values_to_seed[key] = [str(v) for v in replace_vals]
                     
                     alias_iv = f"iv_{col_clean_name.replace('.', '_').replace(' ', '_')[:35]}"
+                    if col_class == "date":
+                        # Date columns compare as string explicitly to avoid conversion issues with sentinel values like '###'
+                        join_cond = f"CAST(c.{col_bracket} AS NVARCHAR(MAX)) = {alias_iv}.invalid_value"
+                    else:
+                        join_cond = f"{cast_func}({alias_iv}.invalid_value AS {cast_type}) = c.{col_bracket}"
                     join_clauses.append(
                         f"LEFT JOIN dbo.etl_invalid_values {alias_iv} ON {alias_iv}.column_name = '{key}' "
-                        f"AND {cast_func}({alias_iv}.invalid_value AS {cast_type}) = c.{col_bracket}"
+                        f"AND {join_cond}"
                     )
                     expr = f"CASE WHEN {alias_iv}.invalid_value IS NOT NULL THEN NULL ELSE {expr} END"
                     where_clauses.append(f"{alias_iv}.invalid_value IS NOT NULL")
@@ -946,7 +1064,8 @@ def generate_sql_etl(plan: Dict[str, Any], assessment: Dict[str, Any], *, dialec
                             expr = f"COALESCE({expr}, {cast_func}({alias_dv}.default_value AS {cast_type}))"
                             where_clauses.append(f"c.{col_bracket} IS NULL")
                             
-                set_clauses.append(f"c.{col_bracket} = {expr}")
+                if expr != f"c.{col_bracket}":
+                    set_clauses.append(f"c.{col_bracket} = {expr}")
                 
             if set_clauses:
                 step_lines.append(f"-- Grouped config and null updates on {tbl_staging}")
@@ -970,6 +1089,9 @@ def generate_sql_etl(plan: Dict[str, Any], assessment: Dict[str, Any], *, dialec
                 step_lines.extend(update_sql.splitlines())
                 step_lines.append("")
 
+        phase_sentinel_lines = list(step_lines)
+        step_lines = []
+
         # Phase 5: Final Copy from Staging to target Clean table
         if dialect == "tsql":
             clean_cols = cols + [f"{c}_outlier_flagged" for st in steps if st.get("action") in ("flag_outliers", "clip_or_flag") for c in [st.get("column")] if c and c not in excluded_columns]
@@ -980,26 +1102,101 @@ def generate_sql_etl(plan: Dict[str, Any], assessment: Dict[str, Any], *, dialec
                         clean_cols.append(f"{cc}_int")
             clean_cols = sorted(list(set(clean_cols)))
             col_list_clean = ", ".join(f"[{c}]" for c in clean_cols)
-            
+
+            # Build typed SELECT expressions for safe insert from NVARCHAR(MAX) staging
+            select_parts = []
+            for c in clean_cols:
+                # Derived columns are already typed in staging — no cast needed
+                if c.endswith("_outlier_flagged") or c.endswith("_int"):
+                    select_parts.append(f"[{c}]")
+                    continue
+                col_meta = cols_info.get(c) or {}
+                col_type = col_meta.get("dtype") or col_meta.get("target_dtype") or ""
+                target_type = get_sql_cast_type(col_type, c)
+                if target_type == "NVARCHAR(MAX)":
+                    select_parts.append(f"[{c}]")
+                else:
+                    select_parts.append(f"TRY_CAST([{c}] AS {target_type})")
+            select_list_typed = ", ".join(select_parts)
+
             step_lines.append("-- Copy fully transformed data from Staging to target Clean table")
             step_lines.append("IF @load_type = 'FULL' OR @last_run IS NULL")
             step_lines.append("BEGIN")
             step_lines.append(f"    TRUNCATE TABLE {clean_tbl};")
             step_lines.append(f"    INSERT INTO {clean_tbl} ({col_list_clean}, etl_batch_id, etl_created_at, etl_updated_at)")
-            step_lines.append(f"    SELECT {col_list_clean}, etl_batch_id, GETDATE(), GETDATE() FROM {tbl_staging};")
+            step_lines.append(f"    SELECT {select_list_typed}, etl_batch_id, GETDATE(), GETDATE() FROM {tbl_staging};")
             step_lines.append("END")
             step_lines.append("ELSE")
             step_lines.append("BEGIN")
             if pk_col:
                 step_lines.append(f"    DELETE FROM {clean_tbl} WHERE [{pk_col}] IN (SELECT [{pk_col}] FROM {tbl_staging});")
             step_lines.append(f"    INSERT INTO {clean_tbl} ({col_list_clean}, etl_batch_id, etl_created_at, etl_updated_at)")
-            step_lines.append(f"    SELECT {col_list_clean}, etl_batch_id, GETDATE(), GETDATE() FROM {tbl_staging};")
+            step_lines.append(f"    SELECT {select_list_typed}, etl_batch_id, GETDATE(), GETDATE() FROM {tbl_staging};")
             step_lines.append("END;")
             step_lines.append("")
             
+            # Compute max watermark date from staging before cleanup
+            if watermark_col:
+                step_lines.append(f"DECLARE @max_watermark DATETIME = COALESCE((SELECT MAX(TRY_CAST([{watermark_col}] AS DATETIME)) FROM {tbl_staging}), @last_run, GETDATE());")
+                step_lines.append("")
             # Clean up the staging table
             step_lines.append(f"IF OBJECT_ID('tempdb..{tbl_staging}') IS NOT NULL DROP TABLE {tbl_staging};")
             step_lines.append("")
+
+        phase_copy_lines = list(step_lines)
+        step_lines = []
+
+        # Deduplication Phase: CTE-based dedup on staging after all validations
+        dedup_lines = []
+        if dialect == "tsql":
+            # Prefer row-level dedup (uses PK) over custom-column dedup steps
+            best_dedup = None
+            for st in steps:
+                if str(st.get("action") or "").lower() != "deduplicate":
+                    continue
+                col_val = str(st.get("column") or "").strip()
+                is_row_level = col_val.lower() in ("row-level", "[row-level]", "")
+                if is_row_level:
+                    best_dedup = st
+                    break  # Row-level (PK) dedup is always preferred
+                elif best_dedup is None:
+                    best_dedup = st  # Keep custom-column dedup as fallback
+
+            if best_dedup:
+                col_val = str(best_dedup.get("column") or "").strip()
+                is_row_level = col_val.lower() in ("row-level", "[row-level]", "")
+                if is_row_level:
+                    if pk_col:
+                        partition_cols = [pk_col]
+                    elif cols:
+                        partition_cols = list(cols)
+                    else:
+                        partition_cols = ["column1", "column2"]
+                else:
+                    partition_cols = [c.strip() for c in col_val.split(",") if c.strip()]
+
+                partition_exprs = [
+                    f"LOWER(LTRIM(RTRIM(CAST([{c}] AS NVARCHAR(400)))))"
+                    for c in partition_cols
+                ]
+                partition_clause = ", ".join(partition_exprs)
+                if watermark_col:
+                    order_clause = f"[{watermark_col}] DESC"
+                else:
+                    order_clause = "(SELECT NULL)"
+
+                dedup_lines.append("-- Deduplicate staging table by partition key(s)")
+                dedup_lines.append(";WITH _staging_dedup AS (")
+                dedup_lines.append(f"    SELECT ROW_NUMBER() OVER (PARTITION BY {partition_clause} ORDER BY {order_clause}) AS _rn")
+                dedup_lines.append(f"    FROM {tbl_staging}")
+                dedup_lines.append(")")
+                dedup_lines.append("DELETE FROM _staging_dedup WHERE _rn > 1;")
+                dedup_lines.append("")
+
+        # Combine all phases in correct execution order:
+        # 1. Trims & Casings  2. Sentinel/Placeholder Nullification  3. Format/Null Validations
+        # 4. Post-validation Type Parsing  5. Outlier Flags  6. Deduplication  7. Final Copy
+        step_lines = phase_trim_lines + phase_sentinel_lines + phase_validate_lines + phase_parse_lines + phase_outlier_lines + dedup_lines + phase_copy_lines
 
         if dialect == "tsql":
             proc_lines.extend(step_lines)
@@ -1010,10 +1207,11 @@ def generate_sql_etl(plan: Dict[str, Any], assessment: Dict[str, Any], *, dialec
             proc_lines.append("    MERGE INTO dbo.etl_watermark AS target")
             proc_lines.append(f"    USING (SELECT 'etl_clean_{tbl_base}' AS process_name) AS source")
             proc_lines.append("    ON target.process_name = source.process_name")
+            wm_expr = "@max_watermark" if watermark_col else "GETDATE()"
             proc_lines.append("    WHEN MATCHED THEN")
-            proc_lines.append("        UPDATE SET last_run_time = GETDATE()")
+            proc_lines.append(f"        UPDATE SET last_run_time = {wm_expr}")
             proc_lines.append("    WHEN NOT MATCHED THEN")
-            proc_lines.append("        INSERT (process_name, last_run_time) VALUES (source.process_name, GETDATE());")
+            proc_lines.append(f"        INSERT (process_name, last_run_time) VALUES (source.process_name, {wm_expr});")
             proc_lines.append("END")
             
             # Indent and append child procedure body
@@ -1077,10 +1275,11 @@ def generate_sql_etl(plan: Dict[str, Any], assessment: Dict[str, Any], *, dialec
         lines.append("            MERGE INTO dbo.etl_watermark AS target")
         lines.append("            USING (SELECT 'etl_main' AS process_name) AS source")
         lines.append("            ON target.process_name = source.process_name")
+        master_wm = "COALESCE((SELECT MAX(last_run_time) FROM dbo.etl_watermark WHERE process_name LIKE 'etl_clean_%'), GETDATE())"
         lines.append("            WHEN MATCHED THEN")
-        lines.append("                UPDATE SET last_run_time = GETDATE()")
+        lines.append(f"                UPDATE SET last_run_time = {master_wm}")
         lines.append("            WHEN NOT MATCHED THEN")
-        lines.append("                INSERT (process_name, last_run_time) VALUES (source.process_name, GETDATE());")
+        lines.append(f"                INSERT (process_name, last_run_time) VALUES (source.process_name, {master_wm});")
         lines.append("        END")
         lines.append("")
         lines.append("        UPDATE dbo.etl_log")
@@ -1149,5 +1348,22 @@ def generate_sql_etl(plan: Dict[str, Any], assessment: Dict[str, Any], *, dialec
         seed_sql = ""
         
     full_sql = "\n".join(lines)
+    if dialect == "tsql" and default_values_to_seed:
+        ddl_lines = [
+            "IF OBJECT_ID('dbo.etl_default_values', 'U') IS NULL",
+            "BEGIN",
+            "    CREATE TABLE dbo.etl_default_values (",
+            "        column_name VARCHAR(256) PRIMARY KEY,",
+            "        default_value VARCHAR(256) NOT NULL,",
+            "        data_type VARCHAR(50) NOT NULL",
+            "    );",
+            "END;",
+            "GO",
+            ""
+        ]
+        ddl_sql = "\n".join(ddl_lines)
+    else:
+        ddl_sql = ""
+    full_sql = full_sql.replace("-- __DEFAULT_VALUES_DDL_PLACEHOLDER__", ddl_sql)
     full_sql = full_sql.replace("-- __DEFAULT_VALUES_SEED_PLACEHOLDER__", seed_sql)
     return full_sql.strip() + "\n"

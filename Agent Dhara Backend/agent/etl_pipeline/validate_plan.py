@@ -79,7 +79,7 @@ def validate_etl_plan(
 
         for col, actions in seen_cols.items():
             if "deduplicate" in actions and len(actions) > 1:
-                non_dedupe = [a for a in actions if a != "deduplicate"]
+                non_dedupe = list(set([a for a in actions if a != "deduplicate"]))
                 if len(non_dedupe) > 3:
                     errs.append(
                         f"dataset '{ds_name}' column '{col}' has many transforms — review ordering"

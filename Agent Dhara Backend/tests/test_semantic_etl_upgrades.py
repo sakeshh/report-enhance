@@ -86,6 +86,7 @@ class TestSemanticEtlUpgrades(unittest.TestCase):
             "plan_id": "test_quarantine_plan",
             "business_rules": {
                 "never_drop_rows": False,
+                "non_nullable": ["Email"],
             },
             "datasets": {
                 "dbo.Orders_Raw": {
@@ -131,6 +132,7 @@ class TestSemanticEtlUpgrades(unittest.TestCase):
             "plan_id": "test_quarantine_plan_nd",
             "business_rules": {
                 "never_drop_rows": True,
+                "non_nullable": ["Email"],
             },
             "datasets": {
                 "dbo.Orders_Raw": {

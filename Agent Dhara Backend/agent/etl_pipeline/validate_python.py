@@ -53,7 +53,7 @@ _ACTION_CODE_MARKERS: Dict[str, List[str]] = {
     "coerce_numeric": ["to_numeric", "cast('double')"],
     "parse_dates": ["to_datetime", "to_timestamp"],
     "sanitize_email": ["contains('@'"],
-    "normalize_phone": ["regexp_replace", r"\\D"],
+    "normalize_phone": ["regexp_replace", r"\D"],
     "deduplicate": ["drop_duplicates", "dropDuplicates"],
     "exclude_column": [".drop(columns=", ".drop("],
     "drop_column": [".drop(columns=", ".drop("],

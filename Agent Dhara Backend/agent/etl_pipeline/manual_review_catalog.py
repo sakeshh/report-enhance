@@ -43,6 +43,10 @@ _CATALOG: Dict[str, List[ResolutionOption]] = {
         _opt("nullify_future", "Nullify future dates", "nullify_future_dates", recommended=True),
         _opt("keep_as_is", "Keep as-is (skip)", "noop"),
     ],
+    "invalid_date_format": [
+        _opt("parse_dates", "Standardize date formats", "parse_dates", recommended=True, description="Convert and parse date strings in various formats, and quarantine invalid dates."),
+        _opt("keep_as_is", "Keep as-is (skip in ETL)", "noop"),
+    ],
     "date_range_violation": [
         _opt("nullify_out_of_range", "Nullify out-of-range dates", "nullify_future_dates", recommended=True),
         _opt("keep_as_is", "Keep as-is (skip)", "noop"),

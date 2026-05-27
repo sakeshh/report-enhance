@@ -56,6 +56,7 @@ ISSUE_TO_ACTION = {
     "very_high_cardinality": "review_manually",
     "binary_like_column": "standardize_boolean",
     "very_wide_date_span": "review_manually",
+    "duplicate_insensitive_values": "lowercase",
 }
 
 # Columns we should NOT coerce to numeric (semantic string columns)
@@ -201,6 +202,10 @@ def suggest_transformations(assessment_result: Dict[str, Any]) -> Dict[str, Any]
             issue_type = issue.get("type", "")
             col = issue.get("column")
             action = ISSUE_TO_ACTION.get(issue_type, "review_manually")
+            if action == "fill_or_drop" and col:
+                col_lower = str(col).lower()
+                if any(x in col_lower for x in ("email", "city", "name", "customername", "contact")):
+                    action = "fill_nulls_simple"
             if action == "review_manually":
                 suggested.append(
                     {
@@ -262,7 +267,7 @@ def suggest_transformations(assessment_result: Dict[str, Any]) -> Dict[str, Any]
                     trim_columns.add((ds_name, col_name))
                     
             # 2. Email columns -> sanitize_email
-            elif sem_type == "id" and "email" in col_lower:
+            elif sem_type == "email" or "email" in col_lower:
                 if not any(s["dataset"] == ds_name and s["column"] == col_name and s["suggested_action"] == "sanitize_email" for s in suggested):
                     suggested.append({
                         "dataset": ds_name,
@@ -278,7 +283,7 @@ def suggest_transformations(assessment_result: Dict[str, Any]) -> Dict[str, Any]
                     trim_columns.add((ds_name, col_name))
                     
             # 3. Phone columns -> normalize_phone
-            elif sem_type == "id" and "phone" in col_lower:
+            elif sem_type == "phone" or "phone" in col_lower:
                 if not any(s["dataset"] == ds_name and s["column"] == col_name and (s["suggested_action"] in ("normalize_phone", "hash_phone", "mask_phone")) for s in suggested):
                     suggested.append({
                         "dataset": ds_name,

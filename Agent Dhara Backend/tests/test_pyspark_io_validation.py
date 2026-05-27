@@ -118,7 +118,7 @@ df_json_cleaned.write.json("out.json")
         code = generate_pyspark_etl(self._plan_with_manifest(), {})
         pipeline = code.split("def run_pipeline", 1)[-1]
         load_i = pipeline.find('dfs["data_1.json"] =')
-        transform_i = pipeline.find('transform_data_1_json(dfs["data_1.json"])')
+        transform_i = pipeline.find('transform_data_1_json(dfs["data_1.json"], dfs)')
         write_i = pipeline.find("Write cleaned")
         self.assertLess(load_i, transform_i, "load before transform in run_pipeline")
         self.assertLess(transform_i, write_i, "transform before write")

@@ -49,23 +49,50 @@ def plan_actions(plan: Dict[str, Any]) -> List[str]:
 
 
 def get_sql_cast_type(col_type: Optional[str], col_name: str) -> str:
-    if not col_type:
-        col_lower = col_name.lower()
-        if "date" in col_lower or "time" in col_lower or "stamp" in col_lower or col_lower.endswith("_at"):
-            return "DATETIME"
-        if "amount" in col_lower or "price" in col_lower or "quantity" in col_lower or "qty" in col_lower or "count" in col_lower:
-            return "DECIMAL(18,4)"
-        return "NVARCHAR(MAX)"
+    col_lower = col_name.lower()
+    t = col_type.lower() if col_type else ""
+    is_generic_string = not t or t in ("object", "string", "varchar", "nvarchar", "char", "text")
     
-    t = col_type.lower()
-    if "int" in t:
-        return "BIGINT"
-    if "float" in t or "real" in t or "double" in t:
-        return "FLOAT"
-    if "decimal" in t or "numeric" in t:
-        return "DECIMAL(18,4)"
-    if "date" in t or "time" in t or "timestamp" in t:
-        return "DATETIME"
+    # 1. Date/Time checks
+    if not is_generic_string:
+        if "datetime" in t or "timestamp" in t:
+            return "DATETIME"
+        if "date" in t:
+            return "DATE"
+        if "time" in t:
+            return "TIME"
+    else:
+        if "date" in col_lower:
+            if "time" in col_lower or "stamp" in col_lower or col_lower.endswith("_at"):
+                return "DATETIME"
+            return "DATE"
+        if col_lower.endswith("_at") or "time" in col_lower or "stamp" in col_lower:
+            return "DATETIME"
+
+    # 2. Numeric checks
+    if not is_generic_string:
+        if "int" in t:
+            return "BIGINT"
+        if "float" in t or "real" in t or "double" in t:
+            return "FLOAT"
+        if "decimal" in t or "numeric" in t:
+            if "amount" in col_lower or "price" in col_lower:
+                return "DECIMAL(18,2)"
+            return "DECIMAL(18,4)"
+    else:
+        if "amount" in col_lower or "price" in col_lower:
+            return "DECIMAL(18,2)"
+        if "quantity" in col_lower or "qty" in col_lower or "count" in col_lower:
+            return "DECIMAL(18,4)"
+
+    # 3. String columns checks
+    if col_lower == "email":
+        return "NVARCHAR(255)"
+    if col_lower == "phone":
+        return "NVARCHAR(50)"
+    if any(x in col_lower for x in ("name", "city", "status", "state", "country", "zip", "postal", "category")):
+        return "NVARCHAR(255)"
+
     return "NVARCHAR(MAX)"
 
 
