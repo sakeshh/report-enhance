@@ -9,6 +9,7 @@ import hashlib
 import json
 import os
 import re
+import warnings
 
 import concurrent.futures
 import numpy as np
@@ -57,6 +58,13 @@ def _get_threshold(thresholds: Dict[str, Any], *keys: str, default: Any = None) 
         if d is None:
             return default
     return d if d is not None else default
+
+
+def _pd_to_datetime_coerce(series: pd.Series) -> pd.Series:
+    """Parse mixed-format date strings to datetime without pandas infer-format UserWarning spam."""
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", UserWarning)
+        return pd.to_datetime(series, errors="coerce")
 
 
 # ============================================================
@@ -2640,7 +2648,7 @@ def run_extended_dq_checks(
                     ))
 
         # Dates: future / ancient / span
-        parsed = pd.to_datetime(s_str, errors="coerce")
+        parsed = _pd_to_datetime_coerce(s_str)
         date_ok = int(parsed.notna().sum())
         if (semantic == "date" or "datetime" in str(s.dtype).lower() or (any(h in col_lower for h in ["date", "time", "dt", "created", "updated"]) and "id" not in col_lower)) and date_ok >= max(5, int(0.45 * non_null)):
             valid = parsed.dropna()
@@ -2862,7 +2870,7 @@ def run_extended_dq_checks(
                         pass
 
             # Date: Jan-1 clumping
-            parsed_dates = pd.to_datetime(s_str, errors="coerce")
+            parsed_dates = _pd_to_datetime_coerce(s_str)
             date_ok_cnt = int(parsed_dates.notna().sum())
             if (semantic == "date" or "datetime" in str(s.dtype).lower()) and date_ok_cnt >= max(5, int(0.45 * non_null)):
                 valid_dates = parsed_dates.dropna()
@@ -2972,70 +2980,78 @@ def run_extended_dq_checks(
     # ------------------------------------------------------------
     nd_cfg = (thresholds or {}).get("near_duplicate") or {}
     if nd_cfg.get("enabled", True):
-        from rapidfuzz import fuzz
-        
-        # We construct a string representation for each row (excluding ID/Timestamp cols to be smart)
-        text_cols = [c for c in df.columns if c in priority_cols and _is_text_dtype(df[c].dtype) and not c.lower().endswith("id")]
-        if len(text_cols) >= 2:
-            max_rows = int(nd_cfg.get("max_rows", 50000))
-            sub_df = df[text_cols].dropna(how="all")
-            if len(sub_df) > max_rows:
-                sub_df = sub_df.sample(max_rows, random_state=42)
-                
-            row_strings = sub_df.apply(lambda row: " | ".join(str(val) for val in row), axis=1).tolist()
-            row_indices = sub_df.index.tolist()
-            
-            threshold = float(nd_cfg.get("threshold", 0.92)) * 100
-            near_dups = []
-            
-            # If the dataset is small, do full comparison
-            if len(row_strings) <= 300:
-                for i in range(len(row_strings)):
-                    for j in range(i + 1, len(row_strings)):
-                        ratio = fuzz.token_sort_ratio(row_strings[i], row_strings[j])
-                        if ratio >= threshold:
-                            near_dups.append((row_indices[i], row_indices[j], ratio / 100.0))
-            else:
-                # Group by blocking keys (first two chars of first two significant words)
-                buckets = {}
-                for idx, r_str in enumerate(row_strings):
-                    words = [w for w in re.findall(r'\w+', r_str.lower()) if len(w) > 2]
-                    keys = set()
-                    if len(words) >= 1:
-                        keys.add(words[0][:2])
-                    if len(words) >= 2:
-                        keys.add(words[1][:2])
-                    if not keys:
-                        keys.add(f"len_{len(r_str) // 10}")
-                        
-                    for key in keys:
-                        buckets.setdefault(key, []).append(idx)
-                
-                # Pairwise comparison only within buckets
-                compared_pairs = set()
-                for key, idx_list in buckets.items():
-                    if len(idx_list) < 2:
-                        continue
-                    bucket_limit = min(len(idx_list), 200)
-                    for i in range(bucket_limit):
-                        for j in range(i + 1, bucket_limit):
-                            ii, jj = idx_list[i], idx_list[j]
-                            pair = (min(ii, jj), max(ii, jj))
-                            if pair in compared_pairs:
-                                continue
-                            compared_pairs.add(pair)
-                            
-                            ratio = fuzz.token_sort_ratio(row_strings[ii], row_strings[jj])
+        try:
+            from rapidfuzz import fuzz
+        except ImportError:
+            print(
+                "[intelligent_data_assessment] rapidfuzz not installed; skipping near-duplicate row detection. "
+                "Install with: pip install rapidfuzz"
+            )
+            fuzz = None  # type: ignore[assignment]
+
+        if fuzz is not None:
+            # We construct a string representation for each row (excluding ID/Timestamp cols to be smart)
+            text_cols = [c for c in df.columns if c in priority_cols and _is_text_dtype(df[c].dtype) and not c.lower().endswith("id")]
+            if len(text_cols) >= 2:
+                max_rows = int(nd_cfg.get("max_rows", 50000))
+                sub_df = df[text_cols].dropna(how="all")
+                if len(sub_df) > max_rows:
+                    sub_df = sub_df.sample(max_rows, random_state=42)
+
+                row_strings = sub_df.apply(lambda row: " | ".join(str(val) for val in row), axis=1).tolist()
+                row_indices = sub_df.index.tolist()
+
+                threshold = float(nd_cfg.get("threshold", 0.92)) * 100
+                near_dups = []
+
+                # If the dataset is small, do full comparison
+                if len(row_strings) <= 300:
+                    for i in range(len(row_strings)):
+                        for j in range(i + 1, len(row_strings)):
+                            ratio = fuzz.token_sort_ratio(row_strings[i], row_strings[j])
                             if ratio >= threshold:
-                                near_dups.append((row_indices[ii], row_indices[jj], ratio / 100.0))
-                        
-            if len(near_dups) > 0:
-                issues.append(dq_issue("medium", "near_duplicate_rows",
-                                       f"Found {len(near_dups)} pair(s) of near-duplicate rows with string similarity >= {threshold/100:.2f}",
-                                       column="[Row-level]",
-                                       count=len(near_dups),
-                                       sample=[{"row_index_a": int(a), "row_index_b": int(b), "similarity": float(s)}
-                                               for a, b, s in near_dups[:10]]))
+                                near_dups.append((row_indices[i], row_indices[j], ratio / 100.0))
+                else:
+                    # Group by blocking keys (first two chars of first two significant words)
+                    buckets = {}
+                    for idx, r_str in enumerate(row_strings):
+                        words = [w for w in re.findall(r'\w+', r_str.lower()) if len(w) > 2]
+                        keys = set()
+                        if len(words) >= 1:
+                            keys.add(words[0][:2])
+                        if len(words) >= 2:
+                            keys.add(words[1][:2])
+                        if not keys:
+                            keys.add(f"len_{len(r_str) // 10}")
+
+                        for key in keys:
+                            buckets.setdefault(key, []).append(idx)
+
+                    # Pairwise comparison only within buckets
+                    compared_pairs = set()
+                    for key, idx_list in buckets.items():
+                        if len(idx_list) < 2:
+                            continue
+                        bucket_limit = min(len(idx_list), 200)
+                        for i in range(bucket_limit):
+                            for j in range(i + 1, bucket_limit):
+                                ii, jj = idx_list[i], idx_list[j]
+                                pair = (min(ii, jj), max(ii, jj))
+                                if pair in compared_pairs:
+                                    continue
+                                compared_pairs.add(pair)
+
+                                ratio = fuzz.token_sort_ratio(row_strings[ii], row_strings[jj])
+                                if ratio >= threshold:
+                                    near_dups.append((row_indices[ii], row_indices[jj], ratio / 100.0))
+
+                if len(near_dups) > 0:
+                    issues.append(dq_issue("medium", "near_duplicate_rows",
+                                           f"Found {len(near_dups)} pair(s) of near-duplicate rows with string similarity >= {threshold/100:.2f}",
+                                           column="[Row-level]",
+                                           count=len(near_dups),
+                                           sample=[{"row_index_a": int(a), "row_index_b": int(b), "similarity": float(s)}
+                                                   for a, b, s in near_dups[:10]]))
 
     # ------------------------------------------------------------
     # 6. Multivariate Outlier Detection using IsolationForest

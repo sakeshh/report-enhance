@@ -1,17 +1,74 @@
 {
-    "dbo.Customers_Raw": {
-        "CustomerID": "int64",
-        "CustomerName": "object",
-        "Email": "object",
-        "Phone": "object",
-        "City": "object",
-        "CreatedDate": "object"
+    "data_1.json": {
+        "id": "object",
+        "name": "object",
+        "email": "object",
+        "phone": "object",
+        "age": "object",
+        "salary": "object",
+        "department": "object"
     },
-    "dbo.Orders_Raw": {
-        "OrderID": "int64",
-        "CustomerID": "int64",
-        "OrderDate": "object",
-        "OrderAmount": "object",
-        "OrderStatus": "object"
+    "data_1.xml": {
+        "id": "object",
+        "name": "object",
+        "email": "object",
+        "phone": "object",
+        "age": "object",
+        "salary": "object",
+        "department": "object"
+    },
+    "data_2.json": {
+        "id": "object",
+        "name": "object",
+        "email": "object",
+        "phone": "object",
+        "age": "object",
+        "salary": "object",
+        "department": "object"
+    },
+    "data_2.xml": {
+        "id": "object",
+        "name": "object",
+        "email": "object",
+        "phone": "object",
+        "age": "object",
+        "salary": "object",
+        "department": "object"
+    },
+    "data_3 (1).csv": {
+        "id": "int64",
+        "name": "object",
+        "email": "object",
+        "phone": "object",
+        "age": "object",
+        "salary": "object",
+        "department": "object"
+    },
+    "data_3.csv": {
+        "id": "int64",
+        "name": "object",
+        "email": "object",
+        "phone": "object",
+        "age": "object",
+        "salary": "object",
+        "department": "object"
+    },
+    "data_3.json": {
+        "id": "object",
+        "name": "object",
+        "email": "object",
+        "phone": "object",
+        "age": "object",
+        "salary": "object",
+        "department": "object"
+    },
+    "data_3.xml": {
+        "id": "object",
+        "name": "object",
+        "email": "object",
+        "phone": "object",
+        "age": "object",
+        "salary": "object",
+        "department": "object"
     }
 }

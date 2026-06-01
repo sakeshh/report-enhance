@@ -48,6 +48,7 @@ class OrchestratorState(TypedDict, total=False):
     stream_name: str
     job_id: str
     session_id: str
+    source_connections: Dict[str, Any]
 
     # Derived / intermediate
     plan: Dict[str, Any]
@@ -505,6 +506,7 @@ def run_orchestrator(
     job_id: str = "",
     approved_semantics: Optional[Dict[str, Dict[str, str]]] = None,
     session_id: str = "",
+    source_connections: Optional[Dict[str, Any]] = None,
 ) -> Dict[str, Any]:
     """
     High-level convenience wrapper.
@@ -522,6 +524,7 @@ def run_orchestrator(
             "timings": {},
             "approved_semantics": approved_semantics or {},
             "session_id": session_id,
+            "source_connections": dict(source_connections or {}),
         }
     )
     if job_id:

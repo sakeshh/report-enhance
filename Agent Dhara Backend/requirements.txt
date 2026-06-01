@@ -49,7 +49,14 @@ ydata-profiling>=4.0.0
 # Docs: https://github.com/fbdesignpro/sweetviz
 sweetviz>=2.3.0
 
-# Great Expectations — data quality validation (removed as per plan)
+# Great Expectations — data quality validation (DuckDB SqlAlchemyExecutionEngine)
+great-expectations>=0.18.0
+duckdb>=0.10.0
+duckdb-engine>=0.13.0
+adlfs>=2024.2.0
+fsspec>=2024.2.0
+sqlalchemy>=2.0.0
+xmltodict>=0.13.0
 
 # Phone number validation (Google's libphonenumber — gold standard)
 phonenumbers>=8.13.0
