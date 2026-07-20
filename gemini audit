@@ -1,0 +1,103 @@
+gent Dhara Deep Audit & Architecture Report
+This report provides a raw, honest, and comprehensive audit of the Agent Dhara system (frontend + backend). It details the inner workings of each stage, diagnoses architectural design issues (overdesigned vs. underdesigned), and proposes concrete fixes and recommendations to make the platform production-ready.
+
+1. Data Validation & Assessment Engine
+How It Works Under the Hood
+Triggering: The workflow is initiated when the user selects a source (SQL Database, Blob Storage, or Local Stream) and submits an assessment request (POST /etl/assessment).
+Profiling & Validation Core:
+Great Expectations (GX): The system utilizes GX suites in gx_validation_specialist.py to assert data types, check null distributions, inspect string lengths, and find format violations.
+India-Specific Specialists: A dedicated specialist is triggered for Indian data contexts, matching regexes/checksums for PAN, Aadhaar, GSTIN, IFSC, and CIN.
+Custom Business Rules: Users can pre-configure rule lists (e.g. non-nullable columns, strict type schemas). These rules are translated directly into GX expectations before execution.
+Issue Classification:
+Auto-Fixable (Standard): Inconsistencies like trailing whitespace, simple type casting mismatches, lowercase/uppercase conversions, or simple nulls are flagged as auto-fixable.
+Complex: Multi-column outliers, primary key duplicates, and skewed dominant values are routed to the Manual Review Queue (plan["manual_review"]).
+Non-Fixable: Structural blockers like missing required schema columns or referential integrity failures are flagged as blockers (plan["blocked"]), requiring upfront data source changes.
+Diagnostic Analysis (Overdesigned vs. Underdesigned)
+WARNING
+
+Overdesigned: Great Expectations Resource Overhead Using Great Expectations (GX) for small local files or in-memory streams creates significant CPU and memory footprint overhead. GX compiles heavy validation matrices and extensive JSON reports that can lead to backend memory bloat.
+
+IMPORTANT
+
+Underdesigned: Lack of Custom SQL Profiler For SQL database locations, the system copies data out to profile it using Pandas/GX locally rather than running in-database aggregation queries (like COUNT(1) WHERE col IS NULL). This causes massive network egress costs and database timeouts on large SQL tables.
+
+2. Semantic Layer & PII Masking
+How It Works Under the Hood
+Semantic Inference: The system uses heuristics (column name patterns like *_id, email, phone) combined with an LLM call to categorize columns (e.g. semantic_type="email", sub_type="currency").
+PII Masking:
+When PII flags are identified (email, phone, SSN), the planner automatically maps them to sanitize_email, hash_phone, or mask_phone steps.
+In PySpark, this is executed as SHA-256 hashing (F.sha2(col, 256)) or character masking (F.lit("***")).
+The Verdict on PII Masking: Useful or Damaging?
+CAUTION
+
+PII masking is extremely useful for security, but currently DAMAGING to data pipelines. If a column is a Join Key (e.g., CustomerID or EmailAddress used in a child table join) and the semantic layer automatically hashes or masks it, all downstream joins will silently fail (since the hash of a raw key will not match the unhashed version, or one side will be masked as *** while the other is hashed).
+
+How to Fix It:
+We must add a validation rule to 
+validate_plan.py
+ to block PII hashing/masking on keys:
+
+python
+
+def check_pii_key_conflicts(plan):
+    joins = plan.get("relationships", {}).get("joins", [])
+    join_keys = {j.get("parent_key") for j in joins} | {j.get("child_key") for j in joins}
+    for ds_name, block in plan.get("datasets", {}).items():
+        for step in block.get("steps", []):
+            if step.get("action") in ("hash_phone", "mask_phone", "sanitize_email"):
+                col = step.get("column")
+                if col in join_keys:
+                    raise ValueError(f"Cannot mask or hash column '{col}' because it is used as a Join Key.")
+3. ETL Planning Layer
+Query: Does it use LLM calls for suggestions and Manual Review?
+Initial Suggestions Generation: Deterministic & Rule-Based. The initial ETL steps are mapped directly from assessment issues using compile_issues_to_steps (in 
+issue_to_step_compiler.py
+). There is no LLM call here to ensure speed and low latency.
+Manual Review Suggestions: Hybrid. Standard options are mapped from rules, but if the user wants advanced corrections, they can invoke the "Enhance with AI" option. This calls GPT-4o-mini to analyze the schema context and suggest customized regex patterns or logical corrections.
+Queue Promotion: Yes. Once a user resolves a manual review item (by choosing an action in the UI), it is submitted via POST /etl/apply-manual-resolutions, appended directly to the ETL steps list, and removed from the active manual review queue.
+4. Impact Preview Option
+Query: Is it real data in the preview?
+No, the preview is a metadata-driven simulation.
+It uses the issue counts from the initial profile run combined with standard heuristics to estimate how many rows will be altered or saved.
+Why it's designed this way: Running the full PySpark transformations on the entire dataset just for a UI preview would take minutes, stalling the user experience. The metadata-driven delta model keeps the interface interactive and immediate.
+5. Bug Fix: Plan Validation Notes Deletion
+The Bug
+When a user clicked the trash icon to delete a row in the plan table, the function removePlanRow called setPlan(rowsToPlan(plan, next)). The helper rowsToPlan was only mapping order, column, action, and bucket. It completely discarded params, reason, severity, and other metadata properties of the remaining steps. As a result:
+
+All validation notes disappeared.
+Step options (like custom regex strings or fill values) vanished, causing subsequent validations to fail.
+The Fix
+We modified rowsToPlan to copy the original step object:
+
+typescript
+
+const baseSteps = (base.datasets as Record<string, { steps?: Record<string, unknown>[] }>)?.[ds]?.steps || [];
+    datasets[ds] = {
+      steps: sorted.map((r, i) => {
+        const origStep = baseSteps.find((bs) => bs.column === r.column && bs.action === r.action);
+        return {
+          ...origStep,
+          order: i + 1,
+          column: r.column,
+          action: r.action,
+          bucket: r.bucket || origStep?.bucket || 'auto',
+        };
+      }),
+    };
+This correctly preserves all step parameters and validation details upon deletion.
+
+6. ETL Code Generation & Production Readiness
+PySpark & Fabric Execution Audit
+Different Formats: Fabric OneLake Shortcuts support CSV, Parquet, JSON, and Delta. Writing a cleaned table back as a Delta table (saveAsTable) is ideal because it registers it automatically in the Lakehouse's metadata catalog.
+The Missing Execution Bug (Fixed):
+When GPT-4o-mini encountered syntax or validation failures during PySpark code generation (Attempts 1 & 2), it fell back to Attempt 3 (Minimal Payload).
+Attempt 3 explicitly stripped out the loading, path resolution, and writing code, assuming they would be injected post-generation.
+However, the backend lacked this injection wrapper, resulting in "empty" scripts that ran successfully but created no cleaned files.
+Our Fix: We implemented _inject_pyspark_run_pipeline in llm_codegen.py to safely inject the run_pipeline(spark) execution block and output writers before compiling the final script. This ensures that the generated code is 100% executable and writes cleaned files as Delta tables under the Tables/ directory.
+7. Strategic Recommendations for Production Readiness
+Implement In-Database Profiling for SQL:
+Instead of copying millions of SQL rows locally, run aggregation and metadata checks inside the SQL Server engine using native queries.
+Key Protection in PII Masking:
+Check if a column acts as a foreign key or join key before auto-applying masking or hashing.
+Exclude Generated Folders from Reload Watcher:
+Always run uvicorn with --reload-dir agent to avoid reloading and interrupting active PySpark executions when files are written to output/.
