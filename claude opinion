@@ -1,0 +1,185 @@
+Agent Dhara — Deep Audit Report
+Raw. Honest. Based on actual source code read.
+
+Legend
+Mark	Meaning
+🔴 BROKEN	Currently broken / causes real runtime failures
+🟠 RISKY	Works but will break under edge cases or scale
+🟡 WEAK	Incomplete, leaky, or poorly designed
+🟢 SOLID	Well built and production-worthy
+1. Ingestion Layer
+1.1 SQL Source
+🟢 Connection — azure_sql_executor.py correctly builds pyodbc connection strings from env vars, auto-selects best installed ODBC driver, sets autocommit=False, wraps DDL in transactions, has rollback on failure. GOOD.
+
+🟡 Profiling is all in-memory — SQL tables are pulled into Pandas for GX validation + profiling. For large tables (10M+ rows) this will OOM the FastAPI process. There is an OOM gate (get_safe_validation_dataframe) that samples to ≤100K rows, but the sample truncation is random — it will miss low-frequency issues like rare null patterns or minority sentinel values. Recommendation: push COUNT/AVG/NULL-rate queries to the database; only pull samples for pattern checks.
+
+🟡 Business rules are injected but never bidirectionally cross-checked — gx_validation_specialist.py applies valid_values, non_nullable, and custom assertions from business rules. However, if a business rule references a column name that does not exist in the DataFrame, it silently skips (the match loop finds nothing). There is no warning emitted when a rule is orphaned against a non-existent column.
+
+1.2 Blob Source
+🟠 Mirror vs. Shortcut mismatch — mirror_service.py calls fabric_shortcut_service.py which actually physically uploads the file bytes via ADLS Gen2 REST. The service is named "shortcut" but it is a full copy, not a zero-copy Fabric native shortcut. For large files (Parquet/XML hundreds of MB) this will time out and fail silently. The code wraps only the HTTP retry loop — the main upload call has no end-to-end timeout guard outside the 30-second per-request timeout, meaning a 500 MB Parquet upload can stall indefinitely.
+
+🟠 Multi-format reading in io_snippets.py is incomplete — pyspark_read_snippet only handles CSV, Parquet, JSON, XML, and SQL table paths in the Fabric path. For .xlsx, .tsv there is no PySpark read path — it falls through to CSV read. This means an Excel blob fed into PySpark codegen will generate spark.read.csv(...) on an Excel file, which will fail at runtime.
+
+🔴 XML to Parquet path is partially broken — io_snippets.py L228-233 correctly generates spark.read.format("com.databricks.spark.xml") for PySpark XML, but pyspark_write_snippet (L246-247) silently renames .xml → .parquet in the output path. The output extension swap is fine, but the comment in code says "# requires spark-xml / Maven" — this dependency is never validated or injected into the notebook. If the Maven package isn't registered in the Fabric Spark pool, the read will hard-fail with ClassNotFoundException.
+
+🟡 Stale shortcut detection uses ETag only when AzureBlobStorageConnector is available — mirror_service.py L53-69: if blob_connector is None (which it is when env vars are missing), staleness is never checked. An outdated blob shortcut will silently serve stale data forever.
+
+1.3 Local Stream
+🟢 connector_manifest.py correctly maps local files by extension and respects local_files_root. The CSV/JSON/Parquet/Excel/XML read paths are all wired in io_snippets.py for Python codegen.
+
+2. Validation & Data Assessment
+2.1 GX Validation — What's Really Happening
+🟢 Architecture is sound. GX is set up as a Pandas-backed in-memory context (ephemeral). The get_safe_validation_dataframe OOM gate protects against runaway memory. The GX version compatibility shim (data_sources vs sources vs old API) is thorough.
+
+🟢 Custom checks beyond GX — All the non-GX checks (whitespace padding, internal whitespace, HTML tags, punctuation-only, placeholders, sentinel numbers, valid values lookup, custom assertions, conditional rules) run on the safe sampled DataFrame. They are well implemented.
+
+🟡 The expect_table_columns_to_match_ordered_list expectation is over-strict — if a DataFrame has column order that differs from schema definition order, this expectation fires as a failure even if all expected columns are present. For SQL tables where SELECT * does not guarantee order this will produce false positives.
+
+🟡 expect_compound_columns_to_be_unique is applied across ALL columns as a full-row duplicate check. For wide tables (30+ columns) this is an expensive compound uniqueness check on every single row. The guard is ≥2 columns, but there is no upper bound — on a 50-column table this becomes a 50-column compound key uniqueness check.
+
+🟡 expect_column_values_to_be_between(min_value=0) on all numeric non-ID columns — line 329. This will trigger a failure for any numeric column that legitimately contains negative values (e.g., financial P&L columns, temperature readings, balance deltas). The check has no domain awareness — it fires on every non-ID numeric column unconditionally.
+
+🟡 Column semantic detection fallback is fragile — Line 276-281: if semantic_type in profile metadata is "unknown" or empty, it calls detect_semantic_type(s) from intelligent_data_assessment. This means a second-pass semantic detection runs inside the GX loop for every unknown column on every dataset. If intelligent_data_assessment is slow or raises, the exception is swallowed and type becomes "unknown" — causing all semantic regex checks (email, phone, UUID) to be skipped silently.
+
+2.2 Issue Classification (issue_to_step_compiler.py)
+🟢 Three-pass override system is genuinely well designed. Pass 1 (baseline mapping), Pass 2 (business rules), Pass 3 (semantic refinement) — this is correct architecture.
+
+🟡 Non-fixable issues — _NON_FIXABLE_ISSUE_TYPES correctly categorises orphan_foreign_keys, schema_mismatch, referential_integrity_violation as non-fixable. All of these go to manual_review with risk_tier="non_fixable". BUT: the plan_coverage_report.py checks plan.get("non_fixable") as a separate key (line 74), which is never populated (non-fixable items live in manual_review[] with a risk_tier field). This means coverage report incorrectly counts non-fixable items as uncovered even though they are tracked in manual_review. The coverage percentage is artificially deflated.
+
+🟡 was_manual preservation in Pass 3 — Line 175-177: if was_manual=True AND sem_confidence < 0.85, the action reverts to review_manually. This is too aggressive. If a business rule explicitly says sanitize_email for an email column, the was_manual=True path can override it back to manual_review if sem_confidence is low.
+
+2.3 DQ Gate (dq_gate.py)
+🟢 Scoring formula — Null 30% + Type 30% + Duplicates 20% + Outliers 20% with quadratic null penalty. Reasonable.
+
+🟠 The gate score is computed from assessment metadata only — type_score counts issues of type type_mismatch, invalid_date_format, invalid_email, invalid_phone — but only from the datasets.{name}.quality.issues path. If GX validation results are stored in a different key (e.g., data_quality_issues.datasets.{name}.issues), the type_score will read 0 mismatches and score 100 even if there are 50 format errors. The legacy path fallback exists for DQ issues but type_mismatches count may be wrong if routes diverge.
+
+🟡 PII high flag raises threshold by +15 — Line 103: if any column in the dataset has pii_level="high", the DQ threshold rises from 70 to min(85, 95). This is a good policy but it fires on ANY high-PII column, even if that column is not part of the ETL transformation scope. A dataset with a single email column will always need to pass at 85 instead of 70.
+
+3. ETL Planning Layer
+3.1 Planner (planner.py)
+🟢 Action priority ordering — _ACTION_PRIORITY dict is correctly designed. Trim before lowercase before fill before deduplicate before join. Good.
+
+🟢 LLM Recommendation merging — The llm_rec_mapper integration at line 603-680 is a solid design. LLM recommendations are attached to existing deterministic suggestions by fuzzy matching, confidence scored, and only promoted to auto_fixable=True when confidence ≥ 0.80. Low-confidence LLM recs become manual review items. This is exactly right.
+
+🔴 PII masking on Join Keys — the known open bug — The semantic refinement in issue_to_step_compiler.py line 159-165 will apply hash_phone to a phone column marked as high-PII. If that phone column is also the join key between two datasets, the join in join_emitters.py will reference the original column name. The generated PySpark code will hash the phone first, then attempt a join on the now-masked column against the unmasked foreign table — this join will silently produce zero rows. There is no check anywhere in the planner to detect "this column is a join key AND a PII masking target." This is a data correctness defect, not just a performance issue.
+
+🟡 Business rules that reference columns with partial names may not match — Line 139-144: col_key = col.lower() is compared against non_nullable_cols which contains ds.col_lower. The lookup checks BOTH col_key in non_nullable_cols AND f"{ds}.{col_key}" in non_nullable_cols. This means if a business rule says non_nullable: ["email"] and the dataset is customers.csv, the lookup will try "email" and "customers.csv.email". If the user typed "Email" (capital E) in the business rules form, it is lowercased by Line 103 — so that part works. But if the user typed the dataset-qualified name slightly differently (e.g., "Customers.email" vs "customers.csv.email"), the match silently fails.
+
+3.2 Manual Review Catalog (manual_review_catalog.py)
+🟢 Per-issue resolution options are well defined. _CATALOG has 40+ specific issue types with typed resolution options, recommended flags, and descriptions.
+
+🟡 plan_coverage_report.py has a structural bug — As noted above, nf_cols is built from plan.get("non_fixable") which is always [] because non-fixable items land in manual_review not in a separate non_fixable key. Non-fixable items will never be in nf_cols, so the coverage report will always list them as uncovered. Fix: check risk_tier == "non_fixable" within manual_review items.
+
+4. Code Generation Layer
+4.1 Python Codegen (python_codegen.py)
+🟢 Deterministic template-based codegen — python_codegen.py generates Pandas code from plan steps without LLM calls. This is correct for simple plans. The action map covers: trim, lowercase, fill, cast, date parse, email sanitize, phone normalize, dedup, clip, sentinel replacement, boolean standardize, etc.
+
+🟡 No cleaned output file created by default — With targetDestination='dataframe_only', the Python codegen ends without a df.to_csv(...) or df.to_parquet(...) call. The user sees "100% transformations applied" but no file is written. The user has to explicitly choose "new_path" or "overwrite" in the UI to get output. This is a UX trap — users expect cleaned data to exist after running the ETL.
+
+🟡 fill_value: None with strategy: "value" fallback — _emit_fill line 73-74: if fill_strategy="value" and fill_value is None, it emits df[col].fillna('') — an empty string. For numeric columns this will cause a type error at runtime. Should emit pd.NA for numeric columns and "" for string columns.
+
+4.2 LLM Codegen (llm_codegen.py)
+🟢 System prompt engineering is excellent. The SQL T-SQL system prompt (lines 450-499) is extremely detailed — GO separators, idempotent DDL guards, run_id SCOPE_IDENTITY race condition fix, balanced transactions, watermarking, IQR outlier procedures. This took serious engineering effort.
+
+🟢 Validation-Retry loop — The generate_with_llm function validates generated code, feeds errors back as fix_errors in the next LLM call, and retries up to max_retries times. After exhausting retries, validation warnings are prepended as comments. The circuit breaker (_PLAN_FAILURE_COUNTS) stops hammering the LLM after 3 consecutive failures.
+
+🟢 Step filtering before LLM — Lines 767-798: string-only actions (trim, lowercase) are filtered out for non-string columns, outlier actions for non-numeric columns, duplicates deduplicated. This prevents the LLM from receiving contradictory instructions.
+
+🟠 _inject_pyspark_run_pipeline was added as a post-hoc fix — The function exists (confirmed at line 1514) but the implementation injects boilerplate run_pipeline(spark) only if the pattern is missing. The risk: if the LLM generates run_pipeline but with incorrect dataset variable names, the injector won't detect the mismatch and the call will fail silently with a Python NameError at runtime.
+
+🟡 _PYSPARK_READ_TEMPLATES fallback templates (lines 923-930) use old-style paths — These templates ('df = spark.read.option("header","true").csv(r"{loc}")') are used when connector_manifest is not provided. They hardcode r"{loc}" which becomes a raw string literal instead of the actual path. This means any codegen that falls back to these templates generates code that literally reads the path string "{loc}" — which does not exist.
+
+🟡 The _inject_pyspark_fabric_ids function — Injects workspace/lakehouse IDs. These are hardcoded at generation time from the session's Fabric configuration. If the session context is missing the IDs (no Fabric workspace configured), they are injected as empty strings "", producing abfss://""@onelake.dfs.fabric.microsoft.com/"" — a guaranteed runtime failure.
+
+4.3 SQL Codegen (sql_codegen.py — 117KB)
+🟡 At 117KB, this file is too large to maintain sanely. Single function bodies are over 500 lines. It needs to be split by concern: DDL generation, DML generation, stored procedure scaffolding, rejects handling, watermarking.
+
+🟡 GO batch separator injection — The prompt correctly instructs the LLM to emit GO separators between DDL statements. But the LLM sometimes forgets to place GO after the very last stored procedure definition. The validate_sql.py validator does NOT check for this, so the generated SQL file will silently fail to compile in SSMS when pasted directly.
+
+5. Execution Layer
+5.1 Azure SQL Executor (azure_sql_executor.py)
+🟢 Connection handling is good. Autocommit=False, explicit transaction, rollback on failure, no credential logging, approval gate for DELETE/UPDATE/MERGE/TRUNCATE/DROP.
+
+🟠 APPROVAL_REQUIRED_OPS check is case-sensitive regex — Line 28: APPROVAL_REQUIRED_OPS = ["DELETE", "UPDATE", ...]. The approval check later uses a regex/string match against the generated SQL. If the LLM generates delete (lowercase) or Delete, it will bypass the approval gate. The check should be case-insensitive.
+
+🟡 Post-ETL validator only runs on SQL targets — post_etl_validator.py connects via pyodbc to check null counts on target tables. It never runs for Python/PySpark execution — there is no post-run quality check for non-SQL targets. After PySpark execution, you have no idea if the cleaned output has better or worse DQ than the input.
+
+5.2 Fabric Notebook Executor
+🟢 FabricNotebookExecutor deploys one notebook per dataset and polls for status. The execution status polling exists in the routes.
+
+🟠 Notebook deployment is not idempotent — If the same session runs codegen twice (e.g., after tweaking a plan step), a second notebook with a different name is deployed. The old notebook is orphaned in the Fabric workspace. Over repeated iterations this will litter the Fabric workspace with stale notebooks.
+
+🟡 run_pipeline injection (the fix from previous session) — Was correctly added at line 1514. However, the injection logic checks for "def run_pipeline" in the code. If the LLM generates the function as async def run_pipeline (which it sometimes does for PySpark async submission patterns), the check passes but the if __name__ == "__main__": run_pipeline(spark) caller doesn't await it. This can silently produce a no-op execution.
+
+6. Semantic Layer
+6.1 Semantic Classifier (semantic_classifier.py + semantic_llm_enricher.py)
+🟢 Two-tier classification — Layer 1 is deterministic heuristics (column name + dtype + sample patterns). Layer 2 is LLM enrichment for low-confidence columns. The LLM enricher batches all low-confidence columns into a single API call, which is efficient.
+
+🟢 The enricher returns raw JSON and gracefully falls back — if the LLM call fails, the original Layer 1 heuristic result is preserved unchanged.
+
+🟡 LLM semantic prompt sends raw_samples[:10] — line 58-64 in semantic_llm_enricher.py. Raw cell values from the dataset are sent to the LLM. For PII columns (email, phone, SSN), this means real personal data leaks into the Azure OpenAI API request. The API call is within the customer's Azure tenant (no external transmission), but the principle of least exposure is violated. Should always mask/hash samples before sending.
+
+🟡 pii_level is set by LLM enricher — The LLM decides whether a column is "none", "low", "medium", or "high" PII. If the LLM is wrong (e.g., classifies "user_id" as high PII when it's just an integer), the DQ gate threshold is incorrectly raised by 15 points for the entire dataset.
+
+7. Manual Review / Non-Fixable Issue Handling
+7.1 What happens to non-fixable items
+🟢 Items with issue_type in _NON_FIXABLE_ISSUE_TYPES are correctly tagged with risk_tier="non_fixable" and auto_fixable=False. They are added to manual_review[] with enriched resolution options.
+
+🟡 UI representation — ManualReviewPanel.tsx renders all manual_review items. There is no visual distinction between "standard" manual review (solvable in UI), "complex" (requires domain judgment), and "non_fixable" (must be fixed in source system). All three look the same in the panel. A user seeing "orphan_foreign_keys" may select "Deduplicate" from the resolution options and think they've fixed it, when the actual fix requires source data correction.
+
+🟢 Resolution options for each issue type — The _CATALOG in manual_review_catalog.py is thorough. Non-fixable types like very_wide_table, column_name_whitespace correctly show only "keep_as_is / review with stakeholders" options.
+
+8. Frontend (EtlGenerationPanel.tsx)
+8.1 State Management
+🟡 State explosion — EtlGenerationPanel.tsx has 35+ useState calls in one component. phase1Code, phase2Code, activeCodeTab, planRows, planJson, plan, preview, validationOk, validationErrors, artifactPath, generatedBy, isDraft... This is unmanageable and will cause stale closure bugs. It needs to be split into a proper state machine or Zustand/Jotai store.
+
+🟡 rowsToPlan fix from previous session — The fix (preserving origStep properties on row deletion) is in place. But the matching logic baseSteps.find((bs) => bs.column === r.column && bs.action === r.action) will match the FIRST occurrence if there are two steps with the same column+action combination. The second step's metadata will be lost.
+
+🟡 The postEtlPlanWithRetries function — Retries on AbortError and TypeError. But the timeout used for /api/etl/plan is the browser's default (no explicit timeout set). If the backend planning takes >60 seconds for a large multi-table dataset, Next.js API proxy may timeout, triggering a retry that sends the planning request again — creating duplicate plan sessions on the backend.
+
+🟡 engineUserOverride state — When the user manually picks an engine, engineUserOverride=true prevents the backend recommendation from overriding the choice. Good. But if the user then navigates to a different session and back, the override flag persists because it's component state (not persisted to session). The engine may be wrong for the new session.
+
+9. API Layer (api_routes.py — 46KB)
+🟡 File is too large — 46KB, single file. All ETL routes, session routes, blob routes, assessment routes in one file. This is unmaintainable.
+
+🟠 No rate limiting — No rate limiter on /etl/generate or /etl/plan. A misbehaving UI retry loop could send dozens of concurrent plan requests, each spinning up LLM calls and spawning threads.
+
+🟡 Session isolation — Sessions are stored in SQLite via session_store.py. SQLite with WAL mode supports concurrent reads, but concurrent writes are serialized with a threading.Lock. Under concurrent ETL sessions from different users, write contention on SQLite will cause latency spikes.
+
+10. Critical Bugs — Prioritized Fix List
+Priority	File	Bug	Impact
+🔴 P0	issue_to_step_compiler.py + join_emitters.py	PII masking applied to join keys silently produces zero-row joins	Data correctness — joined output is empty
+🔴 P0	plan_coverage_report.py	non_fixable items always show as uncovered	Misleading coverage % to user
+🔴 P0	io_snippets.py	Excel/TSV files have no PySpark read path — fall through to CSV	Runtime failure for Blob+Excel→PySpark flows
+🟠 P1	azure_sql_executor.py	Approval gate is case-sensitive — lowercase delete bypasses it	Safety gate bypass
+🟠 P1	fabric_shortcut_service.py	File upload has no end-to-end timeout — large files stall	Blob execution hangs indefinitely
+🟠 P1	fabric_notebook_deployer.py	Notebook deployment not idempotent — orphaned notebooks per re-run	Workspace clutter + stale execution
+🟡 P2	gx_validation_specialist.py	expect_column_values_to_be_between(min=0) fires on all numeric non-ID columns	False positive failures on legitimate negatives
+🟡 P2	python_codegen.py	fill_value=None + fill_strategy="value" emits fillna('') on numeric cols	Silent type error in execution
+🟡 P2	semantic_llm_enricher.py	Raw sample values (PII data) sent to LLM API	Privacy exposure
+🟡 P2	ManualReviewPanel.tsx	Non-fixable items visually indistinct from standard review items	User picks inapplicable resolution, thinks issue is fixed
+🟡 P2	EtlGenerationPanel.tsx	35+ useState calls — state explosion and stale closure bugs	UX instability
+11. What is Actually Well Built (Don't Break These)
+Component	Why it's good
+_inject_pyspark_imports	Catches LLM-missed imports and injects them deterministically
+issue_to_step_compiler.py three-pass logic	Correct architecture for rule layering
+SQL T-SQL system prompt	Remarkably detailed — GO separators, watermarking, rejects table, IQR procedure, dedup CTE
+get_safe_validation_dataframe OOM gate	Protects against memory death
+manual_review_catalog.py resolution options	Per-issue-type options are well curated
+mirror_service.py ETag staleness detection	Correct pattern — only breaks when env vars missing
+_build_evidence in planner	Generates honest confidence + why_this_action notes from real stats
+LLM codegen validation-retry loop	Correct retry-with-feedback pattern
+12. Overdesigned vs. Underdesigned
+Overdesigned (complexity exceeds value)
+sql_codegen.py at 117KB — a single file that tries to be a full T-SQL compiler
+etl_handlers.py at 80KB — monolithic handler file
+service_layer.py at 94KB — needs to be a module, not a file
+mcp_server.py at 53KB — too many capabilities in a single MCP server file
+Underdesigned (needs more investment)
+Post-ETL quality comparison for Python/PySpark — only SQL has post-ETL null count comparison
+Blob→PySpark multi-format path — Excel/TSV/XML have gaps
+UI state management — EtlGenerationPanel.tsx needs a proper state machine
+Non-fixable issue visual distinction — the UI shows all manual review items the same
+Coverage report non_fixable tracking — the plan_coverage_report.py misses non-fixable items
+Audit generated from source code read on 2026-07-20. Every finding is backed by specific file and line references.
+
