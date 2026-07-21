@@ -1,316 +1,531 @@
-DHARA-GX — Complete Ground-Truth Production Audit
-Grounded in actual code read this session. No speculation.
+ok now we are successfully able to run the generated etl code in fabrics and my next task is 
+2. Collect Disparate Data into OneLake → Provide Insights via Fabric IQ
+Objective
+Create a unified business knowledge layer where users can discover, understand, and analyze enterprise data using AI-driven semantic understanding rather than querying raw tables. Fabric IQ introduces business semantics, ontologies, and graph-based understanding to help users interact with data in business language
+ 
+End-to-End Flow
+Source Systems
+(ERP, CRM, SAP, SQL, APIs, Files)
+          │
+          ▼
+      OneLake
+    (Unified Storage)
+          │
+          ▼
+  Curated Lakehouse /
+      Warehouse
+          │
+          ▼
+   Semantic Models
+          │
+          ▼
+      Fabric IQ
+          │
+          ▼
+Business Insights
+ 
+Activities in Fabric
+1. Consolidate Data
+Ingest data from multiple systems into OneLake.
+Use Fabric Data Factory Pipelines, Dataflows Gen2, or Shortcuts.
+Store in Lakehouse or Warehouse.
+2. Create Semantic Models
+Define:
+
+Business metrics
+KPIs
+Relationships
+Calculated measures
+Examples:
+1.Revenue
+2.Profit Margin
+3.Inventory Turnover
+4.Customer Acquisition Cost
+ 
+3. Apply Business Semantics
+Fabric IQ can leverage semantic models to understand:
+1.Customer
+2.Sales
+3.Region
+4.Product
+5.Supplier
+6.Revenue
+instead of raw database columns.
+ 
+4. Enable AI Understanding
+Users ask:
+Why did revenue decrease in South India?
+ 
+rather than writing SQL.
+Fabric IQ interprets the business context and navigates the semantic layer. 
+Expected Outcome
+Business users receive:
+Natural-language insights
+KPI explanations
+Trend analysis
+Root-cause investigations
+Cross-domain intelligence
+without needing technical expertise.
+ 
+could u explain me 
+
+Copilot said:
+Absolutely. Think of this task as moving from "cleaning data" (your ETL work) to "making data understandable to business users through AI."
+
+What you have done so far
+You just completed:
+
+
+
+
+Plain Text
+Raw CSV / SQL / SAP Data
+          ↓
+ETL Cleaning & Transformation
+          ↓
+Lakehouse Tables
+For example:
+
+
+
+
+Plain Text
+data_quality_issues_csv.csv
+        ↓
+data_quality_issues_csv_clean
+This solves the data engineering problem.
+
+What this new task is about
+The new objective is:
+
+Bring data from multiple systems into OneLake and allow users to ask business questions in natural language using Fabric IQ.
 
-The Verdict Up Front
-You have built a sophisticated intelligence engine riding on a fragile scaffold. The AI logic — 3-pass compiler, LangGraph specialists, deterministic SQL/PySpark codegen templates — is genuinely impressive. The surrounding structure — job durability, auth model, error contracts, state synchronization, test isolation — is prototype-grade. That gap is the source of every debugging session that took 3+ days.
+Instead of:
 
-1. INGESTION (SQL / Blob / Local) — Structural pass; two confirmed bombs
-What works: Three paths feeding one unified assessment_orchestrator.py is the right design.
 
-Boot-time bomb confirmed in pyspark_codegen.py line 7:
 
-python
 
-from pyspark.sql import SparkSession  # ← hard module-level import
-This crashes your entire FastAPI server on startup in any environment without PySpark (local dev, CI, Docker without Spark). It's not a smell — it's an active crash.
+SQL
+SELECT SUM(sales_amount)
+FROM sales_fact
+WHERE region='South India'
+Business users should simply ask:
 
-Fix (10 minutes): Move all PySpark imports inside the functions that call them:
+"Why did revenue decrease in South India?"
 
-python
+and Fabric IQ should understand:
 
-def _emit_fill_spark(...):
-    from pyspark.sql import functions as F  # lazy import
-Blob-specific gap confirmed: No format_readers.py or deterministic per-format dispatcher exists anywhere. PySpark file reading (CSV vs JSON vs Parquet vs XML) is LLM-driven — this is why blob ETL execution fails inconsistently by file type. The LLM shouldn't decide spark.read syntax. That's a deterministic fact.
+Revenue
+Region
+Time period
+Sales data
+Relationships between datasets
+without SQL.
 
-Fix (1 day): Build format_readers.py:
+Architecture Explained
+Step 1: Source Systems
+Data comes from different places.
 
-python
 
-def read_csv(path): return spark.read.option("header","true").option("inferSchema","true").csv(path)
-def read_json(path): return spark.read.json(path)
-def read_parquet(path): return spark.read.parquet(path)
-def read_xml(path, row_tag): return spark.read.format("xml").option("rowTag", row_tag).load(path)
-Codegen selects based on detected format metadata — LLM only writes the cleaning logic.
 
-2. BUSINESS RULES — Correct intent, split execution
-Confirmed working: never_drop_rows, outlier_strategy, non_nullable, required_columns all gate actions in Pass 2. Not decorative.
 
-Confirmed flaw: Two disconnected rule systems:
+Plain Text
+SAP
+CRM
+ERP
+SQL Database
+CSV Files
+REST APIs
+Excel
+Example:
 
-business_rules_loader.py → hardcoded 4-field gate
-cross_field_rules.py + auto_cross_field_rules.py → custom cross-column assertions
-No shared schema, no unified routing. A user setting a cross-field rule has no idea it's on a completely different code path.
 
-Fix: One rules_engine.py with rule_type: "field_gate" | "cross_field" | "custom_assertion" discriminator. One loader, one place to audit all active rules.
 
-3. DQ ASSESSMENT — Three disconnected issue systems = silent score inflation
-Confirmed architecture: Three parallel issue sources, none sharing a schema:
 
-GX suite (gx_suite_builder.py → gx_runner.py → gx_validation_specialist.py)
-Custom profiler (profiling/dq_checks.py, statistical_profiling.py, format_validators.py)
-PII scanner (pii_masking.scan_dataframe_for_pii)
-The 100% score bug confirmed in dq_gate.py lines 35–38:
+Plain Text
+SAP      -> Inventory
+CRM      -> Customers
+ERP      -> Orders
+SQL DB   -> Products
+CSV      -> Supplier Details
+Step 2: OneLake
+All data lands in Microsoft Fabric OneLake.
 
-python
 
-dq_issues = list((ds_info.get("quality") or {}).get("issues") or [])
-legacy_issues = (assessment or {}).get("data_quality_issues", {})...get("issues", [])
-if legacy_issues:
-    dq_issues.extend(legacy_issues)
-GX emits to the legacy path; the profiler emits to the canonical path (or vice versa depending on which ran). The scoring loop reads from whichever it finds first, silently missing the other. PII findings never reach this loop at all.
 
-P0 Fix — canonical DQIssue dataclass:
 
-python
+Plain Text
+                 OneLake
+     ┌─────────────────────────┐
+     │ Customers               │
+     │ Orders                  │
+     │ Products                │
+     │ Inventory               │
+     │ Suppliers               │
+     └─────────────────────────┘
+Think of OneLake as:
 
-@dataclass
-class DQIssue:
-    dataset: str
-    column: str
-    issue_type: str
-    severity: Literal["high", "medium", "low"]
-    message: str
-    source: Literal["gx", "profiler", "pii_scanner", "cross_field"]
-    count: Optional[int] = None
-Force ALL three systems through this schema in gx_issue_mapper.py before anything downstream touches them. One list, one scoring loop, no dual-path reading.
+"One huge central storage location for the enterprise."
 
-4. DQ GATE SCORING — Formula is wrong for real data
-Confirmed in dq_gate.py lines 8–82:
+Step 3: Curated Lakehouse / Warehouse
+Raw data is messy.
 
-Dimension	Formula	Bug
-null_score	100 × (1 - avg_null_pct)²	Quadratic of column averages, not row-weighted
-type_score	100 - (issue_count × 10)	10 issues = score 0, regardless of row count
-dup_score	100 - (dup_count × 5)	Reads llm_hints.business_key_duplicate_count — if LLM enrichment hasn't run (it's async), dup_count = 0, score = 100 always
-outlier_score	100 - (issue_count × 10)	Same issue-count-not-row-count problem
-Fix (4 hours): Score each dimension as (clean_rows / total_rows) × 100. You already have null_percentage per column and row_count per dataset — these are the right inputs. An issue affecting 2 rows in 100,000 should not score the same as one affecting 50,000.
+So we create cleaned business tables:
 
-5. SEMANTIC LAYER — Useful but overconfident
-Confirmed in semantic_context_builder.py:
 
-_likely_keys() — column name regex only, no cardinality/uniqueness check from actual data
-semantic_confidence — flat constant (0.82 known, 0.55 unknown), not computed from sample match rates
-PII false-positive confirmed in pii_masking.py lines 43–65:
 
-python
 
-"card",   # → card_type, score_card, card_category all masked
-"pan",    # → span, japan_region match too
-"address" # → address_type, ip_address match
-No content-based confirmation — name substring is the only signal.
+Plain Text
+Customer
+Product
+Sales
+Supplier
+Inventory
+Example:
 
-Fixes:
 
-Add sample_match_rate: regex match rate on 200-row sample → real confidence signal (replace flat constant 0.82)
-is_sensitive_column: require name hint AND ≥30% sample regex match before flagging
-_likely_keys: add cardinality check — >95% unique AND name hint = strong signal
-6. ETL PLANNING — 3-Pass Compiler Is Your Strongest Layer
-Confirmed working correctly:
 
-66 issue types mapped in _ISSUE_TO_ACTION_MAP
-Pass 2 genuinely blocks drop_rows when never_drop_rows=True
-Pass 3 reads semantic context to override trim with sanitize_email for email columns
-_NON_FIXABLE_ISSUE_TYPES / _COMPLEX_ISSUE_TYPES correctly tier manual review with risk_tier
-Critical frontend bug confirmed in ManualReviewPanel.tsx: The component renders ALL manual review items identically — no branching on risk_tier. A non_fixable item (schema mismatch, orphan FK — the ETL cannot fix these, period) shows the same UI as a resolution picker for a standard issue. Users have no way to know "this is a dead end, fix it in source" vs "choose your resolution."
 
-Fix (2 hours):
+SQL
+sales_fact
+customer_dim
+product_dim
+region_dim
+supplier_dim
+This is where your ETL pipelines will load data.
 
-tsx
+Step 4: Semantic Model
+This is the most important part.
 
-// In ManualReviewPanel.tsx render logic:
-if (item.risk_tier === 'non_fixable') {
-  return <RedBanner>Cannot be auto-fixed. Fix at source before proceeding.</RedBanner>
-}
-if (item.risk_tier === 'complex') {
-  return <AmberBanner>Requires your judgment — {options}</AmberBanner>
-}
-// else standard — current behavior
-Manual review LLM calls confirmed: allow_llm_call=False is the default. Users always see static catalog lookups unless the background worker has pre-cached an LLM response. No badge distinguishes "AI-enhanced" vs "static catalog." Add one.
+Without Semantic Model
+Fabric sees:
 
-7. PLAN COVERAGE — Fully built, wired to nothing
-Confirmed in plan_coverage_report.py: build_coverage_report() is complete (131 lines), produces coverage_pct, lists covered and uncovered items with severity.
 
-Confirmed not wired: EtlGenerationPanel.tsx has no reference to coverage_pct. No gate before runGenerate(). The "Generate Code" button never checks if all high-severity issues are covered.
 
-This is the highest ROI fix in the codebase — everything exists, nothing is connected:
 
-Return coverage_report from /etl/plan response
-Show coverage_pct badge in plan review step (e.g., "94% of issues covered")
-Block "Generate Code" if coverage_pct < 100 and uncovered contains severity == "high"
-8. PREVIEW — Backend honest, frontend lying
-Confirmed in preview_impact.py: Every row carries estimate_source: "actual_run_delta" | "dq_issue_count" | "profile_heuristic" | "unknown". Backend labels every estimate correctly.
+Plain Text
+cust_id
+cust_nm
+prd_cd
+amt
+txn_dt
+Business users don't understand these.
 
-Confirmed not surfaced: EtlIntelligencePreview.tsx doesn't render estimate_source anywhere. Users see "~500 rows affected" with no indication it's a heuristic vs a real measurement. This erodes trust when users notice the number is wrong.
+With Semantic Model
+You tell Fabric:
 
-Fix (1 hour): One tooltip badge per row — "Measured" (green), "DQ count" (blue), "Profile heuristic" (amber), "Unknown" (gray).
 
-9. PLAN NOTES DELETE Bug — Root cause confirmed
-Confirmed in EtlGenerationPanel.tsx lines 69–93:
 
-typescript
 
-function rowsToPlan(base, rows): Record<string, unknown> {
-  // Only rebuilds 'datasets' key
-  return { ...base, datasets };  // line 92
-}
-If base is stale (doesn't include notes added after the last plan fetch), the PUT round-trip overwrites the server plan with a version missing those notes.
+Plain Text
+cust_nm = Customer Name
+amt = Revenue
+txn_dt = Sales Date
+prd_cd = Product
+and relationships:
 
-Fix:
 
-Add DELETE /etl/plan/notes/{note_id} — scoped server-side mutation
-Ensure base in rowsToPlan always comes from the latest fetched plan, including all sub-fields (notes, manual_review, relationships, business_rules)
-10. ETL CODE GENERATION — Templates are solid; caches are not
-Confirmed strengths:
 
-sql_codegen.py (1,978 lines) — fully deterministic template engine. T-SQL bracket quoting, assertion-to-SQL translation, fill strategies — all template-driven. Correct architecture.
-pyspark_codegen.py (472 lines) — same pattern, deterministic per-action emitters
-_inject_pyspark_imports() + _inject_pyspark_run_pipeline() — post-processing guards that deterministically fix what the LLM might miss. Good.
-Confirmed flaws:
 
-Flaw	Location	Impact
-_CODE_CACHE in-memory global	llm_codegen.py line 48	Lost on restart; diverges across uvicorn workers
-_FAILURE_CACHE in-memory global	llm_codegen.py line 50	Same — multi-worker circuit breaker doesn't coordinate
-_PLAN_FAILURE_COUNTS per-process	llm_codegen.py lines 19–21	Worker 1 trips circuit; worker 2 still accepts requests
-Fix (3 hours): Move all three to Redis with TTL. redis-py + 30 lines of code.
+Plain Text
+Customer -> Sales
+Product -> Sales
+Region -> Sales
+Now Fabric understands business concepts.
 
-11. EXECUTION — 4-minute synchronous timeout is the "did it work?" mystery
-Confirmed in app/api/etl/execute/route.ts:
+Example Semantic Model
+Tables
 
-typescript
 
-timeoutMs: 240_000,  // 4 minutes hard limit
-Azure SQL with DDL, index rebuilds, or large tables easily exceeds 4 minutes. Frontend gets 504 BACKEND_TIMEOUT and shows an error — but the SQL is still running on Azure. User has no idea if it succeeded.
 
-Fix (1 day): The execute endpoint should immediately return {job_id} and use jobs_store.py + jobs_worker.py (already built) for async execution. Frontend polls /api/jobs/{id}. This is the exact pattern already designed — the endpoint just isn't using it yet.
+Plain Text
+Customer
+Sales
+Product
+Region
+Relationships
 
-12. FABRIC DEPLOYER — DATASETS extraction is regex-fragile
-Confirmed in fabric_notebook_deployer.py lines 97–100:
 
-python
 
-ds_match = re.search(r"DATASETS\s*=\s*(\[[\s\S]*?\])", pyspark_code)
-Breaks if LLM adds a comment inside the list, or the list spans non-contiguous indents. The AST-based _customize_code_for_dataset (lines 31–94) already uses ast.parse correctly — the DATASETS extraction should use the same pattern.
-
-Fix: ast.literal_eval(ds_match.group(1)) with regex fallback. 20 minutes.
-
-13. JOB STORE — Confirmed race condition in claim_next_job
-Confirmed in jobs_store.py lines 144–165:
-
-python
-
-row = conn.execute("SELECT job_id ... WHERE status='queued' LIMIT 1").fetchone()
-# ← another thread can read the same row here
-conn.execute("UPDATE jobs SET status='running' WHERE job_id=?", (job_id,))
-SELECT-then-UPDATE without a transaction lock. Two workers can double-claim the same job.
-
-Also: session_store._connect() sets PRAGMA journal_mode=WAL but jobs_store._connect() does NOT. Inconsistency confirmed.
-
-Fix:
-
-python
-
-# Atomic claim using BEGIN IMMEDIATE
-conn.execute("BEGIN IMMEDIATE")
-row = conn.execute("SELECT job_id FROM jobs WHERE status='queued' ORDER BY created_at LIMIT 1").fetchone()
-if row:
-    conn.execute("UPDATE jobs SET status='running', updated_at=? WHERE job_id=?", (time.time(), row[0]))
-conn.execute("COMMIT")
-14. SECURITY — Three production-blocking gaps
-Gap	Evidence	Fix
-No per-user identity	security.py has only shared-secret; login/signup pages in frontend with no matching backend JWT/session module	Add Azure AD B2C or Clerk as identity provider; or build JWT issuance + user table in Azure SQL
-In-memory rate limiter	security.py line 33: developer left comment "For multi-instance production, replace with Redis"	redis-py sliding window, 30 minutes
-No audit log for destructive ops	fabric_notebook_deployer.py, azure_sql_executor.py, etl_handlers.py write to production with no persistent who/what/when trail	Structured audit log table in Azure SQL, written on every execution/deployment trigger
-15. ERROR HANDLING — Three parallel exception classes
-Confirmed:
-
-AgentError (clean, has to_dict(), AgentErrorCode enum) — in errors.py
-ConnectorConfigError(Exception) (plain, no code, no to_dict()) — in errors.py
-LLMInfraError(Exception) (plain, doesn't inherit AgentError) — in llm_codegen.py line 44
-Also confirmed: DataAssessmentReport.tsx reads from data_quality_issues.datasets.{name}.issues[] (legacy schema). EtlGenerationPanel.tsx reads from datasets.{name}.quality.issues[] (canonical schema). Same session, two components, two shapes.
-
-Fix:
-
-ConnectorConfigError and LLMInfraError → become AgentError subclasses with proper AgentErrorCode values
-One FastAPI exception handler: AgentError → {ok: false, error_code, message, recoverable}
-Deprecate the legacy data_quality_issues response shape — migrate DataAssessmentReport.tsx to canonical path
-16. FRONTEND STATE MANAGEMENT — 29 useState calls, no shared cache
-Confirmed in EtlGenerationPanel.tsx lines 177–232: 29 useState calls managing plan, planRows, preview, manualReviewItemsState, phase1Code, phase2Code, sqlQualityScore, duckdbDiff, and more — all derived from one backend session, all managed independently.
-
-lib/ directory confirmed: Contains only backend-bridge.ts, azure-agent.ts, assessmentDisplay.ts. No shared data fetching layer. Each component re-fetches independently.
-
-Consequence: When applyManualResolutions resolves and updates the plan, preview and manualReviewItemsState are not invalidated — they still show pre-resolution data until manually refreshed.
-
-Fix (pragmatic):
-
-typescript
-
-// lib/useSessionData.ts
-export function useSessionData(sessionId: string) {
-  const [cache, setCache] = useState<SessionCache>({});
-  const invalidate = (key: keyof SessionCache) => setCache(prev => omit(prev, key));
-  return { cache, invalidate };
-}
-All read-only views consume from this hook. All mutations call invalidate() on success.
-
-17. COMPONENT SPRAWL — Merge vs Keep
-Merge (confirmed overlap):
-
-From	Into	Why
-DataAssessment.tsx (6KB) + DataQuality.tsx (2.5KB)	DataAssessmentReport.tsx	Sub-sections of the same view
-ETLCodeGenerator.tsx (20KB) + ETLCodeTabView.tsx (18KB)	Tabs inside EtlGenerationPanel.tsx	Panel already controls this flow
-drift_analyzer.py (1.6KB) + drift_detector.py (6.9KB)	drift.py with analyze() + detect()	Trivially overlapping names
-reconciliation_analyzer.py (2.2KB) + reconciliation_tracker.py (2KB)	reconciliation.py	Same
-Keep (correct separation):
-
-profiling/ package — best organized package in the backend, don't touch it
-ManualReviewPanel.tsx — focused; fix risk_tier rendering, don't merge
-EtlLineageVisualizer.tsx — distinct visualization concern
-SemanticReviewPanel.tsx + SemanticColumnEditor.tsx — review vs editing are distinct
-Under-designed (needs more, not less):
-
-errors.py — needs full hierarchy + FastAPI handler
-lib/ — needs useSessionData hook + error boundary component
-tests/ — good quantity but missing golden-dataset regression tests
-18. TESTING — 54 Files Present; What's Missing
-Present: Unit tests for codegen combinations, connector manifests, ETL scenarios, India validators, manual review, PII masking, PySpark IO validation, report accuracy, semantic rules, validate_plan.
-
-Missing:
-
-Graph-transition tests for unified_graph.py — no test asserts state X + input Y → next_node Z
-Golden-dataset regression tests — no test loads a known-dirty CSV and asserts generated SQL contains specific cleaning steps for known issues
-DQ gate formula accuracy tests — no test verifies coverage_pct for a dataset with known issue counts
-test_pii_masking.py (2KB) doesn't test the card column false-positive or pan substring collision
-Priority Fix Matrix
-Priority	Fix	File(s)	Effort
-P0	Unify GX + profiler + PII into one DQIssue schema	gx_issue_mapper.py, pii_masking.py, dq_gate.py	2 days
-P0	Lazy-import PySpark (boot crash)	pyspark_codegen.py line 7	10 min
-P0	Wire coverage_pct → UI badge + codegen gate	etl_handlers.py, EtlGenerationPanel.tsx	4 hrs
-P0	risk_tier visual distinction in ManualReviewPanel	ManualReviewPanel.tsx	2 hrs
-P0	Fix claim_next_job race + add WAL to jobs_store	jobs_store.py	2 hrs
-P1	Deterministic per-format PySpark reader dispatcher	New format_readers.py	1 day
-P1	Fix DQ gate scoring (row-based not issue-count-based)	dq_gate.py	4 hrs
-P1	Execute endpoint → async job_id + poll	etl_handlers.py, execute/route.ts	1 day
-P1	Expose est_source badge in preview	EtlIntelligencePreview.tsx	1 hr
-P1	PII content-confirmation before masking	pii_masking.py	3 hrs
-P1	Scoped PATCH/DELETE for plan notes	etl_handlers.py + new route	3 hrs
-P2	Move _CODE_CACHE + _FAILURE_CACHE to Redis	llm_codegen.py	3 hrs
-P2	Unify error hierarchy + FastAPI handler	errors.py, main.py	1 day
-P2	useSessionData hook, remove per-component fetches	New lib/useSessionData.ts	1 day
-P2	Merge dual business rule systems	business_rules_loader.py, cross_field_rules.py	1 day
-P2	Audit logging for destructive operations	etl_handlers.py, fabric_notebook_deployer.py	4 hrs
-P2	DATASETS extraction via ast.literal_eval	fabric_notebook_deployer.py	20 min
-P3	sample_match_rate for semantic confidence	semantic_context_builder.py	4 hrs
-P3	LLM suggestion source badge in ManualReview	ManualReviewPanel.tsx	1 hr
-P3	LangGraph state-transition tests	New tests/test_graph_transitions.py	2 days
-P3	Golden-dataset ETL regression suite	New tests/golden/	3 days
-P3	Redis rate limiter	security.py	30 min
-P3	Delete main.py.bak from version control	root	2 min
-The Honest Bottom Line
-Your backend intelligence is genuinely production-design level. profiling/, the 3-pass compiler, and the deterministic codegen templates show real engineering discipline.
-
-The three things causing your worst debugging days:
-
-Three disconnected issue schemas — DQ score is computed on incomplete data silently. Every downstream system inherits this. Fix the schema first.
-coverage_pct computed but gating nothing — you built the enforcement mechanism and didn't wire it. This one connection would catch most ETL correctness issues before code is generated.
-Synchronous execute through a 4-minute proxy — every slow Azure SQL run creates a "did it work?" void. The jobs queue is built. Use it.
-Fix those three in order. Then the rest of the priority matrix.
+Plain Text
+CustomerID
+Customer
+      │
+      ▼
+Sales
+      ▲
+      │
+ProductID
+Product
+Business Measures
+Create measures like:
 
+
+
+
+DAX
+Revenue =
+SUM(Sales[Revenue])
+
+
+
+DAX
+Profit =
+SUM(Sales[Profit])
+
+
+
+DAX
+Profit Margin =
+DIVIDE(
+    [Profit],
+    [Revenue]
+)
+
+
+
+DAX
+Customer Count =
+DISTINCTCOUNT(Customer[CustomerID])
+These become business knowledge.
+
+Step 5: Fabric IQ
+Now Fabric IQ sits on top of the semantic model.
+
+
+
+
+Plain Text
+User
+ ↓
+Fabric IQ
+ ↓
+Semantic Model
+ ↓
+Lakehouse Data
+Instead of SQL:
+
+
+
+
+SQL
+SELECT ...
+users ask:
+
+
+
+
+Plain Text
+Show top products by revenue.
+
+
+
+Plain Text
+Which supplier caused delayed deliveries?
+Fabric IQ translates these into:
+
+semantic understanding
+DAX queries
+graph relationships
+business context
+What Fabric IQ Understands
+Suppose we have:
+
+
+
+
+Plain Text
+Customer
+Region
+Product
+Supplier
+Revenue
+Cost
+Fabric IQ creates a knowledge graph like:
+
+
+
+
+Plain Text
+Customer
+   │
+   ▼
+Sales
+   ▲
+   │
+Product
+   │
+   ▼
+Supplier
+
+Sales
+   │
+   ▼
+Region
+
+Show more lines
+Now it can reason across domains.
+
+For example:
+
+Question:
+
+
+
+
+Plain Text
+Why did revenue decrease in South India?
+
+Fabric IQ may discover:
+
+
+
+
+Plain Text
+Revenue Down
+      │
+      ├── Product A sales down
+      │
+      ├── Inventory shortages
+      │
+      ├── Supplier delays
+      │
+      └── Customer churn
+This is AI-powered business analysis.
+
+Expected Deliverables for Your Project
+Typically you will need:
+
+1. Ingest Data
+Use:
+
+Data Factory Pipelines
+Dataflows Gen2
+Shortcuts
+Notebooks
+Load everything into OneLake.
+
+2. Create Curated Tables
+Example:
+
+
+
+
+Plain Text
+sales_fact
+customer_dim
+product_dim
+supplier_dim
+inventory_fact
+3. Create Semantic Model
+Define:
+
+Measures
+
+
+
+Plain Text
+Revenue
+Profit
+Margin
+Inventory Turnover
+CAC
+Relationships
+
+
+
+Plain Text
+Customer -> Sales
+Product -> Sales
+Supplier -> Inventory
+Region -> Sales
+KPIs
+
+
+
+Plain Text
+Revenue Growth %
+Profit Margin %
+Customer Retention %
+Inventory Turnover
+4. Enable Fabric IQ
+Point Fabric IQ to the semantic model.
+
+Add:
+
+
+
+
+Plain Text
+Business descriptions
+Table descriptions
+Column descriptions
+Measure definitions
+Synonyms
+Example:
+
+
+
+
+Plain Text
+Revenue
+Synonyms:
+Sales
+Turnover
+Income
+This improves AI understanding.
+
+Example End-to-End Scenario
+Data
+
+
+
+Plain Text
+SAP -> Inventory
+CRM -> Customer
+ERP -> Orders
+loaded into OneLake.
+
+Semantic Model
+
+
+
+Plain Text
+Revenue
+Profit
+Product
+Customer
+Region
+defined.
+
+User Query
+
+
+
+Plain Text
+Why did revenue decrease in South India?
+Fabric IQ:
+
+Finds revenue measure.
+Filters South India.
+Compares previous periods.
+Identifies products contributing to decline.
+Checks inventory issues.
+Generates explanation.
+Response:
+
+
+
+
+Plain Text
+Revenue declined by 12%.
+
+Primary causes:
+- Product A sales down 18%
+- Supplier delays increased 22%
+- Inventory shortages in Chennai warehouse
+- Customer retention dropped 5%
+without the user writing a single SQL query.
+
+In one sentence
+Your ETL task built the data foundation in OneLake. This new Fabric IQ task builds the business knowledge layer (Semantic Model + AI understanding) so business users can ask questions in plain English and receive insights, explanations, trends, and root-cause analysis instead of querying raw tables.
