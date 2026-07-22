@@ -1,0 +1,1001 @@
+campaign_id,customer_name,budget,start_date,channel
+,,,25/10/2024,
+,???,42949,99/99/9999,123
+102, jane ,,,Radio
+,,60852,,123
+,mike,,99/99/9999,
+,Bob,,TBD,
+, jane ,unknown,99/99/9999,Email
+,Sara,,,TV
+,,3239,TBD,email 
+C9, jane ,,TBD,
+110, jane ,,99/99/9999,TV
+C11,???,unknown,,
+112,???,,,SOCIAL
+,Bob,98190,,123
+,,41035,99/99/9999,123
+,Sara,,06-09-2021,123
+C16,,,TBD,Email
+,John,unknown,,
+, jane ,,,123
+C19, jane ,,,123
+120,ALICE,unknown,TBD,email 
+,John,1447,,SOCIAL
+122,ALICE,53181.754941193256,99/99/9999,
+C23,,,,
+,mike,975,,
+,,,2025-03-10,
+,,unknown,,
+127,R@hul,,,Email
+128,ALICE,,99/99/9999,123
+,Sara,11244.293082706285,,123
+130,???,,,Radio
+C31,,85433.0876367894,02-13-2020,SOCIAL
+C32,mike,47960.682970263486,,SOCIAL
+,???,83997.81584216669,99/99/9999,
+134,Sara,73886.09478977173,99/99/9999,123
+C35,ALICE,,2022/06/04,email 
+,???,43842.65513192073,99/99/9999,
+C37,Bob,,TBD,
+138,Bob,12661,,email 
+C39,,,,email 
+140,Bob,42384,TBD,Email
+,Bob,unknown,2024-02-20,
+,???,76522.05821488632,TBD,email 
+,,,99/99/9999,TV
+, jane ,,,
+,R@hul,1742,TBD,
+,Bob,7854,TBD,
+147,,4968,TBD,SOCIAL
+C48,,64003.80923214598,TBD,Email
+149,,,99/99/9999,Radio
+,,17538.09282689131,2020/09/21,
+151,ALICE,93765.7271893786,99/99/9999,email 
+,mike,94591,99/99/9999,
+C53,???,83309,2023/01/18,TV
+,,,99/99/9999,123
+155,,unknown,,SOCIAL
+C56,,unknown,2024/03/16,TV
+157,mike,18767.290641569864,,Radio
+,,,,email 
+,John,,99/99/9999,Radio
+C60,,unknown,,
+161,mike,2485.2647786462503,,123
+162,???,75804,2020-02-20,Radio
+,R@hul,,99/99/9999,Radio
+C64,???,,,email 
+165,R@hul,45140,,
+166,ALICE,81455.32718795574,,Radio
+C67,,49106,,SOCIAL
+, jane ,27862,99/99/9999,
+C69,,43513.775425483094,TBD,email 
+, jane ,26952.982488948895,,123
+171,John,5166.703156189281,2026-07-13,
+,John,unknown,TBD,Radio
+C73,,unknown,,Radio
+,John,97505.8111321848,,SOCIAL
+175,R@hul,unknown,,123
+,,unknown,03-09-2020,TV
+,Bob,,,123
+178,,25569,99/99/9999,123
+179,???,,2021/11/19,123
+,Bob,23578.955846844037,2021/03/08,SOCIAL
+C81,,unknown,99/99/9999,123
+182,,,,Radio
+,,unknown,04-18-2021,email 
+184,,73798.70310285872,99/99/9999,TV
+,R@hul,73428.70695270246,,Radio
+C86,,,30/09/2026,Radio
+187,Sara,41409,,123
+188,R@hul,27622.67535725936,TBD,email 
+C89,R@hul,,2023/04/08,TV
+190,Bob,84655.0648435836,,
+191,John,,,Radio
+192,Sara,37010,2026/02/22,SOCIAL
+C93,R@hul,unknown,,SOCIAL
+,mike,18982,12/06/2022,TV
+, jane ,,15/10/2024,email 
+C96,mike,17142.920817817612,,Radio
+197,,15571,TBD,SOCIAL
+, jane ,,TBD,Email
+199, jane ,,,123
+C100, jane ,,TBD,SOCIAL
+201,,70452,,123
+202,Sara,83551.53790158685,99/99/9999,SOCIAL
+203,Sara,44170.52069941021,,
+204, jane ,55812.11716631657,,
+C105,Sara,16331.923050643374,10-14-2022,
+,mike,unknown,,
+207,John,24651,99/99/9999,
+,,,,
+C109,,,TBD,Radio
+210,Sara,unknown,,SOCIAL
+,ALICE,,16/04/2020,
+212,Sara,,09-27-2020,TV
+C113,???,unknown,,
+, jane ,16187,,123
+215,Sara,unknown,,email 
+216,ALICE,,,Radio
+,R@hul,,99/99/9999,Radio
+,???,unknown,,SOCIAL
+,,unknown,,
+C120, jane ,unknown,2021-01-04,
+221,ALICE,unknown,2026/03/19,Radio
+,ALICE,,2021/05/25,
+223,,unknown,,123
+224,Sara,90283.6605290467,,TV
+225,,unknown,99/99/9999,email 
+C126,???,34701,99/99/9999,
+,John,,08-23-2020,123
+C128,???,unknown,TBD,Email
+229,,,,email 
+,John,unknown,,TV
+C131,,,,123
+232,ALICE,34727.51548481136,11/01/2024,
+C133,John,unknown,99/99/9999,123
+C134, jane ,,,Radio
+235, jane ,2772,,Email
+236,John,,,123
+C137,???,,,SOCIAL
+238,???,34541,,email 
+,R@hul,77489,99/99/9999,Radio
+240,???,,13/03/2020,Email
+,,91771,,123
+242,Sara,unknown,TBD,
+C143,,6233,2020-06-16,TV
+244,???,46677.87458223174,TBD,123
+C145,,29740.026200297394,TBD,TV
+C146,R@hul,48705,,Radio
+247, jane ,,,
+248,mike,,,
+,ALICE,,,TV
+C150,mike,,,Email
+251,R@hul,unknown,99/99/9999,Radio
+,Sara,9828,,Radio
+,R@hul,26420.9130845918,,Email
+,mike,,99/99/9999,
+C155,Sara,11029.442968085546,TBD,Email
+256,???,92652.0436959722,,email 
+257,,unknown,99/99/9999,Radio
+,???,31788.14918928883,TBD,SOCIAL
+C159,John,53276.25816605296,,
+,Bob,,,
+,,13981.753141574429,,SOCIAL
+262,Bob,95614,TBD,SOCIAL
+263,,68424.04936544619,,
+,,69045,,Radio
+265, jane ,82482.787075406,25/06/2021,
+266,R@hul,363.187305870968,01-30-2026,
+267,mike,58238,,SOCIAL
+268,John,,2021-05-19,email 
+,???,54432,05/01/2020,
+,,unknown,2022/07/14,123
+271, jane ,unknown,11-08-2020,TV
+272,John,,,SOCIAL
+,ALICE,unknown,03-21-2023,
+,,93221.06524411959,99/99/9999,TV
+275,,44116.234666524004,TBD,SOCIAL
+276,,,,Radio
+,,unknown,,Radio
+,mike,,,email 
+,,90898,TBD,Email
+280,John,62118,TBD,TV
+281,???,,99/99/9999,Email
+282, jane ,92269,,TV
+283, jane ,,29/08/2026,SOCIAL
+C184,ALICE,6978.322541338394,99/99/9999,SOCIAL
+,ALICE,unknown,TBD,123
+286,???,10237.93329853282,,SOCIAL
+287,,,,
+288,,93076.47363719987,99/99/9999,
+,R@hul,51418,,123
+C190,,82552.62165835108,99/99/9999,
+291, jane ,unknown,TBD,SOCIAL
+, jane ,5597.2358837940055,,
+293,Bob,,2020/07/02,Email
+C194, jane ,unknown,,
+C195,,72294.5006112722,,email 
+,ALICE,,TBD,SOCIAL
+297,mike,6954.038816732099,99/99/9999,SOCIAL
+,Sara,,99/99/9999,TV
+C199,,61970.547493183665,99/99/9999,email 
+300,R@hul,62406.75428088648,TBD,email 
+, jane ,unknown,TBD,TV
+C202, jane ,,TBD,123
+303, jane ,97139.74518658279,,Radio
+,ALICE,,07-08-2023,Radio
+,mike,25545.57070596717,,Email
+306, jane ,,99/99/9999,Radio
+, jane ,,2025-03-19,SOCIAL
+308,,,TBD,TV
+,mike,,,Email
+,ALICE,19072,,Radio
+311,,62050,09/08/2020,Radio
+C212,???,10956,,email 
+C213,mike,68783,28/11/2022,email 
+,,38915,,123
+,Sara,,2023/12/23,
+316,R@hul,unknown,,SOCIAL
+,,,,SOCIAL
+,R@hul,28655,,Radio
+319,,,TBD,Email
+C220,???,,,TV
+C221,Sara,42010.768769980605,,TV
+322,Sara,,,
+, jane ,99531.68534375457,2020/03/08,123
+,Sara,,TBD,Radio
+325,Bob,,,email 
+C226,mike,,99/99/9999,
+C227,???,54357,2020/01/18,Email
+328,ALICE,,99/99/9999,Radio
+329,Sara,,,Radio
+330,,,,
+331,ALICE,,,SOCIAL
+C232,Bob,,17/02/2020,email 
+,,96229,99/99/9999,
+334,???,,TBD,email 
+335,John,63477.04355019764,,email 
+336,ALICE,27528.766881387386,TBD,
+, jane ,,2020/10/28,
+,,,TBD,Email
+339,R@hul,62752.553532065,,Email
+340,Sara,15937,,Email
+,Sara,unknown,15/04/2021,TV
+342,Bob,90649,,
+343,,unknown,,Radio
+344,???,unknown,,
+345,Bob,,,
+C246,R@hul,,TBD,email 
+,ALICE,unknown,TBD,TV
+,John,,99/99/9999,email 
+349,,36568.39272118364,02-09-2020,TV
+350,mike,42147,,
+,Bob,,,Radio
+,,25971,,Email
+C253,,59347,,Radio
+354,R@hul,,TBD,SOCIAL
+,John,89478.78203451757,2023-10-13,123
+356,,unknown,2023/11/17,TV
+,R@hul,,TBD,email 
+358,Bob,1362,,
+359, jane ,,TBD,Email
+360,John,unknown,TBD,SOCIAL
+361,R@hul,unknown,,email 
+,Sara,,,
+363,???,76386.40024453143,99/99/9999,email 
+364,mike,1720,99/99/9999,123
+365,,,TBD,123
+366,Sara,17047,,
+,Bob,55455,99/99/9999,123
+368, jane ,60404,,123
+C269,???,10950.94559803381,99/99/9999,SOCIAL
+,Sara,42515.69076851464,TBD,email 
+371,,55389,,SOCIAL
+,???,,2024-11-10,
+373,Bob,,26/12/2022,email 
+C274,Bob,,2024/05/24,
+C275,mike,unknown,03-25-2023,email 
+376,Sara,,99/99/9999,TV
+377,ALICE,59666,,TV
+378,ALICE,10089,,Email
+,Bob,46729.39270025481,99/99/9999,SOCIAL
+380, jane ,unknown,TBD,
+,???,unknown,,123
+382,???,68264.19990845173,99/99/9999,SOCIAL
+C283,mike,,12/01/2024,
+, jane ,,TBD,TV
+C285,,unknown,,TV
+, jane ,,11-22-2023,Email
+,ALICE,,TBD,123
+C288, jane ,,TBD,email 
+389,mike,unknown,TBD,SOCIAL
+C290,???,,TBD,SOCIAL
+391,,unknown,,TV
+392,,unknown,99/99/9999,Radio
+C293,R@hul,unknown,,
+C294,???,,,Radio
+395,ALICE,unknown,,TV
+,mike,,,email 
+397,R@hul,,99/99/9999,
+398,,11719.519903489607,2025/03/10,email 
+399,???,82819.32321640496,TBD,123
+C300,John,,,SOCIAL
+,mike,88562,05-17-2023,123
+,Bob,4,,email 
+403,Bob,,2024/12/22,email 
+C304,,24123,,123
+, jane ,42667.723579487814,99/99/9999,SOCIAL
+,Sara,unknown,,123
+C307,???,38510.1112646453,,SOCIAL
+408,???,,02-15-2020,123
+409,,,99/99/9999,TV
+,Sara,,99/99/9999,SOCIAL
+C311,R@hul,93740,,email 
+,,79408,99/99/9999,TV
+,R@hul,,2020-10-03,SOCIAL
+414, jane ,,99/99/9999,email 
+415,,75337.20128465662,09-10-2020,Email
+416,mike,76098.5469356666,12-13-2021,123
+,ALICE,,TBD,123
+,???,97275,12/11/2024,Email
+419,Bob,2357.15837635765,,email 
+C320,ALICE,,99/99/9999,123
+,,73229,,Radio
+422,R@hul,unknown,,
+423,R@hul,2954,,TV
+424,ALICE,,,
+,R@hul,4721.468084604309,TBD,Email
+426,,unknown,99/99/9999,TV
+427,Bob,,05-24-2020,Radio
+,R@hul,,06-14-2021,email 
+429,mike,unknown,TBD,
+430,John,,2026/10/26,123
+431,,91152,,SOCIAL
+432,mike,unknown,TBD,Radio
+433,Bob,22435.37590124511,,Email
+434,Bob,81074.81108416057,99/99/9999,
+435,,85879,,Radio
+, jane ,unknown,,TV
+437,mike,,,
+C338,Sara,unknown,TBD,email 
+439,ALICE,68287,03/06/2023,TV
+440,John,,2025-02-01,123
+441,???,unknown,TBD,Radio
+,John,,99/99/9999,Radio
+443,,unknown,05-08-2020,TV
+C344,R@hul,unknown,2024/11/12,email 
+,,unknown,,
+446,,31224,TBD,email 
+447,Sara,,TBD,
+C348,R@hul,,99/99/9999,123
+,John,43430.83722066834,,
+,John,unknown,11-04-2026,123
+451,???,unknown,99/99/9999,SOCIAL
+452,R@hul,65253.793254550896,,123
+,,94025,TBD,Email
+C354,Sara,78719,2023-12-03,123
+455,Sara,unknown,,email 
+,???,,,TV
+,???,unknown,99/99/9999,Email
+458,R@hul,,99/99/9999,Radio
+,John,,99/99/9999,Radio
+, jane ,84607.10306261807,,123
+C361,???,unknown,99/99/9999,TV
+462,mike,15127,TBD,email 
+C363,Sara,,,Radio
+464,R@hul,,,SOCIAL
+,???,unknown,,Radio
+,ALICE,82920,2022/01/06,SOCIAL
+467,,,17/02/2021,Radio
+468,ALICE,,,TV
+469,,unknown,TBD,email 
+470, jane ,,,
+,ALICE,,99/99/9999,Email
+,R@hul,,,SOCIAL
+,R@hul,12700,TBD,Email
+,Sara,,TBD,Radio
+C375,ALICE,5496,,TV
+476,,unknown,,
+477,???,,TBD,SOCIAL
+478,Bob,66676,,
+479,mike,unknown,,Radio
+,Sara,unknown,,Radio
+,???,unknown,04-22-2021,
+482,,unknown,TBD,Email
+, jane ,unknown,2022-02-18,
+484,R@hul,28863,99/99/9999,123
+485,mike,27542.567039362966,15/10/2025,Radio
+486,mike,27334,TBD,Radio
+,Bob,,99/99/9999,
+,mike,,TBD,email 
+489, jane ,unknown,TBD,
+, jane ,16795.638471382324,99/99/9999,123
+,R@hul,40612.29479617935,,
+,John,unknown,,123
+,,unknown,TBD,Email
+C394,mike,75039,04/01/2026,TV
+495,R@hul,53516.49832734399,TBD,TV
+, jane ,67980,99/99/9999,Radio
+497,???,unknown,,
+498,John,,,Email
+499,???,30147,05-18-2020,Radio
+,ALICE,81647.88455361946,,Radio
+501,John,,,Radio
+502,R@hul,,TBD,
+,Bob,,TBD,Radio
+504,Bob,unknown,,
+,John,,,
+,John,,,email 
+C407,,13520.897215439069,99/99/9999,123
+,Bob,,23/04/2025,123
+C409,,44285,,Radio
+510,???,,TBD,
+C411,mike,,,email 
+,ALICE,,99/99/9999,123
+513,John,64904,99/99/9999,Radio
+,John,unknown,,TV
+,ALICE,68583,,123
+516,,94388,2021/11/03,TV
+,ALICE,14185.256738363481,99/99/9999,email 
+,mike,,03/04/2025,TV
+,Bob,1851,,
+C420,R@hul,,25/01/2026,SOCIAL
+521,Bob,,,Radio
+C422,R@hul,,99/99/9999,SOCIAL
+523,Bob,,99/99/9999,123
+524,,6840,,123
+C425,???,15374,,Radio
+,,unknown,,
+527,???,,TBD,email 
+,,64861.30453770033,TBD,Radio
+529,R@hul,,12/03/2024,
+,,,06-25-2023,TV
+C431,Sara,unknown,,Radio
+532,???,,,123
+,ALICE,,TBD,Email
+,ALICE,23187,2020/12/05,Email
+,John,unknown,TBD,TV
+536,R@hul,,,Email
+537,Bob,65735,99/99/9999,123
+538,???,,03/08/2024,
+C439,Sara,,,123
+540, jane ,91719.12032475125,,Email
+541,John,,TBD,
+542,???,unknown,99/99/9999,TV
+,Bob,35756,TBD,123
+C444, jane ,unknown,99/99/9999,Email
+,,74542,TBD,
+C446,Sara,unknown,TBD,
+,???,,99/99/9999,123
+,,,05-18-2020,TV
+549,ALICE,unknown,TBD,
+550,mike,54224.588765220586,,Radio
+,mike,unknown,,Radio
+C452,John,,,
+,,,,
+,ALICE,12118.973508507372,99/99/9999,TV
+,,110,TBD,
+556,ALICE,,99/99/9999,TV
+557,mike,,99/99/9999,123
+,mike,,99/99/9999,Radio
+C459,???,,,email 
+C460,mike,66657.54446225867,99/99/9999,TV
+C461,,,2026/09/20,
+562,mike,unknown,TBD,Radio
+563,,,TBD,Radio
+564,ALICE,39219.83022925494,TBD,email 
+,John,,,Email
+,,unknown,10-06-2024,123
+,,unknown,12-31-2025,SOCIAL
+,Sara,75720.68902649473,TBD,
+569,Sara,,,
+570, jane ,unknown,TBD,Radio
+C471,???,,TBD,TV
+,John,44123.78503969227,TBD,Email
+,,,99/99/9999,123
+,???,,2022/09/26,email 
+C475,,2867.0253740384724,TBD,
+,,unknown,2020/11/20,
+,???,,17/01/2026,TV
+,mike,unknown,,Email
+,,unknown,,
+580,,unknown,03-09-2025,
+581,John,70609.85949475685,,Radio
+,,,TBD,TV
+C483,mike,,,
+,John,65730.54796517982,06-15-2025,
+,,unknown,2025/01/23,SOCIAL
+,R@hul,,2024/11/02,
+,mike,,,email 
+588,,,99/99/9999,Radio
+,,,TBD,TV
+590,,,,123
+C491,mike,,,TV
+,ALICE,,,Radio
+593,John,,,Radio
+594,,,TBD,Email
+,,25301,99/99/9999,SOCIAL
+,Bob,31595.144379121473,,123
+,Bob,58150,,email 
+,,20875,2025-03-08,Email
+,Sara,99548.98956783958,,email 
+,Sara,,,Email
+C501,,,2024-10-21,SOCIAL
+C502,R@hul,14651,TBD,SOCIAL
+603,mike,unknown,,
+C504,,unknown,,
+,John,,99/99/9999,TV
+,,40194,,123
+C507,ALICE,91105,,
+608,John,unknown,TBD,TV
+,Sara,81062,,TV
+,,63602,99/99/9999,123
+,John,unknown,99/99/9999,
+612,???,60472.76477202363,,123
+,John,68697,04-09-2022,Radio
+614,,,2025-12-30,123
+,Sara,33563,,SOCIAL
+616,R@hul,25842.0972432907,99/99/9999,
+617,Bob,,2025/05/08,Email
+C518, jane ,,99/99/9999,email 
+,R@hul,unknown,,Radio
+620,mike,,TBD,Radio
+,???,unknown,,
+C522,???,unknown,,email 
+623,mike,,99/99/9999,email 
+,???,unknown,99/99/9999,email 
+625,Bob,unknown,2025/12/12,
+,Bob,unknown,,SOCIAL
+627,R@hul,,TBD,
+C528,mike,unknown,TBD,TV
+C529,mike,,,Email
+,,,99/99/9999,
+C531,???,unknown,TBD,
+632,R@hul,49797.285642105475,99/99/9999,TV
+,R@hul,,TBD,Radio
+634, jane ,unknown,,
+635,mike,12562.758117659563,99/99/9999,SOCIAL
+,???,56982.90016650724,TBD,
+,Sara,81548.30926234541,TBD,TV
+,Bob,61384,TBD,
+C539,???,3032,,Radio
+,John,,,Radio
+641,Sara,,,TV
+642, jane ,56095.98738183449,,email 
+,mike,60613.17977806608,,123
+644,,,,Radio
+645,,,2024-05-16,
+C546,,,99/99/9999,TV
+,ALICE,19435,17/06/2023,Email
+,R@hul,5171,01-21-2026,TV
+C549,Bob,unknown,TBD,
+650,,1756.940423462749,,
+,John,52321,,email 
+652,ALICE,,99/99/9999,email 
+,R@hul,,21/02/2022,TV
+,???,50382.260779375036,,Radio
+655,,35399.63678657196,99/99/9999,email 
+,mike,unknown,99/99/9999,SOCIAL
+,John,20415,2025-04-08,
+C558,,,,SOCIAL
+659,,14338,99/99/9999,
+,,,2023-08-08,TV
+661,mike,,,SOCIAL
+662, jane ,508.7846012063799,2024-09-15,123
+,,,TBD,123
+,???,,,123
+,Bob,67467,07/08/2021,email 
+,???,13792,99/99/9999,
+C567,mike,,99/99/9999,TV
+,,65781.38465931505,99/99/9999,SOCIAL
+669,ALICE,31172,06-13-2024,123
+,,,,
+,mike,,99/99/9999,
+C572,mike,76972.78677254154,11-03-2023,TV
+,John,96440.1085367441,2022/07/19,email 
+,???,unknown,,email 
+,ALICE,66965,03/08/2021,
+C576,Sara,,,TV
+,Bob,69582,13/03/2024,SOCIAL
+,Bob,98448,99/99/9999,
+679,,,TBD,SOCIAL
+C580,John,,,email 
+681,,63036,99/99/9999,Radio
+,R@hul,18530.50107587801,99/99/9999,Radio
+683,R@hul,19902,TBD,TV
+684, jane ,51582.64841457619,99/99/9999,123
+C585, jane ,,TBD,
+686,,83635.7220262497,,SOCIAL
+,???,21687.97486131467,99/99/9999,123
+,,unknown,,TV
+,???,98291.74771176868,99/99/9999,123
+690,R@hul,42810.47034433839,,Radio
+691,R@hul,9887.565602545781,2026-06-15,
+C592,R@hul,,TBD,123
+,R@hul,,99/99/9999,SOCIAL
+694,,8979.224238693414,TBD,TV
+C595,Bob,unknown,99/99/9999,
+,Sara,,,email 
+C597,,96974,07-20-2023,email 
+,,83817,TBD,123
+C599,,47377,11-21-2021,email 
+700,R@hul,,,email 
+701, jane ,,TBD,TV
+,ALICE,unknown,TBD,
+,John,unknown,99/99/9999,
+704,Bob,28307,99/99/9999,Email
+,mike,,,SOCIAL
+,R@hul,,TBD,Radio
+C607,,unknown,01-22-2026,SOCIAL
+C608,Bob,75885,,TV
+709,R@hul,,TBD,Email
+,R@hul,,21/09/2020,123
+,John,62472,09-18-2020,
+,???,94682.46383629309,,SOCIAL
+,Bob,,99/99/9999,Radio
+714,Sara,unknown,TBD,email 
+715,R@hul,54225,,SOCIAL
+716,John,64590.108385767366,2023-09-21,Radio
+,,,99/99/9999,email 
+C618,,unknown,99/99/9999,
+,Bob,21890.660676891115,2023/10/23,
+720,R@hul,5150.9898095058,99/99/9999,Email
+,John,unknown,04-23-2020,SOCIAL
+722,R@hul,70151,99/99/9999,TV
+,ALICE,92585,,Email
+,John,unknown,TBD,SOCIAL
+,Sara,,,TV
+,Sara,83008.782619785,TBD,
+C627,ALICE,64325,TBD,Email
+,R@hul,8976.817381569661,,
+C629,,unknown,,Radio
+730,mike,unknown,,Radio
+C631,mike,99221.02321253982,99/99/9999,email 
+C632,R@hul,,12-11-2021,Email
+733,???,,,SOCIAL
+,,5861,99/99/9999,
+C635, jane ,64916,2026-05-28,Radio
+736, jane ,621,,
+C637,,,,
+738,???,,TBD,
+,???,,99/99/9999,
+740, jane ,10643.118568147016,99/99/9999,
+,???,,2022-12-07,Radio
+742, jane ,65269,,123
+743, jane ,50864,99/99/9999,Radio
+,,,,
+745,,1862,99/99/9999,TV
+,Bob,,TBD,email 
+747,ALICE,,2020/04/13,
+,Sara,21115,02-19-2026,email 
+749,,,TBD,Email
+750, jane ,,,email 
+751,John,55927.51458364603,TBD,Radio
+,Bob,unknown,,SOCIAL
+,Sara,29339,,
+754,,unknown,,Radio
+,Bob,unknown,,Radio
+,mike,,TBD,Radio
+757,Sara,28437,,TV
+,Sara,unknown,,SOCIAL
+, jane ,unknown,99/99/9999,
+C660,Sara,,99/99/9999,123
+761,Bob,87424,,
+762,,32204,,Email
+763, jane ,7660.755903780999,TBD,TV
+764,ALICE,95753.61497338263,,123
+,,unknown,99/99/9999,SOCIAL
+, jane ,,TBD,
+767,ALICE,90827.66725074717,,Radio
+,ALICE,unknown,,Email
+,R@hul,33726.71070282154,99/99/9999,SOCIAL
+,???,67414.68904730074,TBD,email 
+C671,R@hul,98340.6626115075,99/99/9999,TV
+C672,Bob,50855.70246953389,99/99/9999,Email
+773,???,unknown,,email 
+C674,Sara,2168.754534390828,TBD,Radio
+775,mike,unknown,TBD,Radio
+,,unknown,,
+C677, jane ,91249.09241078269,2023-07-29,SOCIAL
+778,Bob,6515.877335427916,22/09/2021,email 
+779,John,,,123
+C680, jane ,7361,99/99/9999,email 
+781,John,89863,2022-05-11,Radio
+C682,Sara,,,
+,John,43694.14915649378,99/99/9999,
+784,Sara,57118.84218636971,99/99/9999,TV
+785,ALICE,unknown,,
+786,,45188,TBD,
+787, jane ,unknown,2020/09/04,123
+788, jane ,,TBD,123
+C689,mike,,99/99/9999,SOCIAL
+790,,unknown,,123
+791,ALICE,,TBD,Radio
+792,,56935,99/99/9999,email 
+793,,unknown,,Radio
+794,???,unknown,,123
+,,,09-01-2020,email 
+C696,mike,18543,99/99/9999,Radio
+,John,82773,,Radio
+, jane ,unknown,99/99/9999,TV
+,mike,unknown,99/99/9999,TV
+800,,unknown,,TV
+801,ALICE,,99/99/9999,123
+,mike,,99/99/9999,TV
+803,Sara,unknown,,
+C704,ALICE,,07/10/2022,TV
+C705,R@hul,unknown,TBD,
+806,R@hul,60113.2224213824,99/99/9999,Radio
+,John,26770,2023-04-27,Radio
+808,,,,123
+C709, jane ,unknown,TBD,SOCIAL
+,ALICE,31603.17577098803,,123
+C711,ALICE,,,TV
+,ALICE,31987.65700996881,,Email
+,John,93541,2025-07-27,SOCIAL
+814, jane ,93566,TBD,TV
+815,,,,Radio
+,ALICE,11727,11/01/2025,
+817,Bob,,99/99/9999,123
+818,John,30495,TBD,Radio
+,John,,,email 
+820,Bob,27372,2026/07/14,TV
+821,R@hul,66735,99/99/9999,Email
+,???,,99/99/9999,
+C723,Bob,,,Email
+,R@hul,,99/99/9999,email 
+825,,97362,99/99/9999,
+C726,mike,82066,99/99/9999,Email
+C727,John,unknown,,TV
+,,,99/99/9999,email 
+, jane ,,TBD,Email
+C730,mike,74463,TBD,
+831,,73926.49508655748,2023/02/20,
+832, jane ,,2022-04-18,123
+833,John,95002,TBD,Email
+,mike,90675,,Radio
+835,John,,,Email
+836,???,,04-10-2022,
+837,Bob,68657.19523464814,,123
+838,John,,,SOCIAL
+C739,,70879,,SOCIAL
+,,unknown,,Radio
+C741,,33187,,123
+,ALICE,,,SOCIAL
+,ALICE,,2020/11/30,Email
+, jane ,,TBD,123
+845,,,99/99/9999,TV
+, jane ,,29/09/2021,email 
+,ALICE,unknown,TBD,
+, jane ,95106.60774457401,TBD,email 
+849,ALICE,82593.31687080004,,email 
+,,,,TV
+851,???,,,Email
+,,,,TV
+,John,37376.69678707293,,email 
+854,Bob,72152.14213649656,TBD,
+,mike,,,Radio
+856,John,68066.20179837047,2025/09/04,SOCIAL
+,???,,,email 
+,mike,unknown,TBD,TV
+, jane ,10069,99/99/9999,Email
+,ALICE,unknown,TBD,123
+861,mike,80650.26952161477,99/99/9999,Email
+,mike,,,email 
+,mike,,2024-09-25,email 
+C764,,66468,2021-07-17,SOCIAL
+865,R@hul,,,
+, jane ,86017,2026/07/12,Email
+867,Bob,,02-15-2020,Email
+868,Sara,,99/99/9999,TV
+869,mike,,99/99/9999,email 
+870,,,99/99/9999,SOCIAL
+871,mike,,,TV
+872,???,,,Email
+873,,79486,,Radio
+874,Bob,,,Email
+, jane ,92336,TBD,Radio
+C776,mike,unknown,TBD,123
+,mike,,,TV
+878,mike,,TBD,
+C779,R@hul,unknown,TBD,
+880,,unknown,99/99/9999,SOCIAL
+C781,Bob,,99/99/9999,123
+,Sara,unknown,,TV
+883,mike,,,TV
+884,???,60204.359458961146,2024/03/22,email 
+885,???,,,Radio
+886,???,,,Radio
+,,11063.92213785993,2024-01-20,email 
+C788, jane ,35181,99/99/9999,Email
+,John,,,
+890,Bob,unknown,99/99/9999,SOCIAL
+891,Sara,99922,99/99/9999,Email
+892, jane ,unknown,2025-06-14,
+,Bob,79902,TBD,email 
+894,Bob,,,
+895, jane ,,,Radio
+896,Sara,,TBD,Email
+,Sara,,99/99/9999,email 
+,,52953,TBD,Radio
+C799,Bob,,2026/09/25,
+900,mike,,TBD,Radio
+901,mike,,TBD,TV
+902,???,,99/99/9999,
+903,,99707,03/01/2021,Email
+C804, jane ,,99/99/9999,Radio
+C805,ALICE,40841,99/99/9999,email 
+,John,97136,,SOCIAL
+907,John,,2020-11-11,
+908,Sara,,99/99/9999,SOCIAL
+909,John,unknown,,Email
+,ALICE,61481,,TV
+,???,59630,99/99/9999,Email
+912,,,,Radio
+,mike,unknown,TBD,Radio
+914,Sara,85650.61027163563,,TV
+C815, jane ,,TBD,Email
+C816,mike,2102,,SOCIAL
+C817,,2146,,Radio
+,mike,,2021/06/18,
+919, jane ,unknown,,email 
+,???,,,email 
+C821,,66416,99/99/9999,
+922,John,,,Radio
+C823,R@hul,unknown,03-13-2023,email 
+,mike,42774.22583943311,99/99/9999,Radio
+C825,mike,unknown,99/99/9999,email 
+,,26851.742482441216,06-29-2020,SOCIAL
+927,,54734,99/99/9999,Email
+928,ALICE,,,SOCIAL
+, jane ,unknown,TBD,TV
+C830,Sara,,,
+931,John,unknown,,Radio
+932,R@hul,29334.591619439812,99/99/9999,
+,ALICE,,,Radio
+,R@hul,10633,2021/10/27,TV
+935,,56645,2024/08/23,TV
+C836, jane ,,,Radio
+937,???,unknown,,Radio
+938, jane ,7291.58123070996,,email 
+939,John,-789.1866073606747,TBD,TV
+, jane ,unknown,,email 
+941,R@hul,25198,2024/05/19,
+,???,61158.943582488835,11/03/2023,123
+,???,,,
+C844,John,44388,TBD,
+C845,,unknown,99/99/9999,123
+946,ALICE,,27/04/2021,123
+947,ALICE,unknown,,Radio
+, jane ,,99/99/9999,123
+949,,unknown,2020-09-27,
+,ALICE,,99/99/9999,TV
+,,,99/99/9999,
+, jane ,43850,99/99/9999,123
+C853,Bob,71799.22337257717,TBD,TV
+C854,John,65677,TBD,
+,,,2022/03/16,123
+,Sara,,TBD,Email
+,R@hul,,,
+C858,R@hul,unknown,,
+,???,-567.2130688650628,99/99/9999,Radio
+960,,unknown,2026/01/01,
+,John,76044,12-27-2025,
+,Sara,,,email 
+C863,Bob,94604.43439682062,99/99/9999,
+C864,,55895,11-02-2021,
+C865,Sara,68847.30683577617,08/11/2020,Email
+966, jane ,unknown,,TV
+967,Sara,,,
+968,,46299,,
+969,R@hul,80241.90886997903,TBD,SOCIAL
+,Sara,unknown,,Radio
+971,Sara,52751,,123
+, jane ,97602,,TV
+C873,Bob,,,TV
+974,,64520.3993038184,2023/07/14,SOCIAL
+975,R@hul,,,TV
+976,R@hul,unknown,,Radio
+C877,John,unknown,,SOCIAL
+C878,,,,
+C879,,unknown,99/99/9999,email 
+C880, jane ,unknown,99/99/9999,
+, jane ,unknown,,
+,???,9144.007529526254,2023/07/01,TV
+C883,John,,,Email
+,,unknown,12/10/2021,TV
+985,ALICE,64497.061436880205,99/99/9999,SOCIAL
+986,Sara,23097.24028374501,,
+,Sara,56324,,
+C888,ALICE,,TBD,
+, jane ,,2025-07-31,Radio
+,Bob,90610,,email 
+991,ALICE,30258,,SOCIAL
+992,???,95899.38108901656,2022-05-10,Radio
+993,,18924,TBD,Radio
+,Sara,58118,,TV
+995,Bob,,07-19-2020,Radio
+,ALICE,,99/99/9999,Radio
+997,???,36612,,email 
+,mike,84443,TBD,123
+,???,,99/99/9999,123
+,Bob,,TBD,TV
+,???,,2023/06/24,email 
+, jane ,unknown,,Email
+1003,John,,09-15-2024,123
+1004,ALICE,,,
+,R@hul,56086.78305123912,,
+1006,,unknown,,TV
+,Bob,42513.14236005903,,SOCIAL
+1008,,,2024-08-16,123
+1009,Bob,unknown,TBD,Email
+,,,16/01/2025,TV
+1011,R@hul,,08/01/2026,123
+C912,Sara,15870.810764931131,,TV
+1013, jane ,,,TV
+C914,mike,55184.9730334419,TBD,
+1015,ALICE,5925,99/99/9999,SOCIAL
+C916,mike,58912,2021-07-04,
+C917,???,56599,,Radio
+1018,ALICE,69865,2024-09-17,SOCIAL
+1019, jane ,,TBD,TV
+,ALICE,,,Radio
+1021,R@hul,unknown,,
+1022,Bob,,,email 
+1023,John,,,SOCIAL
+1024,Sara,30382,,email 
+1025,Sara,,TBD,
+C926,Sara,12754.175205820202,99/99/9999,SOCIAL
+1027, jane ,,,email 
+C928,mike,unknown,2020-05-02,Email
+1029,John,,99/99/9999,123
+1030,mike,unknown,99/99/9999,TV
+C931,,unknown,99/99/9999,email 
+,ALICE,,,email 
+1033,ALICE,,,123
+1034,Sara,42903.68193535946,2026-09-20,
+1035,,33880.568432088636,,SOCIAL
+,,,,
+C937,,unknown,2021/11/28,Email
+,John,,,TV
+1039,R@hul,68920,2021-05-30,
+1040, jane ,,TBD,
+1041,Sara,65332,,
+, jane ,31749,,
+1043,Sara,unknown,99/99/9999,Email
+1044,,unknown,99/99/9999,email 
+C945,???,,99/99/9999,TV
+C946,???,5546,TBD,TV
+,ALICE,28677.143174103472,,
+,???,,99/99/9999,email 
+C949,Bob,,TBD,SOCIAL
+,R@hul,unknown,06-02-2020,
+1051,Bob,unknown,,TV
+1052,,72573.55253703713,,123
+,mike,,99/99/9999,email 
+1054,mike,unknown,,Email
+1055, jane ,,,email 
+,Sara,,99/99/9999,
+1057,John,,,Email
+1058,,,,email 
+,John,89144,,TV
+1060,John,6701.44606705019,05-19-2021,
+1061,Bob,unknown,,
+1062,ALICE,,02/09/2025,
+,???,32854.317993724064,01-12-2021,
+1064,Sara,53146.60826423793,TBD,
+,,42295.62181958925,2025-10-28,SOCIAL
+,John,93823.36697174616,TBD,Radio
+,R@hul,7926.35442789943,,email 
+C968,Bob,23004,TBD,Email
+,Sara,,,Radio
+,ALICE,unknown,2023-04-04,
+C971,Sara,,TBD,
+,Sara,69285,99/99/9999,
+C973,R@hul,72109.59100378938,2024/02/26,Email
+,,99312.2406379181,,SOCIAL
+1075,mike,76401,,Radio
+C976,Sara,,,
+1077,Sara,,99/99/9999,TV
+, jane ,unknown,99/99/9999,
+1079,ALICE,unknown,,Email
+,R@hul,,2021/09/26,123
+,John,22795,,
+C982,R@hul,85221,,Email
+C983,John,89622.33044067748,TBD,Email
+,ALICE,,TBD,email 
+,,,25/10/2020,123
+, jane ,89872,,TV
+1087,???,,99/99/9999,
+,???,62230.16977905023,99/99/9999,Email
+1089,Sara,,2020-09-13,Radio
+,Bob,87597,2023-10-03,email 
+,Sara,unknown,,email 
+C992,John,,,SOCIAL
+1093,,unknown,,123
+,???,,,SOCIAL
+,ALICE,33799.59879044973,,Email
+1096,R@hul,69627.31243059786,,
+1097,Bob,59489,TBD,TV
+1098,Bob,33818.85315103648,,Email
+1099,ALICE,,,email 

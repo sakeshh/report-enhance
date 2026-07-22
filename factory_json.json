@@ -1,0 +1,7002 @@
+[
+  {
+    "factory_id": 1,
+    "machine_name": "Widget",
+    "production_qty": "2006",
+    "inspection_date": null,
+    "location": "new york"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "###",
+    "production_qty": 210,
+    "inspection_date": null,
+    "location": "unknown"
+  },
+  {
+    "factory_id": 3,
+    "machine_name": "tool",
+    "production_qty": "",
+    "inspection_date": null,
+    "location": null
+  },
+  {
+    "factory_id": 4,
+    "machine_name": "WID-01",
+    "production_qty": "ten",
+    "inspection_date": "not available",
+    "location": "new york"
+  },
+  {
+    "factory_id": 5,
+    "machine_name": "###",
+    "production_qty": "ten",
+    "inspection_date": "10-08-2026",
+    "location": "123"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "widget ",
+    "production_qty": null,
+    "inspection_date": null,
+    "location": ""
+  },
+  {
+    "factory_id": 7,
+    "machine_name": "Widget",
+    "production_qty": 1816,
+    "inspection_date": "",
+    "location": null
+  },
+  {
+    "factory_id": "",
+    "machine_name": "Gadget",
+    "production_qty": "ten",
+    "inspection_date": "05-08-2022",
+    "location": "unknown"
+  },
+  {
+    "factory_id": "9",
+    "machine_name": "tool",
+    "production_qty": "",
+    "inspection_date": null,
+    "location": ""
+  },
+  {
+    "factory_id": "F10",
+    "machine_name": "Widget",
+    "production_qty": "ten",
+    "inspection_date": "07-01-2024",
+    "location": ""
+  },
+  {
+    "factory_id": null,
+    "machine_name": "Gadget",
+    "production_qty": "",
+    "inspection_date": "not available",
+    "location": "N/A"
+  },
+  {
+    "factory_id": "12",
+    "machine_name": "tool",
+    "production_qty": null,
+    "inspection_date": "not available",
+    "location": ""
+  },
+  {
+    "factory_id": "13",
+    "machine_name": "tool",
+    "production_qty": 3992,
+    "inspection_date": "32/13/2024",
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "widget ",
+    "production_qty": null,
+    "inspection_date": null,
+    "location": "NY"
+  },
+  {
+    "factory_id": 15,
+    "machine_name": "tool",
+    "production_qty": 2135,
+    "inspection_date": "32/13/2024",
+    "location": "123"
+  },
+  {
+    "factory_id": 16,
+    "machine_name": null,
+    "production_qty": null,
+    "inspection_date": null,
+    "location": "unknown"
+  },
+  {
+    "factory_id": "17",
+    "machine_name": "WID-01",
+    "production_qty": null,
+    "inspection_date": null,
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "Widget",
+    "production_qty": "ten",
+    "inspection_date": "32/13/2024",
+    "location": "unknown"
+  },
+  {
+    "factory_id": 19,
+    "machine_name": "widget ",
+    "production_qty": null,
+    "inspection_date": "",
+    "location": "London"
+  },
+  {
+    "factory_id": "20",
+    "machine_name": null,
+    "production_qty": "",
+    "inspection_date": "not available",
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": "F21",
+    "machine_name": "Tool",
+    "production_qty": 4189,
+    "inspection_date": "12/10/2022",
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": 22,
+    "machine_name": "N/A",
+    "production_qty": null,
+    "inspection_date": "2022-06-21",
+    "location": "NY"
+  },
+  {
+    "factory_id": "23",
+    "machine_name": "widget ",
+    "production_qty": 207,
+    "inspection_date": "not available",
+    "location": "123"
+  },
+  {
+    "factory_id": "24",
+    "machine_name": "tool",
+    "production_qty": null,
+    "inspection_date": "",
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": "25",
+    "machine_name": "widget ",
+    "production_qty": "ten",
+    "inspection_date": "",
+    "location": "NY"
+  },
+  {
+    "factory_id": 26,
+    "machine_name": "Widget",
+    "production_qty": 3248,
+    "inspection_date": "32/13/2024",
+    "location": "London"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "WID-01",
+    "production_qty": "ten",
+    "inspection_date": "09/03/2025",
+    "location": "123"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "widget ",
+    "production_qty": 364,
+    "inspection_date": "32/13/2024",
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "Tool",
+    "production_qty": 1701,
+    "inspection_date": "2021/11/05",
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": "F30",
+    "machine_name": "Tool",
+    "production_qty": null,
+    "inspection_date": "32/13/2024",
+    "location": null
+  },
+  {
+    "factory_id": "31",
+    "machine_name": "Widget",
+    "production_qty": 4694,
+    "inspection_date": "2023-07-08",
+    "location": "unknown"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "tool",
+    "production_qty": 4300,
+    "inspection_date": "32/13/2024",
+    "location": "new york"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "widget ",
+    "production_qty": 1876,
+    "inspection_date": null,
+    "location": "unknown"
+  },
+  {
+    "factory_id": 34,
+    "machine_name": "N/A",
+    "production_qty": null,
+    "inspection_date": "not available",
+    "location": ""
+  },
+  {
+    "factory_id": "F35",
+    "machine_name": "",
+    "production_qty": "3242",
+    "inspection_date": "not available",
+    "location": "new york"
+  },
+  {
+    "factory_id": 36,
+    "machine_name": "Tool",
+    "production_qty": 4562,
+    "inspection_date": null,
+    "location": null
+  },
+  {
+    "factory_id": "37",
+    "machine_name": "Gadget",
+    "production_qty": "ten",
+    "inspection_date": "",
+    "location": "London"
+  },
+  {
+    "factory_id": "F38",
+    "machine_name": "N/A",
+    "production_qty": null,
+    "inspection_date": "32/13/2024",
+    "location": null
+  },
+  {
+    "factory_id": 39,
+    "machine_name": "widget ",
+    "production_qty": "ten",
+    "inspection_date": "not available",
+    "location": ""
+  },
+  {
+    "factory_id": "F40",
+    "machine_name": "tool",
+    "production_qty": 3952,
+    "inspection_date": "not available",
+    "location": "NY"
+  },
+  {
+    "factory_id": 41,
+    "machine_name": "Gadget",
+    "production_qty": "2145",
+    "inspection_date": null,
+    "location": "NY"
+  },
+  {
+    "factory_id": 42,
+    "machine_name": "widget ",
+    "production_qty": 1171,
+    "inspection_date": "",
+    "location": "N/A"
+  },
+  {
+    "factory_id": 43,
+    "machine_name": null,
+    "production_qty": "ten",
+    "inspection_date": "10/05/2022",
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "###",
+    "production_qty": "1939",
+    "inspection_date": "2021/12/26",
+    "location": "N/A"
+  },
+  {
+    "factory_id": "F45",
+    "machine_name": "###",
+    "production_qty": "2185",
+    "inspection_date": "2021/03/18",
+    "location": "123"
+  },
+  {
+    "factory_id": "46",
+    "machine_name": "",
+    "production_qty": "ten",
+    "inspection_date": "21/07/2022",
+    "location": ""
+  },
+  {
+    "factory_id": "",
+    "machine_name": "Gadget",
+    "production_qty": "ten",
+    "inspection_date": null,
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": 48,
+    "machine_name": "widget ",
+    "production_qty": null,
+    "inspection_date": "2022-12-23",
+    "location": "unknown"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "Gadget",
+    "production_qty": null,
+    "inspection_date": "",
+    "location": "unknown"
+  },
+  {
+    "factory_id": "50",
+    "machine_name": null,
+    "production_qty": 313,
+    "inspection_date": "not available",
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": 51,
+    "machine_name": "Gadget",
+    "production_qty": "ten",
+    "inspection_date": "",
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": "",
+    "machine_name": null,
+    "production_qty": "1042",
+    "inspection_date": "32/13/2024",
+    "location": "unknown"
+  },
+  {
+    "factory_id": null,
+    "machine_name": null,
+    "production_qty": 3276,
+    "inspection_date": "32/13/2024",
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "N/A",
+    "production_qty": "",
+    "inspection_date": null,
+    "location": "123"
+  },
+  {
+    "factory_id": "55",
+    "machine_name": "widget ",
+    "production_qty": null,
+    "inspection_date": "32/13/2024",
+    "location": null
+  },
+  {
+    "factory_id": "56",
+    "machine_name": "",
+    "production_qty": 1157,
+    "inspection_date": null,
+    "location": "new york"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "###",
+    "production_qty": "",
+    "inspection_date": "32/13/2024",
+    "location": "N/A"
+  },
+  {
+    "factory_id": 58,
+    "machine_name": "widget ",
+    "production_qty": "1792",
+    "inspection_date": "2025/10/22",
+    "location": "London"
+  },
+  {
+    "factory_id": "59",
+    "machine_name": "widget ",
+    "production_qty": "",
+    "inspection_date": "",
+    "location": "unknown"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "###",
+    "production_qty": "3652",
+    "inspection_date": "not available",
+    "location": ""
+  },
+  {
+    "factory_id": "F61",
+    "machine_name": "tool",
+    "production_qty": "ten",
+    "inspection_date": "not available",
+    "location": ""
+  },
+  {
+    "factory_id": "F62",
+    "machine_name": "Gadget",
+    "production_qty": 2569,
+    "inspection_date": "32/13/2024",
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": "63",
+    "machine_name": "",
+    "production_qty": "",
+    "inspection_date": "",
+    "location": "NY"
+  },
+  {
+    "factory_id": "64",
+    "machine_name": "###",
+    "production_qty": 3140,
+    "inspection_date": "",
+    "location": "NY"
+  },
+  {
+    "factory_id": "F65",
+    "machine_name": null,
+    "production_qty": null,
+    "inspection_date": "",
+    "location": ""
+  },
+  {
+    "factory_id": "F66",
+    "machine_name": "###",
+    "production_qty": "",
+    "inspection_date": "32/13/2024",
+    "location": "123"
+  },
+  {
+    "factory_id": "67",
+    "machine_name": "N/A",
+    "production_qty": "",
+    "inspection_date": "2026-08-21",
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": "68",
+    "machine_name": "Tool",
+    "production_qty": "ten",
+    "inspection_date": "32/13/2024",
+    "location": "123"
+  },
+  {
+    "factory_id": "F69",
+    "machine_name": "Gadget",
+    "production_qty": "",
+    "inspection_date": "",
+    "location": "NY"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "Widget",
+    "production_qty": 2816,
+    "inspection_date": "32/13/2024",
+    "location": ""
+  },
+  {
+    "factory_id": 71,
+    "machine_name": "N/A",
+    "production_qty": "1954",
+    "inspection_date": null,
+    "location": ""
+  },
+  {
+    "factory_id": "",
+    "machine_name": null,
+    "production_qty": null,
+    "inspection_date": "32/13/2024",
+    "location": null
+  },
+  {
+    "factory_id": 73,
+    "machine_name": "N/A",
+    "production_qty": null,
+    "inspection_date": "32/13/2024",
+    "location": "new york"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "",
+    "production_qty": null,
+    "inspection_date": "not available",
+    "location": "London"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "Gadget",
+    "production_qty": "ten",
+    "inspection_date": "",
+    "location": "new york"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "Gadget",
+    "production_qty": "",
+    "inspection_date": null,
+    "location": "London"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "Tool",
+    "production_qty": "ten",
+    "inspection_date": "13/08/2023",
+    "location": null
+  },
+  {
+    "factory_id": "",
+    "machine_name": "",
+    "production_qty": null,
+    "inspection_date": "04-01-2024",
+    "location": "123"
+  },
+  {
+    "factory_id": "F79",
+    "machine_name": "WID-01",
+    "production_qty": "ten",
+    "inspection_date": "not available",
+    "location": "unknown"
+  },
+  {
+    "factory_id": "F80",
+    "machine_name": "tool",
+    "production_qty": "4232",
+    "inspection_date": "",
+    "location": "123"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "",
+    "production_qty": "",
+    "inspection_date": "not available",
+    "location": ""
+  },
+  {
+    "factory_id": "",
+    "machine_name": "",
+    "production_qty": "ten",
+    "inspection_date": "",
+    "location": "London"
+  },
+  {
+    "factory_id": "F83",
+    "machine_name": "Gadget",
+    "production_qty": "ten",
+    "inspection_date": "26/10/2022",
+    "location": ""
+  },
+  {
+    "factory_id": "F84",
+    "machine_name": "widget ",
+    "production_qty": "1516",
+    "inspection_date": "not available",
+    "location": "unknown"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "N/A",
+    "production_qty": "823",
+    "inspection_date": "not available",
+    "location": "N/A"
+  },
+  {
+    "factory_id": "F86",
+    "machine_name": "Widget",
+    "production_qty": "ten",
+    "inspection_date": null,
+    "location": null
+  },
+  {
+    "factory_id": "87",
+    "machine_name": "Tool",
+    "production_qty": null,
+    "inspection_date": "",
+    "location": "123"
+  },
+  {
+    "factory_id": "F88",
+    "machine_name": "WID-01",
+    "production_qty": "",
+    "inspection_date": "",
+    "location": "123"
+  },
+  {
+    "factory_id": 89,
+    "machine_name": "N/A",
+    "production_qty": "1242",
+    "inspection_date": "04-24-2026",
+    "location": ""
+  },
+  {
+    "factory_id": 90,
+    "machine_name": "tool",
+    "production_qty": null,
+    "inspection_date": "",
+    "location": "123"
+  },
+  {
+    "factory_id": "F91",
+    "machine_name": "N/A",
+    "production_qty": null,
+    "inspection_date": "32/13/2024",
+    "location": ""
+  },
+  {
+    "factory_id": "F92",
+    "machine_name": "widget ",
+    "production_qty": "1964",
+    "inspection_date": "32/13/2024",
+    "location": "NY"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "Tool",
+    "production_qty": "ten",
+    "inspection_date": "not available",
+    "location": null
+  },
+  {
+    "factory_id": "",
+    "machine_name": "widget ",
+    "production_qty": null,
+    "inspection_date": "2022/03/21",
+    "location": "London"
+  },
+  {
+    "factory_id": "95",
+    "machine_name": "WID-01",
+    "production_qty": 2126,
+    "inspection_date": "not available",
+    "location": "unknown"
+  },
+  {
+    "factory_id": null,
+    "machine_name": null,
+    "production_qty": "",
+    "inspection_date": "not available",
+    "location": "London"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "Tool",
+    "production_qty": null,
+    "inspection_date": "not available",
+    "location": "unknown"
+  },
+  {
+    "factory_id": "F98",
+    "machine_name": "Widget",
+    "production_qty": null,
+    "inspection_date": "not available",
+    "location": "unknown"
+  },
+  {
+    "factory_id": 99,
+    "machine_name": "WID-01",
+    "production_qty": "",
+    "inspection_date": null,
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "widget ",
+    "production_qty": "",
+    "inspection_date": "09-27-2023",
+    "location": "N/A"
+  },
+  {
+    "factory_id": "F101",
+    "machine_name": "###",
+    "production_qty": "",
+    "inspection_date": "",
+    "location": "new york"
+  },
+  {
+    "factory_id": "F102",
+    "machine_name": null,
+    "production_qty": "",
+    "inspection_date": null,
+    "location": "123"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "Widget",
+    "production_qty": "ten",
+    "inspection_date": "2025/08/03",
+    "location": ""
+  },
+  {
+    "factory_id": "F104",
+    "machine_name": "tool",
+    "production_qty": "",
+    "inspection_date": "2025-06-08",
+    "location": "unknown"
+  },
+  {
+    "factory_id": "105",
+    "machine_name": "WID-01",
+    "production_qty": 2495,
+    "inspection_date": "2026/03/12",
+    "location": ""
+  },
+  {
+    "factory_id": 106,
+    "machine_name": "Tool",
+    "production_qty": "",
+    "inspection_date": "",
+    "location": "123"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "",
+    "production_qty": "4515",
+    "inspection_date": null,
+    "location": "London"
+  },
+  {
+    "factory_id": "108",
+    "machine_name": "widget ",
+    "production_qty": "ten",
+    "inspection_date": "09-10-2025",
+    "location": null
+  },
+  {
+    "factory_id": "F109",
+    "machine_name": "N/A",
+    "production_qty": "4011",
+    "inspection_date": "not available",
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "tool",
+    "production_qty": "ten",
+    "inspection_date": null,
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": "111",
+    "machine_name": "###",
+    "production_qty": "",
+    "inspection_date": "32/13/2024",
+    "location": "123"
+  },
+  {
+    "factory_id": 112,
+    "machine_name": "WID-01",
+    "production_qty": "ten",
+    "inspection_date": "2021/02/15",
+    "location": "London"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "Widget",
+    "production_qty": "3358",
+    "inspection_date": "not available",
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "###",
+    "production_qty": null,
+    "inspection_date": "",
+    "location": "London"
+  },
+  {
+    "factory_id": 115,
+    "machine_name": "N/A",
+    "production_qty": "ten",
+    "inspection_date": "",
+    "location": "new york"
+  },
+  {
+    "factory_id": 116,
+    "machine_name": "Tool",
+    "production_qty": 1312,
+    "inspection_date": "07-07-2020",
+    "location": null
+  },
+  {
+    "factory_id": "F117",
+    "machine_name": "Gadget",
+    "production_qty": "1192",
+    "inspection_date": null,
+    "location": "N/A"
+  },
+  {
+    "factory_id": "118",
+    "machine_name": "WID-01",
+    "production_qty": "",
+    "inspection_date": null,
+    "location": "N/A"
+  },
+  {
+    "factory_id": "119",
+    "machine_name": "Tool",
+    "production_qty": "ten",
+    "inspection_date": "not available",
+    "location": "London"
+  },
+  {
+    "factory_id": "120",
+    "machine_name": "widget ",
+    "production_qty": null,
+    "inspection_date": "not available",
+    "location": "123"
+  },
+  {
+    "factory_id": "F121",
+    "machine_name": "",
+    "production_qty": 3101,
+    "inspection_date": null,
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": null,
+    "machine_name": null,
+    "production_qty": "",
+    "inspection_date": null,
+    "location": "NY"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "Tool",
+    "production_qty": null,
+    "inspection_date": "32/13/2024",
+    "location": "unknown"
+  },
+  {
+    "factory_id": "F124",
+    "machine_name": "WID-01",
+    "production_qty": "ten",
+    "inspection_date": null,
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": "125",
+    "machine_name": "widget ",
+    "production_qty": "",
+    "inspection_date": "32/13/2024",
+    "location": "London"
+  },
+  {
+    "factory_id": "F126",
+    "machine_name": "tool",
+    "production_qty": "2232",
+    "inspection_date": "not available",
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": 127,
+    "machine_name": "Tool",
+    "production_qty": "1153",
+    "inspection_date": "06-15-2024",
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": 128,
+    "machine_name": null,
+    "production_qty": "",
+    "inspection_date": null,
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": "F129",
+    "machine_name": "widget ",
+    "production_qty": 1865,
+    "inspection_date": null,
+    "location": ""
+  },
+  {
+    "factory_id": 130,
+    "machine_name": "Tool",
+    "production_qty": 2425,
+    "inspection_date": "2021-07-26",
+    "location": null
+  },
+  {
+    "factory_id": "",
+    "machine_name": "widget ",
+    "production_qty": null,
+    "inspection_date": "",
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "###",
+    "production_qty": "",
+    "inspection_date": null,
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": "F133",
+    "machine_name": "Widget",
+    "production_qty": "",
+    "inspection_date": "not available",
+    "location": "new york"
+  },
+  {
+    "factory_id": "F134",
+    "machine_name": "tool",
+    "production_qty": "",
+    "inspection_date": "04/02/2023",
+    "location": "123"
+  },
+  {
+    "factory_id": 135,
+    "machine_name": "",
+    "production_qty": 4841,
+    "inspection_date": "32/13/2024",
+    "location": "unknown"
+  },
+  {
+    "factory_id": "136",
+    "machine_name": "widget ",
+    "production_qty": null,
+    "inspection_date": "not available",
+    "location": "N/A"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "Widget",
+    "production_qty": "1185",
+    "inspection_date": "32/13/2024",
+    "location": "new york"
+  },
+  {
+    "factory_id": 138,
+    "machine_name": "WID-01",
+    "production_qty": "2934",
+    "inspection_date": "08-08-2026",
+    "location": "N/A"
+  },
+  {
+    "factory_id": "F139",
+    "machine_name": "Widget",
+    "production_qty": null,
+    "inspection_date": "",
+    "location": "123"
+  },
+  {
+    "factory_id": "F140",
+    "machine_name": "tool",
+    "production_qty": "",
+    "inspection_date": null,
+    "location": "NY"
+  },
+  {
+    "factory_id": null,
+    "machine_name": null,
+    "production_qty": 3702,
+    "inspection_date": "",
+    "location": "new york"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "Tool",
+    "production_qty": "ten",
+    "inspection_date": "27/10/2026",
+    "location": "N/A"
+  },
+  {
+    "factory_id": "F143",
+    "machine_name": "N/A",
+    "production_qty": "ten",
+    "inspection_date": "",
+    "location": "London"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "###",
+    "production_qty": null,
+    "inspection_date": "",
+    "location": ""
+  },
+  {
+    "factory_id": "",
+    "machine_name": "Gadget",
+    "production_qty": "",
+    "inspection_date": "",
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": "F146",
+    "machine_name": "Gadget",
+    "production_qty": 1200,
+    "inspection_date": "2021-01-08",
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": 147,
+    "machine_name": "Gadget",
+    "production_qty": 1015,
+    "inspection_date": "07-30-2026",
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": "F148",
+    "machine_name": "###",
+    "production_qty": null,
+    "inspection_date": "07-03-2023",
+    "location": "unknown"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "",
+    "production_qty": "3950",
+    "inspection_date": null,
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": 150,
+    "machine_name": null,
+    "production_qty": "",
+    "inspection_date": null,
+    "location": null
+  },
+  {
+    "factory_id": 151,
+    "machine_name": "WID-01",
+    "production_qty": "ten",
+    "inspection_date": "32/13/2024",
+    "location": "N/A"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "###",
+    "production_qty": 520,
+    "inspection_date": "",
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "Gadget",
+    "production_qty": "ten",
+    "inspection_date": "2023-08-21",
+    "location": "N/A"
+  },
+  {
+    "factory_id": "154",
+    "machine_name": "N/A",
+    "production_qty": "ten",
+    "inspection_date": "",
+    "location": "unknown"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "###",
+    "production_qty": null,
+    "inspection_date": "",
+    "location": "new york"
+  },
+  {
+    "factory_id": "F156",
+    "machine_name": "N/A",
+    "production_qty": "ten",
+    "inspection_date": "",
+    "location": "unknown"
+  },
+  {
+    "factory_id": 157,
+    "machine_name": "Widget",
+    "production_qty": "2469",
+    "inspection_date": "not available",
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": 158,
+    "machine_name": "Widget",
+    "production_qty": "3527",
+    "inspection_date": null,
+    "location": ""
+  },
+  {
+    "factory_id": null,
+    "machine_name": "tool",
+    "production_qty": "",
+    "inspection_date": "2020/06/22",
+    "location": "123"
+  },
+  {
+    "factory_id": 160,
+    "machine_name": "Gadget",
+    "production_qty": null,
+    "inspection_date": "not available",
+    "location": "new york"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "Widget",
+    "production_qty": null,
+    "inspection_date": "02-27-2025",
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": 162,
+    "machine_name": "",
+    "production_qty": "",
+    "inspection_date": "",
+    "location": null
+  },
+  {
+    "factory_id": "F163",
+    "machine_name": "",
+    "production_qty": 2678,
+    "inspection_date": null,
+    "location": "London"
+  },
+  {
+    "factory_id": "164",
+    "machine_name": "Gadget",
+    "production_qty": "1209",
+    "inspection_date": "not available",
+    "location": ""
+  },
+  {
+    "factory_id": "165",
+    "machine_name": "N/A",
+    "production_qty": "617",
+    "inspection_date": null,
+    "location": "unknown"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "N/A",
+    "production_qty": "2589",
+    "inspection_date": "",
+    "location": "123"
+  },
+  {
+    "factory_id": "F167",
+    "machine_name": null,
+    "production_qty": "ten",
+    "inspection_date": "not available",
+    "location": "123"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "Widget",
+    "production_qty": "ten",
+    "inspection_date": null,
+    "location": "unknown"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "###",
+    "production_qty": null,
+    "inspection_date": null,
+    "location": ""
+  },
+  {
+    "factory_id": "F170",
+    "machine_name": "N/A",
+    "production_qty": "4107",
+    "inspection_date": "2020/09/10",
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": 171,
+    "machine_name": "tool",
+    "production_qty": "320",
+    "inspection_date": null,
+    "location": "London"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "WID-01",
+    "production_qty": "ten",
+    "inspection_date": "not available",
+    "location": "unknown"
+  },
+  {
+    "factory_id": 173,
+    "machine_name": "Gadget",
+    "production_qty": 489,
+    "inspection_date": "not available",
+    "location": null
+  },
+  {
+    "factory_id": null,
+    "machine_name": "WID-01",
+    "production_qty": null,
+    "inspection_date": "not available",
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": "175",
+    "machine_name": "N/A",
+    "production_qty": null,
+    "inspection_date": "32/13/2024",
+    "location": "London"
+  },
+  {
+    "factory_id": 176,
+    "machine_name": "###",
+    "production_qty": 4115,
+    "inspection_date": "32/13/2024",
+    "location": ""
+  },
+  {
+    "factory_id": "F177",
+    "machine_name": "Tool",
+    "production_qty": "1855",
+    "inspection_date": "not available",
+    "location": "new york"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "tool",
+    "production_qty": "ten",
+    "inspection_date": "32/13/2024",
+    "location": "N/A"
+  },
+  {
+    "factory_id": "179",
+    "machine_name": "N/A",
+    "production_qty": 1306,
+    "inspection_date": "32/13/2024",
+    "location": "123"
+  },
+  {
+    "factory_id": null,
+    "machine_name": null,
+    "production_qty": null,
+    "inspection_date": "",
+    "location": ""
+  },
+  {
+    "factory_id": "F181",
+    "machine_name": "N/A",
+    "production_qty": "ten",
+    "inspection_date": "32/13/2024",
+    "location": ""
+  },
+  {
+    "factory_id": null,
+    "machine_name": "WID-01",
+    "production_qty": "",
+    "inspection_date": null,
+    "location": "new york"
+  },
+  {
+    "factory_id": "F183",
+    "machine_name": "widget ",
+    "production_qty": "",
+    "inspection_date": "",
+    "location": "new york"
+  },
+  {
+    "factory_id": "184",
+    "machine_name": "Tool",
+    "production_qty": "",
+    "inspection_date": null,
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": "185",
+    "machine_name": "###",
+    "production_qty": "3071",
+    "inspection_date": "04-25-2020",
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": "186",
+    "machine_name": "WID-01",
+    "production_qty": "",
+    "inspection_date": "",
+    "location": "unknown"
+  },
+  {
+    "factory_id": 187,
+    "machine_name": "widget ",
+    "production_qty": "2096",
+    "inspection_date": "2021/09/04",
+    "location": null
+  },
+  {
+    "factory_id": "188",
+    "machine_name": null,
+    "production_qty": "391",
+    "inspection_date": "2024/09/15",
+    "location": "new york"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "N/A",
+    "production_qty": null,
+    "inspection_date": "32/13/2024",
+    "location": null
+  },
+  {
+    "factory_id": "",
+    "machine_name": "Widget",
+    "production_qty": "2890",
+    "inspection_date": "32/13/2024",
+    "location": "new york"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "Gadget",
+    "production_qty": null,
+    "inspection_date": "",
+    "location": "123"
+  },
+  {
+    "factory_id": 192,
+    "machine_name": "###",
+    "production_qty": 3008,
+    "inspection_date": "not available",
+    "location": ""
+  },
+  {
+    "factory_id": 193,
+    "machine_name": "N/A",
+    "production_qty": 2673,
+    "inspection_date": "32/13/2024",
+    "location": "123"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "WID-01",
+    "production_qty": "",
+    "inspection_date": "32/13/2024",
+    "location": "NY"
+  },
+  {
+    "factory_id": "195",
+    "machine_name": "Widget",
+    "production_qty": null,
+    "inspection_date": "not available",
+    "location": "NY"
+  },
+  {
+    "factory_id": "196",
+    "machine_name": null,
+    "production_qty": "ten",
+    "inspection_date": "not available",
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "Tool",
+    "production_qty": "2777",
+    "inspection_date": "not available",
+    "location": "London"
+  },
+  {
+    "factory_id": "F198",
+    "machine_name": "widget ",
+    "production_qty": "",
+    "inspection_date": null,
+    "location": null
+  },
+  {
+    "factory_id": "F199",
+    "machine_name": "widget ",
+    "production_qty": "ten",
+    "inspection_date": null,
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": "200",
+    "machine_name": "Tool",
+    "production_qty": 2829,
+    "inspection_date": "not available",
+    "location": "NY"
+  },
+  {
+    "factory_id": 201,
+    "machine_name": "###",
+    "production_qty": "4203",
+    "inspection_date": null,
+    "location": "123"
+  },
+  {
+    "factory_id": 202,
+    "machine_name": "WID-01",
+    "production_qty": "ten",
+    "inspection_date": null,
+    "location": "NY"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "WID-01",
+    "production_qty": "ten",
+    "inspection_date": null,
+    "location": "N/A"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "Gadget",
+    "production_qty": "ten",
+    "inspection_date": "2022-10-19",
+    "location": "N/A"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "tool",
+    "production_qty": 3120,
+    "inspection_date": "",
+    "location": ""
+  },
+  {
+    "factory_id": null,
+    "machine_name": null,
+    "production_qty": 3973,
+    "inspection_date": "",
+    "location": "N/A"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "widget ",
+    "production_qty": 2568,
+    "inspection_date": "not available",
+    "location": "N/A"
+  },
+  {
+    "factory_id": "208",
+    "machine_name": "Gadget",
+    "production_qty": 4117,
+    "inspection_date": "32/13/2024",
+    "location": "123"
+  },
+  {
+    "factory_id": 209,
+    "machine_name": "Gadget",
+    "production_qty": "ten",
+    "inspection_date": null,
+    "location": "new york"
+  },
+  {
+    "factory_id": 210,
+    "machine_name": null,
+    "production_qty": null,
+    "inspection_date": null,
+    "location": "new york"
+  },
+  {
+    "factory_id": "211",
+    "machine_name": "Gadget",
+    "production_qty": "",
+    "inspection_date": "32/13/2024",
+    "location": "London"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "WID-01",
+    "production_qty": null,
+    "inspection_date": null,
+    "location": "N/A"
+  },
+  {
+    "factory_id": "F213",
+    "machine_name": "WID-01",
+    "production_qty": "2643",
+    "inspection_date": "11-18-2023",
+    "location": null
+  },
+  {
+    "factory_id": "214",
+    "machine_name": "tool",
+    "production_qty": "ten",
+    "inspection_date": null,
+    "location": "N/A"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "N/A",
+    "production_qty": null,
+    "inspection_date": null,
+    "location": "NY"
+  },
+  {
+    "factory_id": 216,
+    "machine_name": "widget ",
+    "production_qty": "ten",
+    "inspection_date": null,
+    "location": "NY"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "tool",
+    "production_qty": "",
+    "inspection_date": "not available",
+    "location": "123"
+  },
+  {
+    "factory_id": 218,
+    "machine_name": "Widget",
+    "production_qty": "",
+    "inspection_date": "32/13/2024",
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "WID-01",
+    "production_qty": "ten",
+    "inspection_date": "not available",
+    "location": "London"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "widget ",
+    "production_qty": "",
+    "inspection_date": "",
+    "location": ""
+  },
+  {
+    "factory_id": "221",
+    "machine_name": "widget ",
+    "production_qty": "",
+    "inspection_date": "32/13/2024",
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "Gadget",
+    "production_qty": "",
+    "inspection_date": "",
+    "location": null
+  },
+  {
+    "factory_id": "",
+    "machine_name": "Widget",
+    "production_qty": null,
+    "inspection_date": "32/13/2024",
+    "location": "unknown"
+  },
+  {
+    "factory_id": "F224",
+    "machine_name": "Widget",
+    "production_qty": "",
+    "inspection_date": "not available",
+    "location": "London"
+  },
+  {
+    "factory_id": 225,
+    "machine_name": "widget ",
+    "production_qty": "ten",
+    "inspection_date": "not available",
+    "location": "NY"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "Widget",
+    "production_qty": "4602",
+    "inspection_date": "01-24-2024",
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "Tool",
+    "production_qty": null,
+    "inspection_date": "01/05/2021",
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": "F228",
+    "machine_name": "Gadget",
+    "production_qty": "2995",
+    "inspection_date": null,
+    "location": "NY"
+  },
+  {
+    "factory_id": 229,
+    "machine_name": "Widget",
+    "production_qty": "",
+    "inspection_date": "32/13/2024",
+    "location": "unknown"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "WID-01",
+    "production_qty": "2609",
+    "inspection_date": null,
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "tool",
+    "production_qty": null,
+    "inspection_date": "2023/05/12",
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": "F232",
+    "machine_name": "widget ",
+    "production_qty": "ten",
+    "inspection_date": "not available",
+    "location": "unknown"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "",
+    "production_qty": "",
+    "inspection_date": "32/13/2024",
+    "location": ""
+  },
+  {
+    "factory_id": 234,
+    "machine_name": "N/A",
+    "production_qty": 850,
+    "inspection_date": "",
+    "location": "N/A"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "",
+    "production_qty": null,
+    "inspection_date": "32/13/2024",
+    "location": "London"
+  },
+  {
+    "factory_id": "236",
+    "machine_name": "tool",
+    "production_qty": null,
+    "inspection_date": "32/13/2024",
+    "location": "123"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "Gadget",
+    "production_qty": "ten",
+    "inspection_date": "32/13/2024",
+    "location": ""
+  },
+  {
+    "factory_id": "F238",
+    "machine_name": "tool",
+    "production_qty": "ten",
+    "inspection_date": "",
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "Gadget",
+    "production_qty": "ten",
+    "inspection_date": "",
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": "240",
+    "machine_name": null,
+    "production_qty": 294,
+    "inspection_date": "not available",
+    "location": "123"
+  },
+  {
+    "factory_id": "241",
+    "machine_name": "",
+    "production_qty": null,
+    "inspection_date": "17/01/2023",
+    "location": "unknown"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "",
+    "production_qty": null,
+    "inspection_date": "13/07/2022",
+    "location": "new york"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "Gadget",
+    "production_qty": "823",
+    "inspection_date": "",
+    "location": "123"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "",
+    "production_qty": "ten",
+    "inspection_date": null,
+    "location": ""
+  },
+  {
+    "factory_id": null,
+    "machine_name": "Widget",
+    "production_qty": "3423",
+    "inspection_date": "",
+    "location": "N/A"
+  },
+  {
+    "factory_id": "F246",
+    "machine_name": "Widget",
+    "production_qty": null,
+    "inspection_date": "not available",
+    "location": null
+  },
+  {
+    "factory_id": "",
+    "machine_name": "tool",
+    "production_qty": "4046",
+    "inspection_date": "not available",
+    "location": ""
+  },
+  {
+    "factory_id": 248,
+    "machine_name": "Gadget",
+    "production_qty": "ten",
+    "inspection_date": "not available",
+    "location": null
+  },
+  {
+    "factory_id": null,
+    "machine_name": "",
+    "production_qty": "",
+    "inspection_date": "10-11-2025",
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": 250,
+    "machine_name": "WID-01",
+    "production_qty": "ten",
+    "inspection_date": "not available",
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": "251",
+    "machine_name": "Tool",
+    "production_qty": "ten",
+    "inspection_date": "not available",
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": "252",
+    "machine_name": "Widget",
+    "production_qty": "ten",
+    "inspection_date": null,
+    "location": null
+  },
+  {
+    "factory_id": 253,
+    "machine_name": null,
+    "production_qty": "1809",
+    "inspection_date": "32/13/2024",
+    "location": "123"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "Gadget",
+    "production_qty": "",
+    "inspection_date": "32/13/2024",
+    "location": "unknown"
+  },
+  {
+    "factory_id": 255,
+    "machine_name": "tool",
+    "production_qty": "ten",
+    "inspection_date": "2020-11-15",
+    "location": "London"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "",
+    "production_qty": "4396",
+    "inspection_date": null,
+    "location": "123"
+  },
+  {
+    "factory_id": 257,
+    "machine_name": "",
+    "production_qty": 4727,
+    "inspection_date": "2025/09/21",
+    "location": "123"
+  },
+  {
+    "factory_id": "258",
+    "machine_name": "tool",
+    "production_qty": null,
+    "inspection_date": "not available",
+    "location": "NY"
+  },
+  {
+    "factory_id": "",
+    "machine_name": null,
+    "production_qty": null,
+    "inspection_date": "",
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": 260,
+    "machine_name": "tool",
+    "production_qty": "",
+    "inspection_date": "",
+    "location": "N/A"
+  },
+  {
+    "factory_id": "261",
+    "machine_name": "###",
+    "production_qty": "",
+    "inspection_date": "2024/03/26",
+    "location": "London"
+  },
+  {
+    "factory_id": "262",
+    "machine_name": "Gadget",
+    "production_qty": null,
+    "inspection_date": "32/13/2024",
+    "location": "NY"
+  },
+  {
+    "factory_id": 263,
+    "machine_name": null,
+    "production_qty": "",
+    "inspection_date": "32/13/2024",
+    "location": ""
+  },
+  {
+    "factory_id": "",
+    "machine_name": "Gadget",
+    "production_qty": "2258",
+    "inspection_date": "",
+    "location": "unknown"
+  },
+  {
+    "factory_id": 265,
+    "machine_name": "",
+    "production_qty": 1638,
+    "inspection_date": "",
+    "location": "unknown"
+  },
+  {
+    "factory_id": 266,
+    "machine_name": "",
+    "production_qty": "",
+    "inspection_date": "17/08/2022",
+    "location": "N/A"
+  },
+  {
+    "factory_id": null,
+    "machine_name": null,
+    "production_qty": "ten",
+    "inspection_date": "32/13/2024",
+    "location": null
+  },
+  {
+    "factory_id": "268",
+    "machine_name": "tool",
+    "production_qty": "ten",
+    "inspection_date": null,
+    "location": "unknown"
+  },
+  {
+    "factory_id": "269",
+    "machine_name": "###",
+    "production_qty": 4503,
+    "inspection_date": null,
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "###",
+    "production_qty": "",
+    "inspection_date": "32/13/2024",
+    "location": ""
+  },
+  {
+    "factory_id": "F271",
+    "machine_name": "WID-01",
+    "production_qty": null,
+    "inspection_date": null,
+    "location": "London"
+  },
+  {
+    "factory_id": "272",
+    "machine_name": "###",
+    "production_qty": "2088",
+    "inspection_date": "",
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": 273,
+    "machine_name": "tool",
+    "production_qty": "ten",
+    "inspection_date": "2024-03-24",
+    "location": ""
+  },
+  {
+    "factory_id": null,
+    "machine_name": "tool",
+    "production_qty": "3927",
+    "inspection_date": "09-25-2023",
+    "location": ""
+  },
+  {
+    "factory_id": "275",
+    "machine_name": "widget ",
+    "production_qty": null,
+    "inspection_date": "32/13/2024",
+    "location": "London"
+  },
+  {
+    "factory_id": "F276",
+    "machine_name": null,
+    "production_qty": null,
+    "inspection_date": "not available",
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "Tool",
+    "production_qty": "",
+    "inspection_date": "not available",
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "Widget",
+    "production_qty": "1812",
+    "inspection_date": null,
+    "location": "unknown"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "###",
+    "production_qty": "1248",
+    "inspection_date": "",
+    "location": "unknown"
+  },
+  {
+    "factory_id": "280",
+    "machine_name": "Tool",
+    "production_qty": "ten",
+    "inspection_date": "",
+    "location": "N/A"
+  },
+  {
+    "factory_id": "F281",
+    "machine_name": "WID-01",
+    "production_qty": "",
+    "inspection_date": null,
+    "location": "NY"
+  },
+  {
+    "factory_id": 282,
+    "machine_name": "Widget",
+    "production_qty": "3378",
+    "inspection_date": "32/13/2024",
+    "location": "NY"
+  },
+  {
+    "factory_id": "283",
+    "machine_name": "tool",
+    "production_qty": 3685,
+    "inspection_date": "2025/06/02",
+    "location": "NY"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "tool",
+    "production_qty": 3319,
+    "inspection_date": null,
+    "location": null
+  },
+  {
+    "factory_id": 285,
+    "machine_name": "tool",
+    "production_qty": 3477,
+    "inspection_date": "32/13/2024",
+    "location": ""
+  },
+  {
+    "factory_id": null,
+    "machine_name": "tool",
+    "production_qty": "ten",
+    "inspection_date": "not available",
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "N/A",
+    "production_qty": "ten",
+    "inspection_date": "2020-11-26",
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "###",
+    "production_qty": 4477,
+    "inspection_date": "08/02/2020",
+    "location": "123"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "Gadget",
+    "production_qty": null,
+    "inspection_date": "32/13/2024",
+    "location": "unknown"
+  },
+  {
+    "factory_id": "",
+    "machine_name": null,
+    "production_qty": "ten",
+    "inspection_date": "32/13/2024",
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": 291,
+    "machine_name": "",
+    "production_qty": "",
+    "inspection_date": "32/13/2024",
+    "location": "unknown"
+  },
+  {
+    "factory_id": "292",
+    "machine_name": "N/A",
+    "production_qty": "ten",
+    "inspection_date": "21/04/2024",
+    "location": "London"
+  },
+  {
+    "factory_id": "F293",
+    "machine_name": "Widget",
+    "production_qty": "3580",
+    "inspection_date": null,
+    "location": "unknown"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "###",
+    "production_qty": "ten",
+    "inspection_date": "32/13/2024",
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "###",
+    "production_qty": null,
+    "inspection_date": null,
+    "location": null
+  },
+  {
+    "factory_id": "296",
+    "machine_name": "widget ",
+    "production_qty": "2195",
+    "inspection_date": "",
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": "F297",
+    "machine_name": "widget ",
+    "production_qty": "ten",
+    "inspection_date": "not available",
+    "location": "new york"
+  },
+  {
+    "factory_id": "298",
+    "machine_name": "widget ",
+    "production_qty": "",
+    "inspection_date": "2026/03/31",
+    "location": "NY"
+  },
+  {
+    "factory_id": 299,
+    "machine_name": "Gadget",
+    "production_qty": null,
+    "inspection_date": "",
+    "location": "NY"
+  },
+  {
+    "factory_id": "F300",
+    "machine_name": "###",
+    "production_qty": null,
+    "inspection_date": "",
+    "location": "N/A"
+  },
+  {
+    "factory_id": "301",
+    "machine_name": null,
+    "production_qty": "",
+    "inspection_date": "32/13/2024",
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": "F302",
+    "machine_name": "###",
+    "production_qty": 2405,
+    "inspection_date": "32/13/2024",
+    "location": "123"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "N/A",
+    "production_qty": 1551,
+    "inspection_date": "07-08-2021",
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": "F304",
+    "machine_name": "N/A",
+    "production_qty": "",
+    "inspection_date": null,
+    "location": "N/A"
+  },
+  {
+    "factory_id": "F305",
+    "machine_name": "Gadget",
+    "production_qty": "",
+    "inspection_date": "",
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": "F306",
+    "machine_name": "Tool",
+    "production_qty": "ten",
+    "inspection_date": "",
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": 307,
+    "machine_name": "N/A",
+    "production_qty": null,
+    "inspection_date": "",
+    "location": ""
+  },
+  {
+    "factory_id": "",
+    "machine_name": null,
+    "production_qty": "",
+    "inspection_date": "32/13/2024",
+    "location": null
+  },
+  {
+    "factory_id": "309",
+    "machine_name": "###",
+    "production_qty": "",
+    "inspection_date": null,
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "tool",
+    "production_qty": 3376,
+    "inspection_date": "2024-01-12",
+    "location": ""
+  },
+  {
+    "factory_id": "F311",
+    "machine_name": "WID-01",
+    "production_qty": null,
+    "inspection_date": "",
+    "location": "new york"
+  },
+  {
+    "factory_id": 312,
+    "machine_name": "widget ",
+    "production_qty": null,
+    "inspection_date": "",
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "Tool",
+    "production_qty": "4099",
+    "inspection_date": "",
+    "location": "new york"
+  },
+  {
+    "factory_id": "F314",
+    "machine_name": "###",
+    "production_qty": "950",
+    "inspection_date": "not available",
+    "location": "123"
+  },
+  {
+    "factory_id": "315",
+    "machine_name": "tool",
+    "production_qty": "",
+    "inspection_date": "",
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": 316,
+    "machine_name": null,
+    "production_qty": 316,
+    "inspection_date": "32/13/2024",
+    "location": ""
+  },
+  {
+    "factory_id": null,
+    "machine_name": "WID-01",
+    "production_qty": "ten",
+    "inspection_date": "",
+    "location": ""
+  },
+  {
+    "factory_id": "",
+    "machine_name": "WID-01",
+    "production_qty": "",
+    "inspection_date": "",
+    "location": "unknown"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "###",
+    "production_qty": "1759",
+    "inspection_date": null,
+    "location": "new york"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "WID-01",
+    "production_qty": "2670",
+    "inspection_date": "not available",
+    "location": "123"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "Gadget",
+    "production_qty": null,
+    "inspection_date": "not available",
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "N/A",
+    "production_qty": null,
+    "inspection_date": "32/13/2024",
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": 323,
+    "machine_name": "",
+    "production_qty": "958",
+    "inspection_date": null,
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "N/A",
+    "production_qty": "",
+    "inspection_date": "",
+    "location": "London"
+  },
+  {
+    "factory_id": "325",
+    "machine_name": "tool",
+    "production_qty": "ten",
+    "inspection_date": "not available",
+    "location": "123"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "Widget",
+    "production_qty": "",
+    "inspection_date": "",
+    "location": "London"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "Tool",
+    "production_qty": "",
+    "inspection_date": "32/13/2024",
+    "location": "new york"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "Widget",
+    "production_qty": 1756,
+    "inspection_date": null,
+    "location": null
+  },
+  {
+    "factory_id": "329",
+    "machine_name": "Tool",
+    "production_qty": null,
+    "inspection_date": null,
+    "location": "new york"
+  },
+  {
+    "factory_id": "F330",
+    "machine_name": "tool",
+    "production_qty": 2955,
+    "inspection_date": "",
+    "location": "new york"
+  },
+  {
+    "factory_id": "331",
+    "machine_name": null,
+    "production_qty": "ten",
+    "inspection_date": "",
+    "location": "new york"
+  },
+  {
+    "factory_id": "332",
+    "machine_name": "",
+    "production_qty": null,
+    "inspection_date": null,
+    "location": "N/A"
+  },
+  {
+    "factory_id": "333",
+    "machine_name": "",
+    "production_qty": "ten",
+    "inspection_date": null,
+    "location": "London"
+  },
+  {
+    "factory_id": "334",
+    "machine_name": "Gadget",
+    "production_qty": null,
+    "inspection_date": "32/13/2024",
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": 335,
+    "machine_name": null,
+    "production_qty": "1087",
+    "inspection_date": "32/13/2024",
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "WID-01",
+    "production_qty": "",
+    "inspection_date": "2024/03/16",
+    "location": "new york"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "tool",
+    "production_qty": "",
+    "inspection_date": null,
+    "location": "NY"
+  },
+  {
+    "factory_id": 338,
+    "machine_name": "Tool",
+    "production_qty": null,
+    "inspection_date": "",
+    "location": ""
+  },
+  {
+    "factory_id": "",
+    "machine_name": null,
+    "production_qty": "ten",
+    "inspection_date": null,
+    "location": "123"
+  },
+  {
+    "factory_id": "F340",
+    "machine_name": "Widget",
+    "production_qty": "",
+    "inspection_date": "32/13/2024",
+    "location": "123"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "Widget",
+    "production_qty": "1657",
+    "inspection_date": "not available",
+    "location": "new york"
+  },
+  {
+    "factory_id": "F342",
+    "machine_name": null,
+    "production_qty": "3046",
+    "inspection_date": "not available",
+    "location": ""
+  },
+  {
+    "factory_id": "",
+    "machine_name": "widget ",
+    "production_qty": "8",
+    "inspection_date": "32/13/2024",
+    "location": "unknown"
+  },
+  {
+    "factory_id": "344",
+    "machine_name": "tool",
+    "production_qty": 3595,
+    "inspection_date": "",
+    "location": "N/A"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "widget ",
+    "production_qty": 1825,
+    "inspection_date": "not available",
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": "F346",
+    "machine_name": "WID-01",
+    "production_qty": "1090",
+    "inspection_date": null,
+    "location": "N/A"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "Gadget",
+    "production_qty": "",
+    "inspection_date": "17/12/2024",
+    "location": "new york"
+  },
+  {
+    "factory_id": "348",
+    "machine_name": "widget ",
+    "production_qty": "ten",
+    "inspection_date": "32/13/2024",
+    "location": ""
+  },
+  {
+    "factory_id": "F349",
+    "machine_name": "widget ",
+    "production_qty": null,
+    "inspection_date": "09-23-2026",
+    "location": null
+  },
+  {
+    "factory_id": "350",
+    "machine_name": "tool",
+    "production_qty": "4174",
+    "inspection_date": "05-23-2024",
+    "location": ""
+  },
+  {
+    "factory_id": "",
+    "machine_name": "###",
+    "production_qty": "",
+    "inspection_date": null,
+    "location": "NY"
+  },
+  {
+    "factory_id": "F352",
+    "machine_name": "Gadget",
+    "production_qty": null,
+    "inspection_date": null,
+    "location": "N/A"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "widget ",
+    "production_qty": 86,
+    "inspection_date": "32/13/2024",
+    "location": "NY"
+  },
+  {
+    "factory_id": 354,
+    "machine_name": "###",
+    "production_qty": null,
+    "inspection_date": "",
+    "location": "new york"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "tool",
+    "production_qty": "ten",
+    "inspection_date": "12-08-2020",
+    "location": "London"
+  },
+  {
+    "factory_id": "356",
+    "machine_name": "WID-01",
+    "production_qty": "",
+    "inspection_date": "not available",
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": "357",
+    "machine_name": "Widget",
+    "production_qty": "",
+    "inspection_date": null,
+    "location": "unknown"
+  },
+  {
+    "factory_id": 358,
+    "machine_name": null,
+    "production_qty": 1388,
+    "inspection_date": "32/13/2024",
+    "location": "123"
+  },
+  {
+    "factory_id": "F359",
+    "machine_name": "tool",
+    "production_qty": "2123",
+    "inspection_date": "not available",
+    "location": "new york"
+  },
+  {
+    "factory_id": 360,
+    "machine_name": "Gadget",
+    "production_qty": null,
+    "inspection_date": null,
+    "location": "new york"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "Tool",
+    "production_qty": 4134,
+    "inspection_date": "not available",
+    "location": "N/A"
+  },
+  {
+    "factory_id": "F362",
+    "machine_name": "widget ",
+    "production_qty": "944",
+    "inspection_date": "2025-09-15",
+    "location": "NY"
+  },
+  {
+    "factory_id": "363",
+    "machine_name": "Widget",
+    "production_qty": "",
+    "inspection_date": "06/09/2021",
+    "location": "London"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "",
+    "production_qty": "",
+    "inspection_date": "08-03-2023",
+    "location": "unknown"
+  },
+  {
+    "factory_id": "F365",
+    "machine_name": "widget ",
+    "production_qty": "431",
+    "inspection_date": "",
+    "location": "new york"
+  },
+  {
+    "factory_id": "",
+    "machine_name": null,
+    "production_qty": 2495,
+    "inspection_date": "2026/03/15",
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": "367",
+    "machine_name": null,
+    "production_qty": null,
+    "inspection_date": "not available",
+    "location": "unknown"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "",
+    "production_qty": "2008",
+    "inspection_date": "2020/01/27",
+    "location": ""
+  },
+  {
+    "factory_id": null,
+    "machine_name": "Gadget",
+    "production_qty": 28,
+    "inspection_date": "03-21-2024",
+    "location": ""
+  },
+  {
+    "factory_id": null,
+    "machine_name": "",
+    "production_qty": 3389,
+    "inspection_date": "08-06-2021",
+    "location": "NY"
+  },
+  {
+    "factory_id": "371",
+    "machine_name": "tool",
+    "production_qty": "",
+    "inspection_date": null,
+    "location": "N/A"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "widget ",
+    "production_qty": 4798,
+    "inspection_date": "32/13/2024",
+    "location": null
+  },
+  {
+    "factory_id": "F373",
+    "machine_name": "Gadget",
+    "production_qty": "ten",
+    "inspection_date": "32/13/2024",
+    "location": "new york"
+  },
+  {
+    "factory_id": "374",
+    "machine_name": "WID-01",
+    "production_qty": "892",
+    "inspection_date": "",
+    "location": "123"
+  },
+  {
+    "factory_id": "F375",
+    "machine_name": "###",
+    "production_qty": "ten",
+    "inspection_date": "not available",
+    "location": "123"
+  },
+  {
+    "factory_id": "F376",
+    "machine_name": "widget ",
+    "production_qty": "ten",
+    "inspection_date": "32/13/2024",
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": "377",
+    "machine_name": "widget ",
+    "production_qty": "",
+    "inspection_date": "not available",
+    "location": null
+  },
+  {
+    "factory_id": "378",
+    "machine_name": "Widget",
+    "production_qty": null,
+    "inspection_date": "03/03/2026",
+    "location": "123"
+  },
+  {
+    "factory_id": 379,
+    "machine_name": "WID-01",
+    "production_qty": 944,
+    "inspection_date": "32/13/2024",
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": "F380",
+    "machine_name": "widget ",
+    "production_qty": "ten",
+    "inspection_date": "2020-11-03",
+    "location": ""
+  },
+  {
+    "factory_id": "",
+    "machine_name": "WID-01",
+    "production_qty": 703,
+    "inspection_date": "2020/06/23",
+    "location": "N/A"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "###",
+    "production_qty": 3185,
+    "inspection_date": "32/13/2024",
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": "383",
+    "machine_name": "WID-01",
+    "production_qty": "",
+    "inspection_date": null,
+    "location": "unknown"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "",
+    "production_qty": "",
+    "inspection_date": "2026/03/05",
+    "location": "new york"
+  },
+  {
+    "factory_id": "F385",
+    "machine_name": "###",
+    "production_qty": "3434",
+    "inspection_date": null,
+    "location": "NY"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "Gadget",
+    "production_qty": "",
+    "inspection_date": "",
+    "location": null
+  },
+  {
+    "factory_id": "387",
+    "machine_name": "Widget",
+    "production_qty": "4891",
+    "inspection_date": "04-30-2020",
+    "location": "123"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "Gadget",
+    "production_qty": "1906",
+    "inspection_date": "32/13/2024",
+    "location": null
+  },
+  {
+    "factory_id": null,
+    "machine_name": "Widget",
+    "production_qty": "",
+    "inspection_date": "32/13/2024",
+    "location": ""
+  },
+  {
+    "factory_id": null,
+    "machine_name": "Gadget",
+    "production_qty": 2889,
+    "inspection_date": null,
+    "location": ""
+  },
+  {
+    "factory_id": "",
+    "machine_name": "tool",
+    "production_qty": "",
+    "inspection_date": "2020-06-04",
+    "location": ""
+  },
+  {
+    "factory_id": null,
+    "machine_name": "",
+    "production_qty": "",
+    "inspection_date": null,
+    "location": ""
+  },
+  {
+    "factory_id": "393",
+    "machine_name": "Gadget",
+    "production_qty": 1403,
+    "inspection_date": null,
+    "location": "N/A"
+  },
+  {
+    "factory_id": 394,
+    "machine_name": "tool",
+    "production_qty": "ten",
+    "inspection_date": "not available",
+    "location": null
+  },
+  {
+    "factory_id": "F395",
+    "machine_name": "WID-01",
+    "production_qty": "",
+    "inspection_date": null,
+    "location": "unknown"
+  },
+  {
+    "factory_id": "F396",
+    "machine_name": "",
+    "production_qty": "",
+    "inspection_date": "32/13/2024",
+    "location": "N/A"
+  },
+  {
+    "factory_id": 397,
+    "machine_name": "N/A",
+    "production_qty": 3157,
+    "inspection_date": null,
+    "location": ""
+  },
+  {
+    "factory_id": null,
+    "machine_name": "widget ",
+    "production_qty": "ten",
+    "inspection_date": "not available",
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": "399",
+    "machine_name": "widget ",
+    "production_qty": 2700,
+    "inspection_date": "32/13/2024",
+    "location": "new york"
+  },
+  {
+    "factory_id": "F400",
+    "machine_name": null,
+    "production_qty": 835,
+    "inspection_date": "",
+    "location": "N/A"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "Tool",
+    "production_qty": null,
+    "inspection_date": "",
+    "location": "unknown"
+  },
+  {
+    "factory_id": "402",
+    "machine_name": "WID-01",
+    "production_qty": 3646,
+    "inspection_date": "not available",
+    "location": null
+  },
+  {
+    "factory_id": 403,
+    "machine_name": "widget ",
+    "production_qty": "",
+    "inspection_date": null,
+    "location": "new york"
+  },
+  {
+    "factory_id": "F404",
+    "machine_name": "N/A",
+    "production_qty": 4976,
+    "inspection_date": null,
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": "405",
+    "machine_name": "Widget",
+    "production_qty": "2712",
+    "inspection_date": null,
+    "location": "London"
+  },
+  {
+    "factory_id": "F406",
+    "machine_name": null,
+    "production_qty": 2386,
+    "inspection_date": null,
+    "location": "London"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "WID-01",
+    "production_qty": 396,
+    "inspection_date": "not available",
+    "location": "unknown"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "",
+    "production_qty": "210",
+    "inspection_date": "11-30-2021",
+    "location": "123"
+  },
+  {
+    "factory_id": 409,
+    "machine_name": null,
+    "production_qty": "",
+    "inspection_date": null,
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": "410",
+    "machine_name": "Gadget",
+    "production_qty": "3026",
+    "inspection_date": "not available",
+    "location": "123"
+  },
+  {
+    "factory_id": "",
+    "machine_name": null,
+    "production_qty": null,
+    "inspection_date": "09/09/2020",
+    "location": "new york"
+  },
+  {
+    "factory_id": "F412",
+    "machine_name": "tool",
+    "production_qty": "4831",
+    "inspection_date": "",
+    "location": "London"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "tool",
+    "production_qty": "4691",
+    "inspection_date": "05-04-2025",
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": 414,
+    "machine_name": "tool",
+    "production_qty": null,
+    "inspection_date": "",
+    "location": "N/A"
+  },
+  {
+    "factory_id": "415",
+    "machine_name": "",
+    "production_qty": 1528,
+    "inspection_date": "",
+    "location": ""
+  },
+  {
+    "factory_id": "416",
+    "machine_name": "N/A",
+    "production_qty": 2062,
+    "inspection_date": null,
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "Gadget",
+    "production_qty": "",
+    "inspection_date": "2020/02/20",
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": "418",
+    "machine_name": "WID-01",
+    "production_qty": null,
+    "inspection_date": null,
+    "location": "new york"
+  },
+  {
+    "factory_id": "F419",
+    "machine_name": "tool",
+    "production_qty": "ten",
+    "inspection_date": null,
+    "location": "unknown"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "Widget",
+    "production_qty": "",
+    "inspection_date": "2021/08/12",
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": "F421",
+    "machine_name": "",
+    "production_qty": "ten",
+    "inspection_date": "not available",
+    "location": null
+  },
+  {
+    "factory_id": "F422",
+    "machine_name": null,
+    "production_qty": "804",
+    "inspection_date": "",
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": "F423",
+    "machine_name": "###",
+    "production_qty": "731",
+    "inspection_date": "",
+    "location": "123"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "Gadget",
+    "production_qty": "4221",
+    "inspection_date": null,
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": "425",
+    "machine_name": "tool",
+    "production_qty": "237",
+    "inspection_date": "28/02/2022",
+    "location": ""
+  },
+  {
+    "factory_id": 426,
+    "machine_name": "Tool",
+    "production_qty": "2952",
+    "inspection_date": "",
+    "location": "London"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "widget ",
+    "production_qty": "ten",
+    "inspection_date": "32/13/2024",
+    "location": "123"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "tool",
+    "production_qty": "2820",
+    "inspection_date": "not available",
+    "location": "NY"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "Widget",
+    "production_qty": "4687",
+    "inspection_date": "32/13/2024",
+    "location": null
+  },
+  {
+    "factory_id": "",
+    "machine_name": "tool",
+    "production_qty": "",
+    "inspection_date": null,
+    "location": "NY"
+  },
+  {
+    "factory_id": "431",
+    "machine_name": null,
+    "production_qty": "ten",
+    "inspection_date": "not available",
+    "location": "123"
+  },
+  {
+    "factory_id": "F432",
+    "machine_name": "",
+    "production_qty": null,
+    "inspection_date": "2024-06-14",
+    "location": "London"
+  },
+  {
+    "factory_id": "F433",
+    "machine_name": "tool",
+    "production_qty": "ten",
+    "inspection_date": "",
+    "location": "new york"
+  },
+  {
+    "factory_id": "F434",
+    "machine_name": null,
+    "production_qty": "ten",
+    "inspection_date": "32/13/2024",
+    "location": "London"
+  },
+  {
+    "factory_id": "435",
+    "machine_name": "Widget",
+    "production_qty": "ten",
+    "inspection_date": "",
+    "location": null
+  },
+  {
+    "factory_id": "F436",
+    "machine_name": "###",
+    "production_qty": 3264,
+    "inspection_date": "not available",
+    "location": ""
+  },
+  {
+    "factory_id": null,
+    "machine_name": "Tool",
+    "production_qty": "ten",
+    "inspection_date": "not available",
+    "location": "new york"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "WID-01",
+    "production_qty": "4579",
+    "inspection_date": "32/13/2024",
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": "439",
+    "machine_name": null,
+    "production_qty": "ten",
+    "inspection_date": "",
+    "location": "new york"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "Widget",
+    "production_qty": null,
+    "inspection_date": "32/13/2024",
+    "location": "London"
+  },
+  {
+    "factory_id": 441,
+    "machine_name": "###",
+    "production_qty": "",
+    "inspection_date": "32/13/2024",
+    "location": ""
+  },
+  {
+    "factory_id": "F442",
+    "machine_name": "###",
+    "production_qty": "3748",
+    "inspection_date": "19/07/2023",
+    "location": "123"
+  },
+  {
+    "factory_id": "F443",
+    "machine_name": "WID-01",
+    "production_qty": 2517,
+    "inspection_date": "32/13/2024",
+    "location": "N/A"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "WID-01",
+    "production_qty": "721",
+    "inspection_date": "",
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "###",
+    "production_qty": null,
+    "inspection_date": "03-27-2022",
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "",
+    "production_qty": "33",
+    "inspection_date": "not available",
+    "location": "N/A"
+  },
+  {
+    "factory_id": 447,
+    "machine_name": "###",
+    "production_qty": "ten",
+    "inspection_date": "2021-11-15",
+    "location": null
+  },
+  {
+    "factory_id": "F448",
+    "machine_name": "Tool",
+    "production_qty": null,
+    "inspection_date": "32/13/2024",
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "Gadget",
+    "production_qty": "",
+    "inspection_date": "32/13/2024",
+    "location": "N/A"
+  },
+  {
+    "factory_id": "450",
+    "machine_name": "Widget",
+    "production_qty": "4133",
+    "inspection_date": "05-19-2021",
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": "F451",
+    "machine_name": "tool",
+    "production_qty": 348,
+    "inspection_date": "2021-03-18",
+    "location": "new york"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "Tool",
+    "production_qty": null,
+    "inspection_date": "32/13/2024",
+    "location": ""
+  },
+  {
+    "factory_id": 453,
+    "machine_name": null,
+    "production_qty": null,
+    "inspection_date": "",
+    "location": "new york"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "N/A",
+    "production_qty": 914,
+    "inspection_date": "32/13/2024",
+    "location": "unknown"
+  },
+  {
+    "factory_id": "455",
+    "machine_name": null,
+    "production_qty": "ten",
+    "inspection_date": "32/13/2024",
+    "location": "NY"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "Tool",
+    "production_qty": "ten",
+    "inspection_date": "2022-08-18",
+    "location": "new york"
+  },
+  {
+    "factory_id": 457,
+    "machine_name": "N/A",
+    "production_qty": 3997,
+    "inspection_date": "2025-09-26",
+    "location": null
+  },
+  {
+    "factory_id": "458",
+    "machine_name": "Tool",
+    "production_qty": "",
+    "inspection_date": "32/13/2024",
+    "location": "NY"
+  },
+  {
+    "factory_id": "F459",
+    "machine_name": "Gadget",
+    "production_qty": 2511,
+    "inspection_date": "2021-01-24",
+    "location": "N/A"
+  },
+  {
+    "factory_id": "460",
+    "machine_name": "Gadget",
+    "production_qty": null,
+    "inspection_date": "not available",
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": "461",
+    "machine_name": "widget ",
+    "production_qty": "",
+    "inspection_date": "",
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": "462",
+    "machine_name": "widget ",
+    "production_qty": "480",
+    "inspection_date": null,
+    "location": "123"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "Tool",
+    "production_qty": "ten",
+    "inspection_date": "",
+    "location": "123"
+  },
+  {
+    "factory_id": 464,
+    "machine_name": "###",
+    "production_qty": 3560,
+    "inspection_date": "12-07-2022",
+    "location": "London"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "N/A",
+    "production_qty": null,
+    "inspection_date": "",
+    "location": ""
+  },
+  {
+    "factory_id": "",
+    "machine_name": "Gadget",
+    "production_qty": null,
+    "inspection_date": "32/13/2024",
+    "location": "London"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "Tool",
+    "production_qty": "",
+    "inspection_date": "not available",
+    "location": null
+  },
+  {
+    "factory_id": 468,
+    "machine_name": "tool",
+    "production_qty": "",
+    "inspection_date": "09/07/2024",
+    "location": "123"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "N/A",
+    "production_qty": "",
+    "inspection_date": "01-05-2025",
+    "location": "123"
+  },
+  {
+    "factory_id": 470,
+    "machine_name": "widget ",
+    "production_qty": 3254,
+    "inspection_date": "2026-04-01",
+    "location": "unknown"
+  },
+  {
+    "factory_id": null,
+    "machine_name": null,
+    "production_qty": "4606",
+    "inspection_date": "not available",
+    "location": "NY"
+  },
+  {
+    "factory_id": "472",
+    "machine_name": "Tool",
+    "production_qty": null,
+    "inspection_date": "not available",
+    "location": "123"
+  },
+  {
+    "factory_id": 473,
+    "machine_name": "widget ",
+    "production_qty": "ten",
+    "inspection_date": null,
+    "location": "London"
+  },
+  {
+    "factory_id": "F474",
+    "machine_name": "widget ",
+    "production_qty": "",
+    "inspection_date": "2021/07/29",
+    "location": null
+  },
+  {
+    "factory_id": null,
+    "machine_name": "",
+    "production_qty": "",
+    "inspection_date": "32/13/2024",
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": 476,
+    "machine_name": "###",
+    "production_qty": 330,
+    "inspection_date": null,
+    "location": "London"
+  },
+  {
+    "factory_id": "477",
+    "machine_name": "Tool",
+    "production_qty": -15,
+    "inspection_date": null,
+    "location": "123"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "WID-01",
+    "production_qty": "1422",
+    "inspection_date": null,
+    "location": "unknown"
+  },
+  {
+    "factory_id": "F479",
+    "machine_name": "tool",
+    "production_qty": null,
+    "inspection_date": "",
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": "F480",
+    "machine_name": "Tool",
+    "production_qty": "",
+    "inspection_date": null,
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "",
+    "production_qty": null,
+    "inspection_date": "32/13/2024",
+    "location": "N/A"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "tool",
+    "production_qty": "ten",
+    "inspection_date": null,
+    "location": "unknown"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "tool",
+    "production_qty": 2292,
+    "inspection_date": "2025-11-11",
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": "484",
+    "machine_name": "Widget",
+    "production_qty": "ten",
+    "inspection_date": "not available",
+    "location": "N/A"
+  },
+  {
+    "factory_id": 485,
+    "machine_name": null,
+    "production_qty": 1621,
+    "inspection_date": "2024/01/09",
+    "location": "unknown"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "",
+    "production_qty": "3185",
+    "inspection_date": "09-23-2025",
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "###",
+    "production_qty": 2511,
+    "inspection_date": "32/13/2024",
+    "location": "unknown"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "",
+    "production_qty": null,
+    "inspection_date": "32/13/2024",
+    "location": null
+  },
+  {
+    "factory_id": "",
+    "machine_name": "WID-01",
+    "production_qty": "1531",
+    "inspection_date": "",
+    "location": "NY"
+  },
+  {
+    "factory_id": "",
+    "machine_name": null,
+    "production_qty": "2164",
+    "inspection_date": "10-21-2021",
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "WID-01",
+    "production_qty": "ten",
+    "inspection_date": null,
+    "location": null
+  },
+  {
+    "factory_id": "",
+    "machine_name": "N/A",
+    "production_qty": 4456,
+    "inspection_date": "32/13/2024",
+    "location": "London"
+  },
+  {
+    "factory_id": 493,
+    "machine_name": "tool",
+    "production_qty": null,
+    "inspection_date": "2026/01/08",
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": "494",
+    "machine_name": "",
+    "production_qty": "ten",
+    "inspection_date": null,
+    "location": "London"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "tool",
+    "production_qty": "ten",
+    "inspection_date": null,
+    "location": "unknown"
+  },
+  {
+    "factory_id": "496",
+    "machine_name": "Widget",
+    "production_qty": 2579,
+    "inspection_date": null,
+    "location": null
+  },
+  {
+    "factory_id": 497,
+    "machine_name": "tool",
+    "production_qty": null,
+    "inspection_date": "2024/12/30",
+    "location": null
+  },
+  {
+    "factory_id": "498",
+    "machine_name": "Gadget",
+    "production_qty": 4159,
+    "inspection_date": "2021-11-16",
+    "location": ""
+  },
+  {
+    "factory_id": "499",
+    "machine_name": "###",
+    "production_qty": null,
+    "inspection_date": "32/13/2024",
+    "location": "NY"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "Gadget",
+    "production_qty": 260,
+    "inspection_date": "not available",
+    "location": "London"
+  },
+  {
+    "factory_id": 501,
+    "machine_name": "N/A",
+    "production_qty": "",
+    "inspection_date": "",
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": "F502",
+    "machine_name": "Widget",
+    "production_qty": null,
+    "inspection_date": null,
+    "location": "NY"
+  },
+  {
+    "factory_id": 503,
+    "machine_name": "Gadget",
+    "production_qty": "ten",
+    "inspection_date": "not available",
+    "location": "123"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "###",
+    "production_qty": "3882",
+    "inspection_date": "32/13/2024",
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": null,
+    "machine_name": null,
+    "production_qty": "ten",
+    "inspection_date": "15/02/2020",
+    "location": "NY"
+  },
+  {
+    "factory_id": 506,
+    "machine_name": "N/A",
+    "production_qty": null,
+    "inspection_date": "not available",
+    "location": ""
+  },
+  {
+    "factory_id": "F507",
+    "machine_name": "",
+    "production_qty": "4198",
+    "inspection_date": "32/13/2024",
+    "location": "unknown"
+  },
+  {
+    "factory_id": "F508",
+    "machine_name": "",
+    "production_qty": null,
+    "inspection_date": null,
+    "location": "new york"
+  },
+  {
+    "factory_id": "F509",
+    "machine_name": "widget ",
+    "production_qty": "804",
+    "inspection_date": "not available",
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": "510",
+    "machine_name": "",
+    "production_qty": null,
+    "inspection_date": "not available",
+    "location": "123"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "Gadget",
+    "production_qty": null,
+    "inspection_date": "not available",
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": "512",
+    "machine_name": "Widget",
+    "production_qty": "2016",
+    "inspection_date": "not available",
+    "location": "N/A"
+  },
+  {
+    "factory_id": "F513",
+    "machine_name": "Tool",
+    "production_qty": "ten",
+    "inspection_date": null,
+    "location": "new york"
+  },
+  {
+    "factory_id": "514",
+    "machine_name": "N/A",
+    "production_qty": "2298",
+    "inspection_date": "not available",
+    "location": "new york"
+  },
+  {
+    "factory_id": 515,
+    "machine_name": "Widget",
+    "production_qty": null,
+    "inspection_date": null,
+    "location": ""
+  },
+  {
+    "factory_id": 516,
+    "machine_name": "tool",
+    "production_qty": null,
+    "inspection_date": "not available",
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": "517",
+    "machine_name": "N/A",
+    "production_qty": "",
+    "inspection_date": "",
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "Widget",
+    "production_qty": null,
+    "inspection_date": "32/13/2024",
+    "location": "N/A"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "N/A",
+    "production_qty": "ten",
+    "inspection_date": "",
+    "location": ""
+  },
+  {
+    "factory_id": 520,
+    "machine_name": null,
+    "production_qty": 2976,
+    "inspection_date": "",
+    "location": "123"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "Widget",
+    "production_qty": 276,
+    "inspection_date": "not available",
+    "location": "unknown"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "N/A",
+    "production_qty": "",
+    "inspection_date": null,
+    "location": null
+  },
+  {
+    "factory_id": "",
+    "machine_name": "",
+    "production_qty": "ten",
+    "inspection_date": "",
+    "location": "unknown"
+  },
+  {
+    "factory_id": 524,
+    "machine_name": "tool",
+    "production_qty": "3603",
+    "inspection_date": null,
+    "location": null
+  },
+  {
+    "factory_id": "525",
+    "machine_name": "WID-01",
+    "production_qty": "ten",
+    "inspection_date": "32/13/2024",
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": "F526",
+    "machine_name": "widget ",
+    "production_qty": "",
+    "inspection_date": "",
+    "location": "NY"
+  },
+  {
+    "factory_id": "527",
+    "machine_name": "Widget",
+    "production_qty": null,
+    "inspection_date": null,
+    "location": "NY"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "WID-01",
+    "production_qty": "ten",
+    "inspection_date": null,
+    "location": "unknown"
+  },
+  {
+    "factory_id": 529,
+    "machine_name": null,
+    "production_qty": "",
+    "inspection_date": "",
+    "location": "N/A"
+  },
+  {
+    "factory_id": "530",
+    "machine_name": "###",
+    "production_qty": null,
+    "inspection_date": "32/13/2024",
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "N/A",
+    "production_qty": "563",
+    "inspection_date": "32/13/2024",
+    "location": "new york"
+  },
+  {
+    "factory_id": 532,
+    "machine_name": "",
+    "production_qty": "",
+    "inspection_date": "32/13/2024",
+    "location": "123"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "N/A",
+    "production_qty": null,
+    "inspection_date": "",
+    "location": "N/A"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "tool",
+    "production_qty": null,
+    "inspection_date": "09-19-2024",
+    "location": "London"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "",
+    "production_qty": "ten",
+    "inspection_date": "",
+    "location": "N/A"
+  },
+  {
+    "factory_id": "F536",
+    "machine_name": "Tool",
+    "production_qty": "ten",
+    "inspection_date": "not available",
+    "location": ""
+  },
+  {
+    "factory_id": 537,
+    "machine_name": "Widget",
+    "production_qty": 4684,
+    "inspection_date": "",
+    "location": ""
+  },
+  {
+    "factory_id": "F538",
+    "machine_name": "###",
+    "production_qty": "873",
+    "inspection_date": "not available",
+    "location": "London"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "N/A",
+    "production_qty": "",
+    "inspection_date": null,
+    "location": "London"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "WID-01",
+    "production_qty": null,
+    "inspection_date": "not available",
+    "location": "unknown"
+  },
+  {
+    "factory_id": "F541",
+    "machine_name": "###",
+    "production_qty": "975",
+    "inspection_date": "03/01/2025",
+    "location": ""
+  },
+  {
+    "factory_id": null,
+    "machine_name": "###",
+    "production_qty": null,
+    "inspection_date": "",
+    "location": "NY"
+  },
+  {
+    "factory_id": 543,
+    "machine_name": "WID-01",
+    "production_qty": "",
+    "inspection_date": "not available",
+    "location": ""
+  },
+  {
+    "factory_id": "F544",
+    "machine_name": "widget ",
+    "production_qty": "",
+    "inspection_date": null,
+    "location": "NY"
+  },
+  {
+    "factory_id": "545",
+    "machine_name": "Tool",
+    "production_qty": "87",
+    "inspection_date": "32/13/2024",
+    "location": "NY"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "tool",
+    "production_qty": null,
+    "inspection_date": "not available",
+    "location": ""
+  },
+  {
+    "factory_id": 547,
+    "machine_name": "WID-01",
+    "production_qty": "",
+    "inspection_date": "",
+    "location": "unknown"
+  },
+  {
+    "factory_id": "548",
+    "machine_name": "tool",
+    "production_qty": 75,
+    "inspection_date": null,
+    "location": "unknown"
+  },
+  {
+    "factory_id": "F549",
+    "machine_name": "Gadget",
+    "production_qty": null,
+    "inspection_date": "",
+    "location": "unknown"
+  },
+  {
+    "factory_id": 550,
+    "machine_name": null,
+    "production_qty": null,
+    "inspection_date": null,
+    "location": null
+  },
+  {
+    "factory_id": "F551",
+    "machine_name": "widget ",
+    "production_qty": null,
+    "inspection_date": "",
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "Tool",
+    "production_qty": "",
+    "inspection_date": "",
+    "location": "new york"
+  },
+  {
+    "factory_id": "F553",
+    "machine_name": "widget ",
+    "production_qty": "1805",
+    "inspection_date": "not available",
+    "location": "London"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "Widget",
+    "production_qty": "ten",
+    "inspection_date": "not available",
+    "location": "new york"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "WID-01",
+    "production_qty": "ten",
+    "inspection_date": "32/13/2024",
+    "location": ""
+  },
+  {
+    "factory_id": "",
+    "machine_name": "",
+    "production_qty": "ten",
+    "inspection_date": "32/13/2024",
+    "location": ""
+  },
+  {
+    "factory_id": null,
+    "machine_name": "Gadget",
+    "production_qty": 1227,
+    "inspection_date": null,
+    "location": "NY"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "Widget",
+    "production_qty": null,
+    "inspection_date": null,
+    "location": null
+  },
+  {
+    "factory_id": "",
+    "machine_name": "WID-01",
+    "production_qty": "",
+    "inspection_date": "28/06/2022",
+    "location": "London"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "Tool",
+    "production_qty": null,
+    "inspection_date": "32/13/2024",
+    "location": "123"
+  },
+  {
+    "factory_id": 561,
+    "machine_name": "tool",
+    "production_qty": 3718,
+    "inspection_date": "",
+    "location": "unknown"
+  },
+  {
+    "factory_id": 562,
+    "machine_name": "Gadget",
+    "production_qty": "2127",
+    "inspection_date": "32/13/2024",
+    "location": null
+  },
+  {
+    "factory_id": "",
+    "machine_name": "N/A",
+    "production_qty": "2997",
+    "inspection_date": "32/13/2024",
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": "F564",
+    "machine_name": "Gadget",
+    "production_qty": "",
+    "inspection_date": null,
+    "location": ""
+  },
+  {
+    "factory_id": 565,
+    "machine_name": null,
+    "production_qty": "",
+    "inspection_date": "32/13/2024",
+    "location": "N/A"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "Widget",
+    "production_qty": "",
+    "inspection_date": "",
+    "location": null
+  },
+  {
+    "factory_id": "F567",
+    "machine_name": "tool",
+    "production_qty": "",
+    "inspection_date": "09/02/2021",
+    "location": ""
+  },
+  {
+    "factory_id": "F568",
+    "machine_name": "Tool",
+    "production_qty": "ten",
+    "inspection_date": "not available",
+    "location": "London"
+  },
+  {
+    "factory_id": null,
+    "machine_name": null,
+    "production_qty": "",
+    "inspection_date": null,
+    "location": ""
+  },
+  {
+    "factory_id": null,
+    "machine_name": "N/A",
+    "production_qty": "ten",
+    "inspection_date": null,
+    "location": "123"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "widget ",
+    "production_qty": "",
+    "inspection_date": "not available",
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "N/A",
+    "production_qty": 3265,
+    "inspection_date": "32/13/2024",
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": "F573",
+    "machine_name": null,
+    "production_qty": "",
+    "inspection_date": "not available",
+    "location": "unknown"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "Tool",
+    "production_qty": "1370",
+    "inspection_date": "32/13/2024",
+    "location": null
+  },
+  {
+    "factory_id": 575,
+    "machine_name": "",
+    "production_qty": 1317,
+    "inspection_date": "",
+    "location": "London"
+  },
+  {
+    "factory_id": 576,
+    "machine_name": "Widget",
+    "production_qty": 3202,
+    "inspection_date": null,
+    "location": "N/A"
+  },
+  {
+    "factory_id": 577,
+    "machine_name": "###",
+    "production_qty": "1878",
+    "inspection_date": "32/13/2024",
+    "location": "N/A"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "WID-01",
+    "production_qty": "ten",
+    "inspection_date": "",
+    "location": "London"
+  },
+  {
+    "factory_id": "F579",
+    "machine_name": "tool",
+    "production_qty": null,
+    "inspection_date": null,
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "tool",
+    "production_qty": "",
+    "inspection_date": "19/01/2026",
+    "location": "123"
+  },
+  {
+    "factory_id": "F581",
+    "machine_name": "Gadget",
+    "production_qty": "2128",
+    "inspection_date": "2023-05-28",
+    "location": "London"
+  },
+  {
+    "factory_id": "582",
+    "machine_name": "Gadget",
+    "production_qty": null,
+    "inspection_date": "",
+    "location": null
+  },
+  {
+    "factory_id": 583,
+    "machine_name": "###",
+    "production_qty": "4890",
+    "inspection_date": "32/13/2024",
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "###",
+    "production_qty": "2047",
+    "inspection_date": "32/13/2024",
+    "location": null
+  },
+  {
+    "factory_id": 585,
+    "machine_name": "###",
+    "production_qty": null,
+    "inspection_date": null,
+    "location": null
+  },
+  {
+    "factory_id": "",
+    "machine_name": "",
+    "production_qty": "1494",
+    "inspection_date": "",
+    "location": "unknown"
+  },
+  {
+    "factory_id": "",
+    "machine_name": null,
+    "production_qty": "ten",
+    "inspection_date": "20/03/2020",
+    "location": "London"
+  },
+  {
+    "factory_id": 588,
+    "machine_name": "WID-01",
+    "production_qty": "ten",
+    "inspection_date": "2021/05/27",
+    "location": ""
+  },
+  {
+    "factory_id": 589,
+    "machine_name": "WID-01",
+    "production_qty": "4043",
+    "inspection_date": "not available",
+    "location": "123"
+  },
+  {
+    "factory_id": "F590",
+    "machine_name": "Tool",
+    "production_qty": 209,
+    "inspection_date": "not available",
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": 591,
+    "machine_name": "tool",
+    "production_qty": "1487",
+    "inspection_date": "2022/10/21",
+    "location": "new york"
+  },
+  {
+    "factory_id": "592",
+    "machine_name": "###",
+    "production_qty": 3578,
+    "inspection_date": "2022/03/26",
+    "location": "London"
+  },
+  {
+    "factory_id": "593",
+    "machine_name": "Tool",
+    "production_qty": "ten",
+    "inspection_date": null,
+    "location": "London"
+  },
+  {
+    "factory_id": 594,
+    "machine_name": null,
+    "production_qty": "2447",
+    "inspection_date": "32/13/2024",
+    "location": "new york"
+  },
+  {
+    "factory_id": "595",
+    "machine_name": "###",
+    "production_qty": "123",
+    "inspection_date": "",
+    "location": ""
+  },
+  {
+    "factory_id": 596,
+    "machine_name": "Widget",
+    "production_qty": null,
+    "inspection_date": "09-26-2021",
+    "location": ""
+  },
+  {
+    "factory_id": "597",
+    "machine_name": "Tool",
+    "production_qty": 698,
+    "inspection_date": "32/13/2024",
+    "location": "London"
+  },
+  {
+    "factory_id": 598,
+    "machine_name": "WID-01",
+    "production_qty": "ten",
+    "inspection_date": "",
+    "location": ""
+  },
+  {
+    "factory_id": 599,
+    "machine_name": "###",
+    "production_qty": "ten",
+    "inspection_date": "",
+    "location": "London"
+  },
+  {
+    "factory_id": "F600",
+    "machine_name": "tool",
+    "production_qty": null,
+    "inspection_date": "not available",
+    "location": "123"
+  },
+  {
+    "factory_id": "F601",
+    "machine_name": "N/A",
+    "production_qty": 4492,
+    "inspection_date": "",
+    "location": null
+  },
+  {
+    "factory_id": "F602",
+    "machine_name": "tool",
+    "production_qty": 2957,
+    "inspection_date": "32/13/2024",
+    "location": "NY"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "Gadget",
+    "production_qty": 1906,
+    "inspection_date": "32/13/2024",
+    "location": "London"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "tool",
+    "production_qty": "ten",
+    "inspection_date": "08-05-2024",
+    "location": "new york"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "widget ",
+    "production_qty": "1063",
+    "inspection_date": "08/05/2020",
+    "location": "123"
+  },
+  {
+    "factory_id": "606",
+    "machine_name": "widget ",
+    "production_qty": "",
+    "inspection_date": "06-29-2025",
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": "607",
+    "machine_name": "N/A",
+    "production_qty": "107",
+    "inspection_date": "",
+    "location": "NY"
+  },
+  {
+    "factory_id": "F608",
+    "machine_name": "tool",
+    "production_qty": 3357,
+    "inspection_date": "2022-12-24",
+    "location": null
+  },
+  {
+    "factory_id": 609,
+    "machine_name": "",
+    "production_qty": 4205,
+    "inspection_date": "32/13/2024",
+    "location": ""
+  },
+  {
+    "factory_id": null,
+    "machine_name": "",
+    "production_qty": null,
+    "inspection_date": "2026/04/05",
+    "location": "unknown"
+  },
+  {
+    "factory_id": "F611",
+    "machine_name": "Tool",
+    "production_qty": "852",
+    "inspection_date": null,
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": "612",
+    "machine_name": "tool",
+    "production_qty": "ten",
+    "inspection_date": "not available",
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "Gadget",
+    "production_qty": null,
+    "inspection_date": "",
+    "location": "London"
+  },
+  {
+    "factory_id": "F614",
+    "machine_name": "Gadget",
+    "production_qty": "",
+    "inspection_date": "not available",
+    "location": "unknown"
+  },
+  {
+    "factory_id": 615,
+    "machine_name": "tool",
+    "production_qty": 1056,
+    "inspection_date": "32/13/2024",
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": 616,
+    "machine_name": null,
+    "production_qty": null,
+    "inspection_date": "26/05/2026",
+    "location": "NY"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "Gadget",
+    "production_qty": "ten",
+    "inspection_date": "32/13/2024",
+    "location": null
+  },
+  {
+    "factory_id": "F618",
+    "machine_name": "widget ",
+    "production_qty": null,
+    "inspection_date": "not available",
+    "location": "123"
+  },
+  {
+    "factory_id": "619",
+    "machine_name": "Tool",
+    "production_qty": null,
+    "inspection_date": null,
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": 620,
+    "machine_name": "Widget",
+    "production_qty": "",
+    "inspection_date": "32/13/2024",
+    "location": "unknown"
+  },
+  {
+    "factory_id": 621,
+    "machine_name": "###",
+    "production_qty": null,
+    "inspection_date": null,
+    "location": "unknown"
+  },
+  {
+    "factory_id": "622",
+    "machine_name": "Gadget",
+    "production_qty": "1808",
+    "inspection_date": "",
+    "location": "unknown"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "tool",
+    "production_qty": "",
+    "inspection_date": "32/13/2024",
+    "location": "N/A"
+  },
+  {
+    "factory_id": "F624",
+    "machine_name": "widget ",
+    "production_qty": 3848,
+    "inspection_date": "not available",
+    "location": "new york"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "tool",
+    "production_qty": "1068",
+    "inspection_date": "",
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "",
+    "production_qty": "4294",
+    "inspection_date": "not available",
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": "F627",
+    "machine_name": "N/A",
+    "production_qty": "",
+    "inspection_date": "not available",
+    "location": ""
+  },
+  {
+    "factory_id": "F628",
+    "machine_name": "Gadget",
+    "production_qty": "ten",
+    "inspection_date": null,
+    "location": "123"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "WID-01",
+    "production_qty": "367",
+    "inspection_date": "32/13/2024",
+    "location": "new york"
+  },
+  {
+    "factory_id": 630,
+    "machine_name": "Widget",
+    "production_qty": "ten",
+    "inspection_date": "02-26-2020",
+    "location": null
+  },
+  {
+    "factory_id": "",
+    "machine_name": "Tool",
+    "production_qty": "2718",
+    "inspection_date": "32/13/2024",
+    "location": "London"
+  },
+  {
+    "factory_id": null,
+    "machine_name": null,
+    "production_qty": null,
+    "inspection_date": "",
+    "location": "unknown"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "Widget",
+    "production_qty": 2042,
+    "inspection_date": null,
+    "location": null
+  },
+  {
+    "factory_id": 634,
+    "machine_name": "Tool",
+    "production_qty": "",
+    "inspection_date": "01-16-2023",
+    "location": "NY"
+  },
+  {
+    "factory_id": "F635",
+    "machine_name": "###",
+    "production_qty": null,
+    "inspection_date": "",
+    "location": "unknown"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "widget ",
+    "production_qty": null,
+    "inspection_date": "2025-02-18",
+    "location": ""
+  },
+  {
+    "factory_id": null,
+    "machine_name": null,
+    "production_qty": "",
+    "inspection_date": "not available",
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": "F638",
+    "machine_name": null,
+    "production_qty": "ten",
+    "inspection_date": "",
+    "location": "NY"
+  },
+  {
+    "factory_id": null,
+    "machine_name": null,
+    "production_qty": "ten",
+    "inspection_date": "28/05/2024",
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "N/A",
+    "production_qty": "3418",
+    "inspection_date": "",
+    "location": null
+  },
+  {
+    "factory_id": null,
+    "machine_name": "Gadget",
+    "production_qty": "4441",
+    "inspection_date": null,
+    "location": "London"
+  },
+  {
+    "factory_id": "642",
+    "machine_name": "WID-01",
+    "production_qty": "4291",
+    "inspection_date": null,
+    "location": "N/A"
+  },
+  {
+    "factory_id": "F643",
+    "machine_name": "widget ",
+    "production_qty": 4515,
+    "inspection_date": "32/13/2024",
+    "location": "NY"
+  },
+  {
+    "factory_id": "F644",
+    "machine_name": "###",
+    "production_qty": "",
+    "inspection_date": "32/13/2024",
+    "location": "new york"
+  },
+  {
+    "factory_id": "645",
+    "machine_name": "WID-01",
+    "production_qty": null,
+    "inspection_date": null,
+    "location": ""
+  },
+  {
+    "factory_id": "646",
+    "machine_name": "Widget",
+    "production_qty": "",
+    "inspection_date": "not available",
+    "location": "N/A"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "Tool",
+    "production_qty": "1126",
+    "inspection_date": "02/03/2022",
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": 648,
+    "machine_name": null,
+    "production_qty": "1823",
+    "inspection_date": "32/13/2024",
+    "location": "123"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "Tool",
+    "production_qty": "3748",
+    "inspection_date": "2024/10/17",
+    "location": "unknown"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "Gadget",
+    "production_qty": null,
+    "inspection_date": null,
+    "location": "new york"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "Tool",
+    "production_qty": null,
+    "inspection_date": "2026/01/12",
+    "location": "London"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "tool",
+    "production_qty": "ten",
+    "inspection_date": "not available",
+    "location": null
+  },
+  {
+    "factory_id": "",
+    "machine_name": "WID-01",
+    "production_qty": null,
+    "inspection_date": "",
+    "location": "123"
+  },
+  {
+    "factory_id": 654,
+    "machine_name": "tool",
+    "production_qty": null,
+    "inspection_date": "",
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": "F655",
+    "machine_name": "Tool",
+    "production_qty": "",
+    "inspection_date": "",
+    "location": "new york"
+  },
+  {
+    "factory_id": "F656",
+    "machine_name": "Gadget",
+    "production_qty": 1293,
+    "inspection_date": "not available",
+    "location": "new york"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "###",
+    "production_qty": "",
+    "inspection_date": "2026/03/04",
+    "location": "N/A"
+  },
+  {
+    "factory_id": "F658",
+    "machine_name": "N/A",
+    "production_qty": "1328",
+    "inspection_date": "",
+    "location": null
+  },
+  {
+    "factory_id": "F659",
+    "machine_name": "Tool",
+    "production_qty": 2315,
+    "inspection_date": "22/06/2021",
+    "location": "unknown"
+  },
+  {
+    "factory_id": "F660",
+    "machine_name": "Widget",
+    "production_qty": "",
+    "inspection_date": null,
+    "location": "123"
+  },
+  {
+    "factory_id": "661",
+    "machine_name": "",
+    "production_qty": "",
+    "inspection_date": "2024/08/06",
+    "location": "unknown"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "Widget",
+    "production_qty": "ten",
+    "inspection_date": "02/04/2026",
+    "location": "N/A"
+  },
+  {
+    "factory_id": "663",
+    "machine_name": "Widget",
+    "production_qty": "300",
+    "inspection_date": "not available",
+    "location": "new york"
+  },
+  {
+    "factory_id": 664,
+    "machine_name": "widget ",
+    "production_qty": "1460",
+    "inspection_date": "",
+    "location": "unknown"
+  },
+  {
+    "factory_id": "F665",
+    "machine_name": "Widget",
+    "production_qty": "ten",
+    "inspection_date": "2024/02/18",
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "widget ",
+    "production_qty": "3856",
+    "inspection_date": "not available",
+    "location": "London"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "tool",
+    "production_qty": null,
+    "inspection_date": null,
+    "location": "London"
+  },
+  {
+    "factory_id": 668,
+    "machine_name": "Tool",
+    "production_qty": "",
+    "inspection_date": "not available",
+    "location": "London"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "N/A",
+    "production_qty": null,
+    "inspection_date": null,
+    "location": "123"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "WID-01",
+    "production_qty": "ten",
+    "inspection_date": "2022-03-03",
+    "location": "NY"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "widget ",
+    "production_qty": "",
+    "inspection_date": "not available",
+    "location": "London"
+  },
+  {
+    "factory_id": "672",
+    "machine_name": "Widget",
+    "production_qty": "ten",
+    "inspection_date": "not available",
+    "location": "London"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "Gadget",
+    "production_qty": "ten",
+    "inspection_date": null,
+    "location": "unknown"
+  },
+  {
+    "factory_id": 674,
+    "machine_name": "WID-01",
+    "production_qty": "ten",
+    "inspection_date": "2025/05/16",
+    "location": "N/A"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "WID-01",
+    "production_qty": "ten",
+    "inspection_date": "2025/03/09",
+    "location": "London"
+  },
+  {
+    "factory_id": "F676",
+    "machine_name": "N/A",
+    "production_qty": null,
+    "inspection_date": null,
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": "F677",
+    "machine_name": "widget ",
+    "production_qty": 1173,
+    "inspection_date": null,
+    "location": "N/A"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "N/A",
+    "production_qty": null,
+    "inspection_date": "not available",
+    "location": "NY"
+  },
+  {
+    "factory_id": "F679",
+    "machine_name": "###",
+    "production_qty": "4071",
+    "inspection_date": "not available",
+    "location": ""
+  },
+  {
+    "factory_id": null,
+    "machine_name": null,
+    "production_qty": "ten",
+    "inspection_date": "02/06/2020",
+    "location": "123"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "Widget",
+    "production_qty": "4096",
+    "inspection_date": "",
+    "location": "London"
+  },
+  {
+    "factory_id": "F682",
+    "machine_name": "Gadget",
+    "production_qty": null,
+    "inspection_date": "27/06/2021",
+    "location": "123"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "tool",
+    "production_qty": "ten",
+    "inspection_date": "not available",
+    "location": "123"
+  },
+  {
+    "factory_id": 684,
+    "machine_name": "widget ",
+    "production_qty": 4214,
+    "inspection_date": "32/13/2024",
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": "685",
+    "machine_name": "",
+    "production_qty": null,
+    "inspection_date": "2023/07/31",
+    "location": null
+  },
+  {
+    "factory_id": "686",
+    "machine_name": "WID-01",
+    "production_qty": 2191,
+    "inspection_date": "32/13/2024",
+    "location": "London"
+  },
+  {
+    "factory_id": "F687",
+    "machine_name": "tool",
+    "production_qty": "2220",
+    "inspection_date": "32/13/2024",
+    "location": "new york"
+  },
+  {
+    "factory_id": "F688",
+    "machine_name": "N/A",
+    "production_qty": "",
+    "inspection_date": "26/07/2020",
+    "location": "123"
+  },
+  {
+    "factory_id": 689,
+    "machine_name": "widget ",
+    "production_qty": 3092,
+    "inspection_date": "32/13/2024",
+    "location": "unknown"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "Tool",
+    "production_qty": "ten",
+    "inspection_date": null,
+    "location": "new york"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "N/A",
+    "production_qty": "",
+    "inspection_date": "not available",
+    "location": "123"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "",
+    "production_qty": null,
+    "inspection_date": "",
+    "location": "N/A"
+  },
+  {
+    "factory_id": "F693",
+    "machine_name": "Gadget",
+    "production_qty": 3663,
+    "inspection_date": "2020/09/24",
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "Tool",
+    "production_qty": "ten",
+    "inspection_date": null,
+    "location": "new york"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "widget ",
+    "production_qty": 2619,
+    "inspection_date": "",
+    "location": "unknown"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "",
+    "production_qty": "4488",
+    "inspection_date": "2025/05/29",
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": "697",
+    "machine_name": "N/A",
+    "production_qty": null,
+    "inspection_date": "32/13/2024",
+    "location": "new york"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "Tool",
+    "production_qty": null,
+    "inspection_date": null,
+    "location": "new york"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "WID-01",
+    "production_qty": 2473,
+    "inspection_date": null,
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": "F700",
+    "machine_name": "Tool",
+    "production_qty": "741",
+    "inspection_date": "32/13/2024",
+    "location": "N/A"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "tool",
+    "production_qty": null,
+    "inspection_date": "32/13/2024",
+    "location": ""
+  },
+  {
+    "factory_id": "F702",
+    "machine_name": null,
+    "production_qty": "",
+    "inspection_date": null,
+    "location": "NY"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "tool",
+    "production_qty": "ten",
+    "inspection_date": null,
+    "location": "NY"
+  },
+  {
+    "factory_id": 704,
+    "machine_name": "tool",
+    "production_qty": "ten",
+    "inspection_date": "",
+    "location": "unknown"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "Gadget",
+    "production_qty": "",
+    "inspection_date": "32/13/2024",
+    "location": "123"
+  },
+  {
+    "factory_id": "706",
+    "machine_name": "",
+    "production_qty": "ten",
+    "inspection_date": "not available",
+    "location": "N/A"
+  },
+  {
+    "factory_id": "707",
+    "machine_name": "Widget",
+    "production_qty": "128",
+    "inspection_date": "32/13/2024",
+    "location": "new york"
+  },
+  {
+    "factory_id": "708",
+    "machine_name": "###",
+    "production_qty": "",
+    "inspection_date": null,
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "Tool",
+    "production_qty": "2910",
+    "inspection_date": null,
+    "location": "NY"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "Tool",
+    "production_qty": "ten",
+    "inspection_date": "08-09-2024",
+    "location": "NY"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "Tool",
+    "production_qty": null,
+    "inspection_date": "32/13/2024",
+    "location": "London"
+  },
+  {
+    "factory_id": "F712",
+    "machine_name": "Tool",
+    "production_qty": null,
+    "inspection_date": "32/13/2024",
+    "location": "123"
+  },
+  {
+    "factory_id": 713,
+    "machine_name": "tool",
+    "production_qty": null,
+    "inspection_date": null,
+    "location": "NY"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "Tool",
+    "production_qty": null,
+    "inspection_date": "not available",
+    "location": null
+  },
+  {
+    "factory_id": "F715",
+    "machine_name": "WID-01",
+    "production_qty": "ten",
+    "inspection_date": "04-27-2026",
+    "location": "123"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "WID-01",
+    "production_qty": "ten",
+    "inspection_date": "",
+    "location": "new york"
+  },
+  {
+    "factory_id": "717",
+    "machine_name": "tool",
+    "production_qty": "ten",
+    "inspection_date": "not available",
+    "location": null
+  },
+  {
+    "factory_id": 718,
+    "machine_name": "widget ",
+    "production_qty": null,
+    "inspection_date": "not available",
+    "location": "N/A"
+  },
+  {
+    "factory_id": "F719",
+    "machine_name": "",
+    "production_qty": null,
+    "inspection_date": "05-15-2020",
+    "location": "N/A"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "WID-01",
+    "production_qty": "",
+    "inspection_date": "32/13/2024",
+    "location": ""
+  },
+  {
+    "factory_id": null,
+    "machine_name": "Gadget",
+    "production_qty": 395,
+    "inspection_date": "",
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": "",
+    "machine_name": null,
+    "production_qty": "4362",
+    "inspection_date": "",
+    "location": null
+  },
+  {
+    "factory_id": "723",
+    "machine_name": "tool",
+    "production_qty": "ten",
+    "inspection_date": "not available",
+    "location": "London"
+  },
+  {
+    "factory_id": 724,
+    "machine_name": "widget ",
+    "production_qty": "",
+    "inspection_date": "not available",
+    "location": null
+  },
+  {
+    "factory_id": "F725",
+    "machine_name": "widget ",
+    "production_qty": "",
+    "inspection_date": null,
+    "location": ""
+  },
+  {
+    "factory_id": null,
+    "machine_name": "Gadget",
+    "production_qty": null,
+    "inspection_date": "2020-02-13",
+    "location": "NY"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "widget ",
+    "production_qty": "",
+    "inspection_date": "not available",
+    "location": null
+  },
+  {
+    "factory_id": "728",
+    "machine_name": "Widget",
+    "production_qty": 144,
+    "inspection_date": null,
+    "location": "new york"
+  },
+  {
+    "factory_id": 729,
+    "machine_name": "widget ",
+    "production_qty": "",
+    "inspection_date": "07/05/2026",
+    "location": "N/A"
+  },
+  {
+    "factory_id": "F730",
+    "machine_name": null,
+    "production_qty": "",
+    "inspection_date": "not available",
+    "location": null
+  },
+  {
+    "factory_id": "731",
+    "machine_name": "widget ",
+    "production_qty": "",
+    "inspection_date": "05-10-2024",
+    "location": null
+  },
+  {
+    "factory_id": "F732",
+    "machine_name": "WID-01",
+    "production_qty": "",
+    "inspection_date": "32/13/2024",
+    "location": "123"
+  },
+  {
+    "factory_id": 733,
+    "machine_name": "WID-01",
+    "production_qty": "3532",
+    "inspection_date": "not available",
+    "location": "new york"
+  },
+  {
+    "factory_id": 734,
+    "machine_name": "widget ",
+    "production_qty": "ten",
+    "inspection_date": "",
+    "location": "N/A"
+  },
+  {
+    "factory_id": 735,
+    "machine_name": "Widget",
+    "production_qty": "2182",
+    "inspection_date": null,
+    "location": "NY"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "Tool",
+    "production_qty": "",
+    "inspection_date": "14/10/2020",
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "widget ",
+    "production_qty": "ten",
+    "inspection_date": "",
+    "location": "NY"
+  },
+  {
+    "factory_id": 738,
+    "machine_name": "Gadget",
+    "production_qty": 4329,
+    "inspection_date": "32/13/2024",
+    "location": "N/A"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "Widget",
+    "production_qty": "ten",
+    "inspection_date": "not available",
+    "location": "123"
+  },
+  {
+    "factory_id": 740,
+    "machine_name": "Tool",
+    "production_qty": 1502,
+    "inspection_date": null,
+    "location": ""
+  },
+  {
+    "factory_id": "",
+    "machine_name": "###",
+    "production_qty": "ten",
+    "inspection_date": "2025/08/08",
+    "location": "NY"
+  },
+  {
+    "factory_id": "F742",
+    "machine_name": "Widget",
+    "production_qty": "",
+    "inspection_date": null,
+    "location": "123"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "WID-01",
+    "production_qty": 4696,
+    "inspection_date": "",
+    "location": "NY"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "N/A",
+    "production_qty": "1988",
+    "inspection_date": "28/02/2020",
+    "location": null
+  },
+  {
+    "factory_id": 745,
+    "machine_name": "Tool",
+    "production_qty": null,
+    "inspection_date": "2020-09-18",
+    "location": "123"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "N/A",
+    "production_qty": "516",
+    "inspection_date": "",
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": 747,
+    "machine_name": "N/A",
+    "production_qty": "ten",
+    "inspection_date": null,
+    "location": "N/A"
+  },
+  {
+    "factory_id": "F748",
+    "machine_name": "widget ",
+    "production_qty": "2243",
+    "inspection_date": "not available",
+    "location": "London"
+  },
+  {
+    "factory_id": "749",
+    "machine_name": "Tool",
+    "production_qty": 1945,
+    "inspection_date": null,
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": "750",
+    "machine_name": "Widget",
+    "production_qty": 3939,
+    "inspection_date": "30/01/2020",
+    "location": "unknown"
+  },
+  {
+    "factory_id": "F751",
+    "machine_name": "###",
+    "production_qty": "1039",
+    "inspection_date": null,
+    "location": "123"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "",
+    "production_qty": null,
+    "inspection_date": null,
+    "location": "new york"
+  },
+  {
+    "factory_id": "F753",
+    "machine_name": "Gadget",
+    "production_qty": null,
+    "inspection_date": "23/08/2022",
+    "location": "London"
+  },
+  {
+    "factory_id": 754,
+    "machine_name": "N/A",
+    "production_qty": null,
+    "inspection_date": "32/13/2024",
+    "location": null
+  },
+  {
+    "factory_id": 755,
+    "machine_name": "",
+    "production_qty": "",
+    "inspection_date": "32/13/2024",
+    "location": "NY"
+  },
+  {
+    "factory_id": 756,
+    "machine_name": "Gadget",
+    "production_qty": "",
+    "inspection_date": null,
+    "location": "123"
+  },
+  {
+    "factory_id": 757,
+    "machine_name": "widget ",
+    "production_qty": "4402",
+    "inspection_date": "",
+    "location": "London"
+  },
+  {
+    "factory_id": 758,
+    "machine_name": "widget ",
+    "production_qty": null,
+    "inspection_date": "",
+    "location": ""
+  },
+  {
+    "factory_id": "F759",
+    "machine_name": "",
+    "production_qty": "2671",
+    "inspection_date": "",
+    "location": ""
+  },
+  {
+    "factory_id": "",
+    "machine_name": "",
+    "production_qty": null,
+    "inspection_date": "",
+    "location": "N/A"
+  },
+  {
+    "factory_id": "761",
+    "machine_name": "N/A",
+    "production_qty": "",
+    "inspection_date": "",
+    "location": ""
+  },
+  {
+    "factory_id": "F762",
+    "machine_name": null,
+    "production_qty": "2751",
+    "inspection_date": "not available",
+    "location": "N/A"
+  },
+  {
+    "factory_id": 763,
+    "machine_name": "Tool",
+    "production_qty": "3426",
+    "inspection_date": "not available",
+    "location": "unknown"
+  },
+  {
+    "factory_id": "764",
+    "machine_name": "N/A",
+    "production_qty": null,
+    "inspection_date": "",
+    "location": "London"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "",
+    "production_qty": "",
+    "inspection_date": "",
+    "location": ""
+  },
+  {
+    "factory_id": "766",
+    "machine_name": "Gadget",
+    "production_qty": "4746",
+    "inspection_date": null,
+    "location": "NY"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "Widget",
+    "production_qty": null,
+    "inspection_date": null,
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "widget ",
+    "production_qty": "4057",
+    "inspection_date": "",
+    "location": ""
+  },
+  {
+    "factory_id": "769",
+    "machine_name": "Gadget",
+    "production_qty": 2373,
+    "inspection_date": "not available",
+    "location": "N/A"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "N/A",
+    "production_qty": "",
+    "inspection_date": "",
+    "location": "N/A"
+  },
+  {
+    "factory_id": "F771",
+    "machine_name": "Tool",
+    "production_qty": "",
+    "inspection_date": "not available",
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": "F772",
+    "machine_name": "N/A",
+    "production_qty": "4712",
+    "inspection_date": "11-27-2020",
+    "location": "London"
+  },
+  {
+    "factory_id": "F773",
+    "machine_name": "Widget",
+    "production_qty": "ten",
+    "inspection_date": "not available",
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": "774",
+    "machine_name": "tool",
+    "production_qty": "4593",
+    "inspection_date": "32/13/2024",
+    "location": "London"
+  },
+  {
+    "factory_id": 775,
+    "machine_name": "Tool",
+    "production_qty": "1718",
+    "inspection_date": "not available",
+    "location": "London"
+  },
+  {
+    "factory_id": "",
+    "machine_name": null,
+    "production_qty": "ten",
+    "inspection_date": "",
+    "location": "London"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "widget ",
+    "production_qty": null,
+    "inspection_date": null,
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": 778,
+    "machine_name": "",
+    "production_qty": 3700,
+    "inspection_date": "not available",
+    "location": "new york"
+  },
+  {
+    "factory_id": 779,
+    "machine_name": "WID-01",
+    "production_qty": "917",
+    "inspection_date": "32/13/2024",
+    "location": "London"
+  },
+  {
+    "factory_id": 780,
+    "machine_name": null,
+    "production_qty": "4435",
+    "inspection_date": "",
+    "location": "123"
+  },
+  {
+    "factory_id": 781,
+    "machine_name": null,
+    "production_qty": 1498,
+    "inspection_date": "",
+    "location": "unknown"
+  },
+  {
+    "factory_id": "F782",
+    "machine_name": "Gadget",
+    "production_qty": null,
+    "inspection_date": "",
+    "location": null
+  },
+  {
+    "factory_id": null,
+    "machine_name": "WID-01",
+    "production_qty": "ten",
+    "inspection_date": "not available",
+    "location": null
+  },
+  {
+    "factory_id": 784,
+    "machine_name": "WID-01",
+    "production_qty": "",
+    "inspection_date": null,
+    "location": null
+  },
+  {
+    "factory_id": "785",
+    "machine_name": "WID-01",
+    "production_qty": "1320",
+    "inspection_date": "not available",
+    "location": "unknown"
+  },
+  {
+    "factory_id": "786",
+    "machine_name": "Tool",
+    "production_qty": "3028",
+    "inspection_date": "not available",
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": "787",
+    "machine_name": "Gadget",
+    "production_qty": "4422",
+    "inspection_date": "12-25-2025",
+    "location": "NY"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "Tool",
+    "production_qty": "ten",
+    "inspection_date": null,
+    "location": "London"
+  },
+  {
+    "factory_id": "F789",
+    "machine_name": null,
+    "production_qty": null,
+    "inspection_date": "not available",
+    "location": "new york"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "Widget",
+    "production_qty": 1092,
+    "inspection_date": "",
+    "location": "unknown"
+  },
+  {
+    "factory_id": "791",
+    "machine_name": "Tool",
+    "production_qty": "ten",
+    "inspection_date": null,
+    "location": "London"
+  },
+  {
+    "factory_id": "792",
+    "machine_name": null,
+    "production_qty": 1553,
+    "inspection_date": "2026/01/14",
+    "location": "London"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "",
+    "production_qty": null,
+    "inspection_date": "not available",
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": "794",
+    "machine_name": "###",
+    "production_qty": "ten",
+    "inspection_date": "not available",
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": "F795",
+    "machine_name": "Tool",
+    "production_qty": "717",
+    "inspection_date": "",
+    "location": null
+  },
+  {
+    "factory_id": "796",
+    "machine_name": "###",
+    "production_qty": null,
+    "inspection_date": "32/13/2024",
+    "location": ""
+  },
+  {
+    "factory_id": "F797",
+    "machine_name": "Tool",
+    "production_qty": 4253,
+    "inspection_date": "2026/08/16",
+    "location": "NY"
+  },
+  {
+    "factory_id": "",
+    "machine_name": null,
+    "production_qty": null,
+    "inspection_date": "32/13/2024",
+    "location": "N/A"
+  },
+  {
+    "factory_id": "",
+    "machine_name": null,
+    "production_qty": 4487,
+    "inspection_date": "",
+    "location": "London"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "",
+    "production_qty": "20",
+    "inspection_date": "",
+    "location": "new york"
+  },
+  {
+    "factory_id": "F801",
+    "machine_name": "###",
+    "production_qty": "4029",
+    "inspection_date": "not available",
+    "location": "123"
+  },
+  {
+    "factory_id": 802,
+    "machine_name": "N/A",
+    "production_qty": "",
+    "inspection_date": "not available",
+    "location": "123"
+  },
+  {
+    "factory_id": 803,
+    "machine_name": "Gadget",
+    "production_qty": 4148,
+    "inspection_date": null,
+    "location": "NY"
+  },
+  {
+    "factory_id": "804",
+    "machine_name": "Gadget",
+    "production_qty": "ten",
+    "inspection_date": "not available",
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "Gadget",
+    "production_qty": "ten",
+    "inspection_date": null,
+    "location": ""
+  },
+  {
+    "factory_id": "806",
+    "machine_name": "widget ",
+    "production_qty": null,
+    "inspection_date": "not available",
+    "location": null
+  },
+  {
+    "factory_id": "F807",
+    "machine_name": "widget ",
+    "production_qty": "ten",
+    "inspection_date": "32/13/2024",
+    "location": "London"
+  },
+  {
+    "factory_id": "F808",
+    "machine_name": "Gadget",
+    "production_qty": "ten",
+    "inspection_date": "32/13/2024",
+    "location": "N/A"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "",
+    "production_qty": null,
+    "inspection_date": "",
+    "location": "123"
+  },
+  {
+    "factory_id": 810,
+    "machine_name": "widget ",
+    "production_qty": "",
+    "inspection_date": "not available",
+    "location": "N/A"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "N/A",
+    "production_qty": "2802",
+    "inspection_date": "2023-06-01",
+    "location": ""
+  },
+  {
+    "factory_id": "812",
+    "machine_name": "WID-01",
+    "production_qty": "2518",
+    "inspection_date": "09/05/2022",
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": 813,
+    "machine_name": "widget ",
+    "production_qty": "",
+    "inspection_date": "23/06/2020",
+    "location": "NY"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "N/A",
+    "production_qty": 435,
+    "inspection_date": "2022-11-02",
+    "location": null
+  },
+  {
+    "factory_id": 815,
+    "machine_name": "widget ",
+    "production_qty": "4929",
+    "inspection_date": "32/13/2024",
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": 816,
+    "machine_name": "widget ",
+    "production_qty": null,
+    "inspection_date": "32/13/2024",
+    "location": "London"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "",
+    "production_qty": 4086,
+    "inspection_date": null,
+    "location": ""
+  },
+  {
+    "factory_id": "818",
+    "machine_name": null,
+    "production_qty": 1357,
+    "inspection_date": null,
+    "location": "123"
+  },
+  {
+    "factory_id": "F819",
+    "machine_name": "N/A",
+    "production_qty": 1466,
+    "inspection_date": "",
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": "820",
+    "machine_name": "tool",
+    "production_qty": 1814,
+    "inspection_date": "",
+    "location": "new york"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "WID-01",
+    "production_qty": "ten",
+    "inspection_date": "2026-04-01",
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "widget ",
+    "production_qty": "",
+    "inspection_date": "",
+    "location": ""
+  },
+  {
+    "factory_id": null,
+    "machine_name": "###",
+    "production_qty": "3505",
+    "inspection_date": "not available",
+    "location": "N/A"
+  },
+  {
+    "factory_id": 824,
+    "machine_name": "Tool",
+    "production_qty": "",
+    "inspection_date": "2025-11-10",
+    "location": "N/A"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "###",
+    "production_qty": "833",
+    "inspection_date": "32/13/2024",
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": "826",
+    "machine_name": "N/A",
+    "production_qty": "1005",
+    "inspection_date": "not available",
+    "location": "unknown"
+  },
+  {
+    "factory_id": null,
+    "machine_name": null,
+    "production_qty": "",
+    "inspection_date": "",
+    "location": "London"
+  },
+  {
+    "factory_id": "F828",
+    "machine_name": "WID-01",
+    "production_qty": 3674,
+    "inspection_date": "",
+    "location": ""
+  },
+  {
+    "factory_id": "829",
+    "machine_name": "Widget",
+    "production_qty": 765,
+    "inspection_date": "32/13/2024",
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "Gadget",
+    "production_qty": null,
+    "inspection_date": null,
+    "location": "123"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "",
+    "production_qty": "",
+    "inspection_date": null,
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "tool",
+    "production_qty": "",
+    "inspection_date": "",
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "Tool",
+    "production_qty": 3715,
+    "inspection_date": "32/13/2024",
+    "location": "123"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "WID-01",
+    "production_qty": "",
+    "inspection_date": null,
+    "location": "London"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "Tool",
+    "production_qty": "4605",
+    "inspection_date": "",
+    "location": null
+  },
+  {
+    "factory_id": "",
+    "machine_name": "N/A",
+    "production_qty": "ten",
+    "inspection_date": "2023-08-05",
+    "location": "unknown"
+  },
+  {
+    "factory_id": 837,
+    "machine_name": "WID-01",
+    "production_qty": null,
+    "inspection_date": "",
+    "location": "new york"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "Gadget",
+    "production_qty": "ten",
+    "inspection_date": "32/13/2024",
+    "location": ""
+  },
+  {
+    "factory_id": "F839",
+    "machine_name": "N/A",
+    "production_qty": "ten",
+    "inspection_date": "32/13/2024",
+    "location": "NY"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "Gadget",
+    "production_qty": "",
+    "inspection_date": "not available",
+    "location": "NY"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "N/A",
+    "production_qty": "",
+    "inspection_date": "not available",
+    "location": "unknown"
+  },
+  {
+    "factory_id": 842,
+    "machine_name": "Tool",
+    "production_qty": "ten",
+    "inspection_date": "32/13/2024",
+    "location": "unknown"
+  },
+  {
+    "factory_id": "F843",
+    "machine_name": "Gadget",
+    "production_qty": "",
+    "inspection_date": "not available",
+    "location": null
+  },
+  {
+    "factory_id": 844,
+    "machine_name": null,
+    "production_qty": "3293",
+    "inspection_date": null,
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": "F845",
+    "machine_name": "widget ",
+    "production_qty": "",
+    "inspection_date": "not available",
+    "location": "new york"
+  },
+  {
+    "factory_id": "F846",
+    "machine_name": "tool",
+    "production_qty": null,
+    "inspection_date": "",
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": "F847",
+    "machine_name": "N/A",
+    "production_qty": null,
+    "inspection_date": null,
+    "location": "N/A"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "Tool",
+    "production_qty": "ten",
+    "inspection_date": null,
+    "location": "NY"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "",
+    "production_qty": "3788",
+    "inspection_date": "not available",
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "Gadget",
+    "production_qty": "",
+    "inspection_date": "32/13/2024",
+    "location": null
+  },
+  {
+    "factory_id": null,
+    "machine_name": "",
+    "production_qty": 3274,
+    "inspection_date": "06/09/2021",
+    "location": ""
+  },
+  {
+    "factory_id": "F852",
+    "machine_name": "Tool",
+    "production_qty": "",
+    "inspection_date": "32/13/2024",
+    "location": "N/A"
+  },
+  {
+    "factory_id": "F853",
+    "machine_name": "WID-01",
+    "production_qty": "ten",
+    "inspection_date": "05/03/2026",
+    "location": "123"
+  },
+  {
+    "factory_id": 854,
+    "machine_name": "Widget",
+    "production_qty": null,
+    "inspection_date": "",
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": 855,
+    "machine_name": "###",
+    "production_qty": 1101,
+    "inspection_date": null,
+    "location": "unknown"
+  },
+  {
+    "factory_id": null,
+    "machine_name": null,
+    "production_qty": "739",
+    "inspection_date": "not available",
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "###",
+    "production_qty": "3464",
+    "inspection_date": "32/13/2024",
+    "location": ""
+  },
+  {
+    "factory_id": "F858",
+    "machine_name": "Tool",
+    "production_qty": null,
+    "inspection_date": null,
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": 859,
+    "machine_name": "Gadget",
+    "production_qty": "",
+    "inspection_date": "32/13/2024",
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "Gadget",
+    "production_qty": null,
+    "inspection_date": "32/13/2024",
+    "location": null
+  },
+  {
+    "factory_id": null,
+    "machine_name": "###",
+    "production_qty": 2483,
+    "inspection_date": "",
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": 862,
+    "machine_name": "###",
+    "production_qty": 2043,
+    "inspection_date": "32/13/2024",
+    "location": "N/A"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "Gadget",
+    "production_qty": "ten",
+    "inspection_date": "",
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": "F864",
+    "machine_name": "###",
+    "production_qty": "ten",
+    "inspection_date": "not available",
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "tool",
+    "production_qty": 2626,
+    "inspection_date": "",
+    "location": "N/A"
+  },
+  {
+    "factory_id": 866,
+    "machine_name": "###",
+    "production_qty": "ten",
+    "inspection_date": "2026-06-16",
+    "location": "N/A"
+  },
+  {
+    "factory_id": "867",
+    "machine_name": "tool",
+    "production_qty": "",
+    "inspection_date": "",
+    "location": "N/A"
+  },
+  {
+    "factory_id": "F868",
+    "machine_name": "WID-01",
+    "production_qty": "ten",
+    "inspection_date": "",
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": "869",
+    "machine_name": "###",
+    "production_qty": "4672",
+    "inspection_date": null,
+    "location": "unknown"
+  },
+  {
+    "factory_id": "870",
+    "machine_name": "widget ",
+    "production_qty": "ten",
+    "inspection_date": "",
+    "location": "unknown"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "N/A",
+    "production_qty": 2081,
+    "inspection_date": null,
+    "location": "new york"
+  },
+  {
+    "factory_id": 872,
+    "machine_name": "tool",
+    "production_qty": "",
+    "inspection_date": "32/13/2024",
+    "location": ""
+  },
+  {
+    "factory_id": "F873",
+    "machine_name": null,
+    "production_qty": "3129",
+    "inspection_date": null,
+    "location": ""
+  },
+  {
+    "factory_id": "F874",
+    "machine_name": "",
+    "production_qty": "",
+    "inspection_date": "not available",
+    "location": null
+  },
+  {
+    "factory_id": "875",
+    "machine_name": "N/A",
+    "production_qty": "ten",
+    "inspection_date": "2026/07/15",
+    "location": "NY"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "WID-01",
+    "production_qty": "3256",
+    "inspection_date": null,
+    "location": null
+  },
+  {
+    "factory_id": 877,
+    "machine_name": "widget ",
+    "production_qty": 4512,
+    "inspection_date": "",
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "N/A",
+    "production_qty": "ten",
+    "inspection_date": "not available",
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": "F879",
+    "machine_name": "WID-01",
+    "production_qty": null,
+    "inspection_date": "32/13/2024",
+    "location": "London"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "Gadget",
+    "production_qty": 3784,
+    "inspection_date": "32/13/2024",
+    "location": null
+  },
+  {
+    "factory_id": 881,
+    "machine_name": "Gadget",
+    "production_qty": "",
+    "inspection_date": "",
+    "location": null
+  },
+  {
+    "factory_id": "F882",
+    "machine_name": "N/A",
+    "production_qty": "ten",
+    "inspection_date": "not available",
+    "location": "123"
+  },
+  {
+    "factory_id": "883",
+    "machine_name": "tool",
+    "production_qty": "435",
+    "inspection_date": "32/13/2024",
+    "location": "N/A"
+  },
+  {
+    "factory_id": 884,
+    "machine_name": "Tool",
+    "production_qty": "",
+    "inspection_date": "",
+    "location": "NY"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "Gadget",
+    "production_qty": "",
+    "inspection_date": "32/13/2024",
+    "location": "new york"
+  },
+  {
+    "factory_id": "F886",
+    "machine_name": "widget ",
+    "production_qty": "2327",
+    "inspection_date": null,
+    "location": "unknown"
+  },
+  {
+    "factory_id": "887",
+    "machine_name": "N/A",
+    "production_qty": null,
+    "inspection_date": "2022/01/09",
+    "location": ""
+  },
+  {
+    "factory_id": "",
+    "machine_name": "widget ",
+    "production_qty": "ten",
+    "inspection_date": "not available",
+    "location": "unknown"
+  },
+  {
+    "factory_id": 889,
+    "machine_name": "Gadget",
+    "production_qty": 1209,
+    "inspection_date": "",
+    "location": null
+  },
+  {
+    "factory_id": null,
+    "machine_name": "Widget",
+    "production_qty": null,
+    "inspection_date": null,
+    "location": "N/A"
+  },
+  {
+    "factory_id": "891",
+    "machine_name": "Widget",
+    "production_qty": 2267,
+    "inspection_date": "2020/10/16",
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": "F892",
+    "machine_name": "WID-01",
+    "production_qty": 1916,
+    "inspection_date": "32/13/2024",
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": "",
+    "machine_name": null,
+    "production_qty": "ten",
+    "inspection_date": "not available",
+    "location": "unknown"
+  },
+  {
+    "factory_id": "894",
+    "machine_name": "Gadget",
+    "production_qty": null,
+    "inspection_date": "",
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": "",
+    "machine_name": null,
+    "production_qty": "",
+    "inspection_date": "not available",
+    "location": "unknown"
+  },
+  {
+    "factory_id": "896",
+    "machine_name": "###",
+    "production_qty": 3439,
+    "inspection_date": "",
+    "location": ""
+  },
+  {
+    "factory_id": "897",
+    "machine_name": "Tool",
+    "production_qty": 4269,
+    "inspection_date": "",
+    "location": "new york"
+  },
+  {
+    "factory_id": "",
+    "machine_name": null,
+    "production_qty": "ten",
+    "inspection_date": "not available",
+    "location": "unknown"
+  },
+  {
+    "factory_id": 899,
+    "machine_name": "tool",
+    "production_qty": null,
+    "inspection_date": "",
+    "location": "new york"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "N/A",
+    "production_qty": "ten",
+    "inspection_date": null,
+    "location": "NY"
+  },
+  {
+    "factory_id": 901,
+    "machine_name": "Tool",
+    "production_qty": "",
+    "inspection_date": "",
+    "location": null
+  },
+  {
+    "factory_id": "F902",
+    "machine_name": "N/A",
+    "production_qty": null,
+    "inspection_date": "32/13/2024",
+    "location": ""
+  },
+  {
+    "factory_id": "903",
+    "machine_name": "widget ",
+    "production_qty": 4898,
+    "inspection_date": "2024-11-11",
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": 904,
+    "machine_name": "Widget",
+    "production_qty": "",
+    "inspection_date": "not available",
+    "location": "unknown"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "Gadget",
+    "production_qty": 3185,
+    "inspection_date": "27/05/2021",
+    "location": ""
+  },
+  {
+    "factory_id": 906,
+    "machine_name": "Widget",
+    "production_qty": "219",
+    "inspection_date": "32/13/2024",
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "",
+    "production_qty": "",
+    "inspection_date": "",
+    "location": "NY"
+  },
+  {
+    "factory_id": 908,
+    "machine_name": "WID-01",
+    "production_qty": "",
+    "inspection_date": "",
+    "location": "unknown"
+  },
+  {
+    "factory_id": "909",
+    "machine_name": "",
+    "production_qty": "",
+    "inspection_date": "07-27-2020",
+    "location": "new york"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "###",
+    "production_qty": null,
+    "inspection_date": "03-20-2026",
+    "location": "123"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "Tool",
+    "production_qty": null,
+    "inspection_date": "21/06/2025",
+    "location": "London"
+  },
+  {
+    "factory_id": 912,
+    "machine_name": "###",
+    "production_qty": null,
+    "inspection_date": "",
+    "location": "123"
+  },
+  {
+    "factory_id": 913,
+    "machine_name": "Tool",
+    "production_qty": "",
+    "inspection_date": "not available",
+    "location": ""
+  },
+  {
+    "factory_id": "",
+    "machine_name": "Gadget",
+    "production_qty": null,
+    "inspection_date": null,
+    "location": "123"
+  },
+  {
+    "factory_id": "915",
+    "machine_name": null,
+    "production_qty": "ten",
+    "inspection_date": null,
+    "location": ""
+  },
+  {
+    "factory_id": "F916",
+    "machine_name": "widget ",
+    "production_qty": "1057",
+    "inspection_date": null,
+    "location": "123"
+  },
+  {
+    "factory_id": 917,
+    "machine_name": "###",
+    "production_qty": "2487",
+    "inspection_date": "2022-05-07",
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": "F918",
+    "machine_name": "Gadget",
+    "production_qty": null,
+    "inspection_date": "not available",
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": 919,
+    "machine_name": "N/A",
+    "production_qty": null,
+    "inspection_date": "not available",
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": "F920",
+    "machine_name": "Widget",
+    "production_qty": "2191",
+    "inspection_date": "2025-10-12",
+    "location": "123"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "widget ",
+    "production_qty": 817,
+    "inspection_date": null,
+    "location": "new york"
+  },
+  {
+    "factory_id": "922",
+    "machine_name": "widget ",
+    "production_qty": "2962",
+    "inspection_date": null,
+    "location": "123"
+  },
+  {
+    "factory_id": 923,
+    "machine_name": "WID-01",
+    "production_qty": "2741",
+    "inspection_date": "",
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": 924,
+    "machine_name": "",
+    "production_qty": "ten",
+    "inspection_date": "30/08/2025",
+    "location": null
+  },
+  {
+    "factory_id": "F925",
+    "machine_name": "###",
+    "production_qty": "2010",
+    "inspection_date": "32/13/2024",
+    "location": "N/A"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "###",
+    "production_qty": null,
+    "inspection_date": "",
+    "location": "N/A"
+  },
+  {
+    "factory_id": 927,
+    "machine_name": "tool",
+    "production_qty": "ten",
+    "inspection_date": "32/13/2024",
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": 928,
+    "machine_name": "###",
+    "production_qty": null,
+    "inspection_date": "",
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": null,
+    "machine_name": null,
+    "production_qty": 2519,
+    "inspection_date": "",
+    "location": "123"
+  },
+  {
+    "factory_id": "930",
+    "machine_name": "tool",
+    "production_qty": "",
+    "inspection_date": "03-19-2022",
+    "location": "NY"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "Gadget",
+    "production_qty": null,
+    "inspection_date": "32/13/2024",
+    "location": "new york"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "tool",
+    "production_qty": "ten",
+    "inspection_date": "2021-10-17",
+    "location": "London"
+  },
+  {
+    "factory_id": null,
+    "machine_name": null,
+    "production_qty": "",
+    "inspection_date": "2025-08-31",
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": "F934",
+    "machine_name": "tool",
+    "production_qty": 2853,
+    "inspection_date": "not available",
+    "location": "unknown"
+  },
+  {
+    "factory_id": 935,
+    "machine_name": "Tool",
+    "production_qty": null,
+    "inspection_date": "not available",
+    "location": null
+  },
+  {
+    "factory_id": "F936",
+    "machine_name": "N/A",
+    "production_qty": null,
+    "inspection_date": "not available",
+    "location": "London"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "",
+    "production_qty": 2909,
+    "inspection_date": "",
+    "location": "new york"
+  },
+  {
+    "factory_id": 938,
+    "machine_name": "Widget",
+    "production_qty": "",
+    "inspection_date": "2022/05/29",
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "###",
+    "production_qty": null,
+    "inspection_date": null,
+    "location": "123"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "Tool",
+    "production_qty": "3415",
+    "inspection_date": "",
+    "location": "123"
+  },
+  {
+    "factory_id": "941",
+    "machine_name": "tool",
+    "production_qty": "967",
+    "inspection_date": "2025/02/08",
+    "location": "N/A"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "Gadget",
+    "production_qty": "",
+    "inspection_date": "not available",
+    "location": "unknown"
+  },
+  {
+    "factory_id": "F943",
+    "machine_name": "Widget",
+    "production_qty": 4232,
+    "inspection_date": "not available",
+    "location": null
+  },
+  {
+    "factory_id": "F944",
+    "machine_name": "Tool",
+    "production_qty": "1170",
+    "inspection_date": "2026/08/12",
+    "location": null
+  },
+  {
+    "factory_id": "F945",
+    "machine_name": "",
+    "production_qty": 1449,
+    "inspection_date": "05-16-2021",
+    "location": "NY"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "Tool",
+    "production_qty": null,
+    "inspection_date": "",
+    "location": "123"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "WID-01",
+    "production_qty": "",
+    "inspection_date": "32/13/2024",
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": 948,
+    "machine_name": "N/A",
+    "production_qty": "3172",
+    "inspection_date": null,
+    "location": "NY"
+  },
+  {
+    "factory_id": "",
+    "machine_name": null,
+    "production_qty": 675,
+    "inspection_date": null,
+    "location": "new york"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "widget ",
+    "production_qty": null,
+    "inspection_date": "",
+    "location": "London"
+  },
+  {
+    "factory_id": 951,
+    "machine_name": "widget ",
+    "production_qty": 4306,
+    "inspection_date": "32/13/2024",
+    "location": "unknown"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "widget ",
+    "production_qty": "ten",
+    "inspection_date": "",
+    "location": "NY"
+  },
+  {
+    "factory_id": "F953",
+    "machine_name": "###",
+    "production_qty": 1428,
+    "inspection_date": "",
+    "location": null
+  },
+  {
+    "factory_id": 954,
+    "machine_name": "widget ",
+    "production_qty": "4438",
+    "inspection_date": "32/13/2024",
+    "location": null
+  },
+  {
+    "factory_id": 955,
+    "machine_name": "WID-01",
+    "production_qty": "3336",
+    "inspection_date": "32/13/2024",
+    "location": "NY"
+  },
+  {
+    "factory_id": 956,
+    "machine_name": null,
+    "production_qty": "ten",
+    "inspection_date": "not available",
+    "location": null
+  },
+  {
+    "factory_id": "",
+    "machine_name": "widget ",
+    "production_qty": "1659",
+    "inspection_date": "",
+    "location": "London"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "###",
+    "production_qty": 892,
+    "inspection_date": null,
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": 959,
+    "machine_name": "Tool",
+    "production_qty": "3338",
+    "inspection_date": null,
+    "location": "unknown"
+  },
+  {
+    "factory_id": 960,
+    "machine_name": "",
+    "production_qty": "ten",
+    "inspection_date": "",
+    "location": "new york"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "",
+    "production_qty": null,
+    "inspection_date": null,
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "Tool",
+    "production_qty": "",
+    "inspection_date": "30/03/2023",
+    "location": "NY"
+  },
+  {
+    "factory_id": "",
+    "machine_name": null,
+    "production_qty": "",
+    "inspection_date": null,
+    "location": "London"
+  },
+  {
+    "factory_id": "F964",
+    "machine_name": "Widget",
+    "production_qty": null,
+    "inspection_date": "10-13-2020",
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": 965,
+    "machine_name": "WID-01",
+    "production_qty": "",
+    "inspection_date": "not available",
+    "location": null
+  },
+  {
+    "factory_id": "",
+    "machine_name": null,
+    "production_qty": "ten",
+    "inspection_date": null,
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": 967,
+    "machine_name": "WID-01",
+    "production_qty": "",
+    "inspection_date": "32/13/2024",
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "Tool",
+    "production_qty": 3167,
+    "inspection_date": "",
+    "location": "new york"
+  },
+  {
+    "factory_id": "F969",
+    "machine_name": "###",
+    "production_qty": "",
+    "inspection_date": "2021-12-26",
+    "location": "123"
+  },
+  {
+    "factory_id": "F970",
+    "machine_name": "",
+    "production_qty": "76",
+    "inspection_date": "not available",
+    "location": ""
+  },
+  {
+    "factory_id": 971,
+    "machine_name": "N/A",
+    "production_qty": "1811",
+    "inspection_date": "07-15-2025",
+    "location": null
+  },
+  {
+    "factory_id": "",
+    "machine_name": "N/A",
+    "production_qty": "58",
+    "inspection_date": "not available",
+    "location": "unknown"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "Tool",
+    "production_qty": "4520",
+    "inspection_date": "06/05/2026",
+    "location": "unknown"
+  },
+  {
+    "factory_id": "974",
+    "machine_name": "widget ",
+    "production_qty": null,
+    "inspection_date": "32/13/2024",
+    "location": "NY"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "N/A",
+    "production_qty": "",
+    "inspection_date": "2020/01/09",
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "###",
+    "production_qty": null,
+    "inspection_date": "not available",
+    "location": "London"
+  },
+  {
+    "factory_id": 977,
+    "machine_name": "",
+    "production_qty": "",
+    "inspection_date": "not available",
+    "location": "NY"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "",
+    "production_qty": null,
+    "inspection_date": "",
+    "location": "new york"
+  },
+  {
+    "factory_id": "979",
+    "machine_name": "",
+    "production_qty": "ten",
+    "inspection_date": "2020-09-14",
+    "location": "123"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "Widget",
+    "production_qty": "ten",
+    "inspection_date": "",
+    "location": ""
+  },
+  {
+    "factory_id": "F981",
+    "machine_name": "Widget",
+    "production_qty": "4257",
+    "inspection_date": "2020/10/25",
+    "location": "123"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "widget ",
+    "production_qty": 650,
+    "inspection_date": "03-25-2024",
+    "location": "N/A"
+  },
+  {
+    "factory_id": 983,
+    "machine_name": "Tool",
+    "production_qty": null,
+    "inspection_date": "2024-11-03",
+    "location": "NY"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "Widget",
+    "production_qty": "",
+    "inspection_date": "32/13/2024",
+    "location": "unknown"
+  },
+  {
+    "factory_id": null,
+    "machine_name": "Widget",
+    "production_qty": "",
+    "inspection_date": "not available",
+    "location": "NY"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "tool",
+    "production_qty": "4815",
+    "inspection_date": "2021-03-18",
+    "location": "unknown"
+  },
+  {
+    "factory_id": 987,
+    "machine_name": "N/A",
+    "production_qty": "4695",
+    "inspection_date": "not available",
+    "location": "mumbAI"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "N/A",
+    "production_qty": "1523",
+    "inspection_date": "2021-07-17",
+    "location": "N/A"
+  },
+  {
+    "factory_id": "F989",
+    "machine_name": "N/A",
+    "production_qty": "ten",
+    "inspection_date": "32/13/2024",
+    "location": "123"
+  },
+  {
+    "factory_id": "F990",
+    "machine_name": "N/A",
+    "production_qty": "ten",
+    "inspection_date": "03/02/2020",
+    "location": ""
+  },
+  {
+    "factory_id": null,
+    "machine_name": "tool",
+    "production_qty": "ten",
+    "inspection_date": "32/13/2024",
+    "location": "new york"
+  },
+  {
+    "factory_id": "F992",
+    "machine_name": "",
+    "production_qty": null,
+    "inspection_date": null,
+    "location": null
+  },
+  {
+    "factory_id": "",
+    "machine_name": "Gadget",
+    "production_qty": "",
+    "inspection_date": "32/13/2024",
+    "location": "NY"
+  },
+  {
+    "factory_id": "994",
+    "machine_name": "",
+    "production_qty": "1746",
+    "inspection_date": "",
+    "location": ""
+  },
+  {
+    "factory_id": "",
+    "machine_name": "WID-01",
+    "production_qty": 5,
+    "inspection_date": "10-29-2020",
+    "location": "London"
+  },
+  {
+    "factory_id": 996,
+    "machine_name": "WID-01",
+    "production_qty": "3607",
+    "inspection_date": "07-26-2026",
+    "location": "NY"
+  },
+  {
+    "factory_id": "997",
+    "machine_name": "",
+    "production_qty": "1426",
+    "inspection_date": "not available",
+    "location": "London"
+  },
+  {
+    "factory_id": "998",
+    "machine_name": "WID-01",
+    "production_qty": "176",
+    "inspection_date": "2022-12-08",
+    "location": "N/A"
+  },
+  {
+    "factory_id": "",
+    "machine_name": "widget ",
+    "production_qty": "ten",
+    "inspection_date": "not available",
+    "location": "Mumbai"
+  },
+  {
+    "factory_id": "1000",
+    "machine_name": "tool",
+    "production_qty": 3503,
+    "inspection_date": "32/13/2024",
+    "location": ""
+  }
+]
