@@ -1,531 +1,373 @@
-ok now we are successfully able to run the generated etl code in fabrics and my next task is 
-2. Collect Disparate Data into OneLake → Provide Insights via Fabric IQ
-Objective
-Create a unified business knowledge layer where users can discover, understand, and analyze enterprise data using AI-driven semantic understanding rather than querying raw tables. Fabric IQ introduces business semantics, ontologies, and graph-based understanding to help users interact with data in business language
- 
-End-to-End Flow
-Source Systems
-(ERP, CRM, SAP, SQL, APIs, Files)
-          │
-          ▼
-      OneLake
-    (Unified Storage)
-          │
-          ▼
-  Curated Lakehouse /
-      Warehouse
-          │
-          ▼
-   Semantic Models
-          │
-          ▼
-      Fabric IQ
-          │
-          ▼
-Business Insights
- 
-Activities in Fabric
-1. Consolidate Data
-Ingest data from multiple systems into OneLake.
-Use Fabric Data Factory Pipelines, Dataflows Gen2, or Shortcuts.
-Store in Lakehouse or Warehouse.
-2. Create Semantic Models
-Define:
+Copied to clipboard
+AGENT DHARA
+DQ verdict
+Overview
+Datasets
+Relations
+Global DQ
+Governance
+LLM recommendations
+Collapse all
+Expand all
+Intelligent data assessment
+Assessment report
+Generated 2026-07-22 16:10:11
+🔴
+Data quality verdict: BLOCKED
+Overall DQ score: 65.6 / 100 · High severity issues: 2 · Rows affected by HIGH: 79 · Approx. row share unaffected by HIGH (UI estimate): 97.4%
+factory.json
+31.3/100
+🔴 BLOCKED
+marketing.csv
+65.6/100
+⚠️ NEEDS_WORK
+sales.xml
+100.0/100
+✅ READY
+Machine-readable manifest — export run writes cleaning_manifest.json next to report.html. Use it when implementing ETL: issues, row indexes, samples, and recommended actions.
+Overview
+Aggregate view of assessed datasets: volume, shape, and footprint.
 
-Business metrics
-KPIs
+Datasets
+3
+Approx. rows
+3,000
+Total columns
+15
+Memory (bytes)
+699,009
+Governance & drift
+LLM Cleaning Recommendations
+AI-assisted recommendations mapped from data quality findings.
+
+Priority 1
+marketing.csv.[Row-level]
+HIGH
+Issue: duplicate_primary_key
+Suggested Fix: Identify source of duplicate key generation; enforce UNIQUE constraint in database; apply deduplication filter in ETL.
+
+Why it matters: Duplicate primary keys can lead to data integrity issues and incorrect data retrieval.
+
+Risk: ⚠️ High risk of data corruption and retrieval errors.
+
+Priority 2
+factory.json.[Row-level]
+HIGH
+Issue: duplicate_primary_key
+Suggested Fix: Identify source of duplicate key generation; enforce UNIQUE constraint in database; apply deduplication filter in ETL.
+
+Why it matters: Duplicate primary keys can lead to data integrity issues and incorrect data retrieval.
+
+Risk: ⚠️ High risk of data corruption and retrieval errors.
+
+Priority 3
+marketing.csv.customer_name
+LOW
+Issue: whitespace
+Suggested Fix: Apply trim/strip operations in ETL to remove leading and trailing space; enforce validation on input.
+
+Why it matters: Leading/trailing spaces can cause issues in data matching and analysis.
+
+Pandas suggestion
+df['customer_name'] = df['customer_name'].str.strip()
+Risk: ⚠️ Low risk of data inconsistency.
+
+Priority 4
+factory.json.machine_name
+LOW
+Issue: whitespace
+Suggested Fix: Apply trim/strip operations in ETL to remove leading and trailing space; enforce validation on input.
+
+Why it matters: Leading/trailing spaces can cause issues in data matching and analysis.
+
+Pandas suggestion
+df['machine_name'] = df['machine_name'].str.strip()
+Risk: ⚠️ Low risk of data inconsistency.
+
+Priority 5
+sales.xml.amount
+MEDIUM
+Issue: cross_field_non_negative
+Suggested Fix: Clip, nullify, or reject negatives per business policy.
+
+Why it matters: Negative values in financial data can lead to incorrect calculations and reporting.
+
+Pandas suggestion
+df.loc[df['amount'] < 0, 'amount'] = 0
+Risk: ⚠️ Medium risk of financial misrepresentation.
+
+
+All locations
+3 location(s) · 3 file(s)
+
+File system
+abfss://04a585ce-f0ec-4a3a-9db2-e237711fd9e7@onelake.dfs.fabric.microsoft.com/abd8c72d-b5aa-4b58-83bd-fb97587de47e/Fi…
+
+.json
+1 file(s)
+
+factory.json
+Profile & data quality
+1,000 rows
+5 cols
+DQ 31.3/100
+Filesystem path
+abfss://04a585ce-f0ec-4a3a-9db2-e237711fd9e7@onelake.dfs.fabric.microsoft.com/abd8c72d-b5aa-4b58-83bd-fb97587de47e/Files/raw/factory_json.json
+Copy
+These counts are computed from overlapping HIGH/MEDIUM rows in this scan (see DQ verdict for context).
+
+Rows with no HIGH-severity finding
+992
+(of 1,000 sampled rows) ≈ 99.2% unaffected by HIGH severity
+Rows with no HIGH nor MEDIUM finding
+318
+(of 1,000 sampled rows) ≈ 31.8% unaffected after HIGH+MEDIUM remediation
+Profile
+Column	Type	Null %	Unique	Semantic	PK candidate
+inspection_date	object (string)	20.2%	207	categorical	false
+production_qty	object (mixed)	20.6%	387	categorical	false
+location	object (string)	10.1%	9	categorical	false
+machine_name	object (string)	9.2%	9	categorical	false
+factory_id	object (mixed)	19.3%	607	categorical	false
+Data quality
+factory.json — 31 issues (1 HIGH · 12 MEDIUM · 18 LOW)
+High severity
+Column	Issue	Sev	Fixability	Count	Rows	Samples	Problem	Recommendation
+[Row-level]	duplicate_primary_key	HIGH	NOT_FIXABLE	8	336, 429, 691, 736, 759, 892, 897, 951	{'factory_id': '', 'machine_name': 'tool', 'production_qty': '', 'inspection_date': None, 'location': 'NY'}, {'factory_id': '', 'machine_name': 'tool', 'production_qty': '', 'inspection_date': None, 'location': 'NY'}, {'factory_id': '', 'machine_name': '', 'production_qty': None, 'inspection_date': '', 'location': 'N/A'}, {'factory_id': '', 'machine_name': 'widget ', 'production_qty': 'ten', 'inspection_date': '', 'location': 'NY'}, {'factory_id': '', 'machine_name': '', 'production_qty': None, 'inspection_date': '', 'location': 'N/A'}, {'factory_id': '', 'machine_name': None, 'production_qty': 'ten', 'inspection_date': 'not available', 'location': 'unknown'}, {'factory_id': '', 'machine_name': None, 'production_qty': 'ten', 'inspection_date': 'not available', 'location': 'unknown'}, {'factory_id': '', 'machine_name': 'widget ', 'production_qty': 'ten', 'inspection_date': '', 'location': 'NY'}	8 duplicate in candidate PK	Identify source of duplicate key generation; enforce UNIQUE constraint in database; apply deduplication filter in ETL.
+Medium severity
+Column	Issue	Sev	Fixability	Count	Rows	Samples	Problem	Recommendation
+machine_name	punctuation_only_value	MEDIUM	COMPLEX	93	
+1, 4, 43, 44, 56, 59, 63, 65, 100, 110, 113, 131, 143, 147, 151, 154, 168, 175, 184, 191, 200, 260, 268, 269, 271, 278, 287, 293, 294, 299, 301, 308, 313, 318, 350, 353, 374, 381, 384, 422, 435, 440, 441, 444, 446, 463, 475, 486, 498, 503
+###, ###, ###, ###, ###	93 punctuation-only value(s)	Replace symbol-only strings with NULL; investigate upstream export bugs.
+[Row-level]	near_duplicate_rows	MEDIUM	COMPLEX	449	
+1, 2, 5, 5, 5, 8, 8, 10, 10, 11, 11, 11, 11, 11, 11, 13, 13, 13, 17, 17, 17, 18, 18, 19, 19, 19, 19, 23, 23, 24, 24, 24, 26, 33, 33, 33, 37, 37, 37, 37, 37, 38, 40, 40, 48, 48, 49, 50, 54, 59
+{'row_index_a': 1, 'row_index_b': 854, 'similarity': 0.9433962264150944}, {'row_index_a': 2, 'row_index_b': 712, 'similarity': 0.9302325581395349}, {'row_index_a': 5, 'row_index_b': 13, 'similarity': 0.9361702127659575}, {'row_index_a': 5, 'row_index_b': 197, 'similarity': 1.0}, {'row_index_a': 5, 'row_index_b': 514, 'similarity': 0.9545454545454546}, {'row_index_a': 8, 'row_index_b': 337, 'similarity': 0.9333333333333332}, {'row_index_a': 8, 'row_index_b': 900, 'similarity': 0.9333333333333332}, {'row_index_a': 10, 'row_index_b': 768, 'similarity': 0.923076923076923}, {'row_index_a': 10, 'row_index_b': 839, 'similarity': 0.9491525423728814}, {'row_index_a': 11, 'row_index_b': 257, 'similarity': 0.9508196721311475}	Found 449 pair(s) of near-duplicate rows withsimilarity >= 0.92	Rows that are identical except for one or two fields may be erroneous duplicates; deduplicate or merge.
+production_qty	string_with_only_digits_in_text_column	MEDIUM	COMPLEX	390	
+0, 1, 6, 12, 14, 20, 22, 25, 27, 28, 30, 31, 32, 34, 35, 39, 40, 41, 43, 44, 49, 51, 52, 55, 57, 59, 61, 63, 69, 70, 79, 83, 84, 88, 91, 94, 104, 106, 108, 112, 115, 116, 120, 125, 126, 128, 129, 134, 136, 137
+2006, 210, 1816, 3992, 2135	49.1% of values are digits-only in a text column — possible schema mismatch	Text columns containing only digits may indicate a schema mismatch or misrouted data.
+location	string_with_only_digits_in_text_column	MEDIUM	COMPLEX	111	
+4, 14, 22, 26, 44, 53, 65, 67, 77, 79, 86, 87, 89, 101, 105, 110, 119, 133, 138, 158, 165, 166, 178, 190, 192, 200, 207, 216, 235, 239, 242, 252, 255, 256, 287, 301, 313, 319, 324, 338, 339, 357, 373, 374, 377, 386, 407, 409, 422, 426
+123, 123, 123, 123, 123	12.3% of values are digits-only in a text column — possible schema mismatch	Text columns containing only digits may indicate a schema mismatch or misrouted data.
+factory_id	mixed_scalar_types	MEDIUM	FIXABLE	212	(none)	str, int	Inconsistent scalar types detected in column: {'str': 595, 'int': 212}	Standardize to a single scalar type in ETL (e.g. cast all IDs to string or integer) and enforce it at ingest.
+production_qty	mixed_scalar_types	MEDIUM	FIXABLE	180	(none)	str, int	Inconsistent scalar types detected in column: {'str': 614, 'int': 180}	Standardize to a single scalar type in ETL (e.g. cast all IDs to string or integer) and enforce it at ingest.
+factory_id	custom_rule_violation	MEDIUM	COMPLEX	201	
+7, 17, 26, 28, 31, 46, 48, 51, 56, 71, 74, 75, 76, 77, 81, 92, 93, 99, 102, 106, 112, 130, 141, 144, 152, 154, 160, 165, 167, 188, 189, 193, 196, 204, 206, 216, 222, 225, 234, 238, 242, 243, 246, 258, 263, 269, 277, 286, 287, 288
+factory_id: expectation failed.	Review with domain owners; document the expected rule; add validation at ingest or in the warehouse.
+machine_name	custom_rule_violation	MEDIUM	COMPLEX	90	
+34, 45, 55, 62, 73, 77, 80, 81, 106, 120, 134, 148, 161, 162, 232, 234, 240, 241, 243, 248, 255, 256, 264, 265, 290, 322, 331, 332, 363, 367, 369, 383, 391, 395, 407, 414, 420, 431, 445, 474, 480, 485, 487, 493, 506, 507, 509, 522, 531, 534
+machine_name: expectation failed.	Review with domain owners; document the expected rule; add validation at ingest or in the warehouse.
+production_qty	custom_rule_violation	MEDIUM	COMPLEX	205	
+2, 8, 10, 19, 53, 56, 58, 62, 65, 66, 68, 75, 80, 87, 95, 98, 99, 100, 101, 103, 105, 110, 117, 121, 124, 127, 131, 132, 133, 139, 144, 149, 158, 161, 181, 182, 183, 185, 193, 197, 210, 216, 217, 219, 220, 221, 223, 228, 232, 248
+production_qty: expectation failed.	Review with domain owners; document the expected rule; add validation at ingest or in the warehouse.
+inspection_date	custom_rule_violation	MEDIUM	COMPLEX	206	
+6, 18, 23, 24, 36, 41, 48, 50, 58, 62, 63, 64, 68, 74, 79, 81, 86, 87, 89, 100, 105, 113, 114, 130, 138, 140, 142, 143, 144, 151, 153, 154, 155, 161, 165, 179, 182, 185, 190, 204, 205, 219, 221, 233, 237, 238, 242, 244, 258, 259
+inspection_date: expectation failed.	Review with domain owners; document the expected rule; add validation at ingest or in the warehouse.
+location	custom_rule_violation	MEDIUM	COMPLEX	114	
+5, 8, 9, 11, 33, 38, 45, 59, 60, 64, 69, 70, 80, 82, 88, 90, 102, 104, 128, 143, 157, 163, 168, 175, 179, 180, 191, 204, 219, 232, 236, 243, 246, 262, 269, 272, 273, 284, 306, 309, 315, 316, 337, 341, 347, 349, 367, 368, 379, 388
+location: expectation failed.	Review with domain owners; document the expected rule; add validation at ingest or in the warehouse.
+production_qty	cross_field_non_negative	MEDIUM	—	1	(none)	(none)	Negative values in production_qty: 1 row(s)	Clip, nullify, or reject negatives per business policy.
+Low severity
+Column	Issue	Sev	Fixability	Count	Rows	Samples	Problem	Recommendation
+factory_id	nulls	LOW	COMPLEX	193	
+1, 5, 10, 13, 27, 32, 43, 52, 53, 59, 69, 73, 80, 84, 95, 96, 109, 113, 121, 122, 131, 136, 140, 143, 148, 151, 158, 168, 171, 173, 177, 179, 181, 190, 202, 203, 205, 211, 214, 218, 219, 221, 226, 229, 230, 232, 236, 241, 244, 248
+, , , , , , , , ,	193 null/placeholder	Check if missing values are expected (nullable column); enforce NOT NULL constraint if critical, or backfill from defaults.
+machine_name	nulls	LOW	COMPLEX	92	
+15, 19, 42, 49, 51, 52, 64, 71, 95, 101, 121, 127, 140, 149, 166, 179, 187, 195, 205, 209, 239, 252, 258, 262, 266, 275, 289, 300, 307, 315, 330, 334, 338, 341, 357, 365, 366, 399, 405, 408, 410, 421, 430, 433, 438, 452, 454, 470, 484, 489
+, , , , , , , , ,	92 null/placeholder	Check if missing values are expected (nullable column); enforce NOT NULL constraint if critical, or backfill from defaults.
+production_qty	nulls	LOW	COMPLEX	206	
+5, 11, 13, 15, 16, 18, 21, 23, 29, 33, 37, 47, 48, 54, 64, 71, 72, 73, 77, 86, 89, 90, 93, 96, 97, 113, 119, 122, 130, 135, 138, 143, 147, 154, 159, 160, 168, 173, 174, 179, 188, 190, 194, 209, 211, 214, 222, 226, 230, 234
+, , , , , , , , ,	206 null/placeholder	Check if missing values are expected (nullable column); enforce NOT NULL constraint if critical, or backfill from defaults.
+inspection_date	nulls	LOW	COMPLEX	202	
+0, 1, 2, 5, 8, 13, 15, 16, 32, 35, 40, 46, 53, 55, 70, 75, 85, 98, 101, 106, 109, 116, 117, 120, 121, 123, 127, 128, 131, 139, 148, 149, 157, 162, 164, 167, 168, 170, 181, 183, 197, 198, 200, 201, 202, 208, 209, 211, 213, 214
+, , , , , , , , ,	202 null/placeholder	Check if missing values are expected (nullable column); enforce NOT NULL constraint if critical, or backfill from defaults.
+location	nulls	LOW	COMPLEX	101	
+2, 6, 29, 35, 37, 54, 71, 76, 85, 92, 107, 115, 129, 149, 161, 172, 186, 188, 197, 212, 221, 245, 247, 251, 266, 283, 294, 307, 327, 348, 371, 376, 385, 387, 393, 401, 420, 428, 434, 446, 456, 466, 473, 487, 490, 495, 496, 521, 523, 549
+, , , , , , , , ,	101 null/placeholder	Check if missing values are expected (nullable column); enforce NOT NULL constraint if critical, or backfill from defaults.
+factory_id	whitespace	LOW	FIXABLE	201	
+7, 17, 26, 28, 31, 46, 48, 51, 56, 71, 74, 75, 76, 77, 81, 92, 93, 99, 102, 106, 112, 130, 141, 144, 152, 154, 160, 165, 167, 188, 189, 193, 196, 204, 206, 216, 222, 225, 234, 238, 242, 243, 246, 258, 263, 269, 277, 286, 287, 288
+, , , ,	201 leading/trailing spaces	Apply trim/strip operations in ETL to remove leading and trailing space; enforce validation on input.
+machine_name	whitespace	LOW	FIXABLE	204	
+5, 13, 18, 22, 24, 27, 32, 34, 38, 41, 45, 47, 54, 55, 57, 58, 62, 73, 77, 80, 81, 83, 91, 93, 99, 106, 107, 119, 120, 124, 128, 130, 134, 135, 148, 161, 162, 182, 186, 197, 198, 206, 215, 219, 220, 224, 231, 232, 234, 240
+widget , widget , widget , widget , widget	204 leading/trailing spaces	Apply trim/strip operations in ETL to remove leading and trailing space; enforce validation on input.
+production_qty	whitespace	LOW	FIXABLE	205	
+2, 8, 10, 19, 53, 56, 58, 62, 65, 66, 68, 75, 80, 87, 95, 98, 99, 100, 101, 103, 105, 110, 117, 121, 124, 127, 131, 132, 133, 139, 144, 149, 158, 161, 181, 182, 183, 185, 193, 197, 210, 216, 217, 219, 220, 221, 223, 228, 232, 248
+, , , ,	205 leading/trailing spaces	Apply trim/strip operations in ETL to remove leading and trailing space; enforce validation on input.
+inspection_date	whitespace	LOW	FIXABLE	206	
+6, 18, 23, 24, 36, 41, 48, 50, 58, 62, 63, 64, 68, 74, 79, 81, 86, 87, 89, 100, 105, 113, 114, 130, 138, 140, 142, 143, 144, 151, 153, 154, 155, 161, 165, 179, 182, 185, 190, 204, 205, 219, 221, 233, 237, 238, 242, 244, 258, 259
+, , , ,	206 leading/trailing spaces	Apply trim/strip operations in ETL to remove leading and trailing space; enforce validation on input.
+location	whitespace	LOW	FIXABLE	114	
+5, 8, 9, 11, 33, 38, 45, 59, 60, 64, 69, 70, 80, 82, 88, 90, 102, 104, 128, 143, 157, 163, 168, 175, 179, 180, 191, 204, 219, 232, 236, 243, 246, 262, 269, 272, 273, 284, 306, 309, 315, 316, 337, 341, 347, 349, 367, 368, 379, 388
+, , , ,	114 leading/trailing spaces	Apply trim/strip operations in ETL to remove leading and trailing space; enforce validation on input.
+factory_id	nulls	LOW	COMPLEX	201	
+7, 17, 26, 28, 31, 46, 48, 51, 56, 71, 74, 75, 76, 77, 81, 92, 93, 99, 102, 106, 112, 130, 141, 144, 152, 154, 160, 165, 167, 188, 189, 193, 196, 204, 206, 216, 222, 225, 234, 238, 242, 243, 246, 258, 263, 269, 277, 286, 287, 288
+, , , ,	201 null/placeholder	Check if missing values are expected (nullable column); enforce NOT NULL constraint if critical, or backfill from defaults.
+machine_name	nulls	LOW	COMPLEX	187	
+21, 33, 34, 37, 45, 53, 55, 62, 66, 70, 72, 73, 77, 80, 81, 84, 88, 90, 106, 108, 114, 120, 134, 142, 148, 153, 155, 161, 162, 164, 165, 169, 174, 178, 180, 188, 192, 214, 232, 233, 234, 240, 241, 243, 248, 255, 256, 264, 265, 286
+N/A, N/A, , N/A,	187 null/placeholder	Check if missing values are expected (nullable column); enforce NOT NULL constraint if critical, or backfill from defaults.
+production_qty	nulls	LOW	COMPLEX	205	
+2, 8, 10, 19, 53, 56, 58, 62, 65, 66, 68, 75, 80, 87, 95, 98, 99, 100, 101, 103, 105, 110, 117, 121, 124, 127, 131, 132, 133, 139, 144, 149, 158, 161, 181, 182, 183, 185, 193, 197, 210, 216, 217, 219, 220, 221, 223, 228, 232, 248
+, , , ,	205 null/placeholder	Check if missing values are expected (nullable column); enforce NOT NULL constraint if critical, or backfill from defaults.
+inspection_date	nulls	LOW	COMPLEX	400	
+3, 6, 10, 11, 18, 19, 22, 23, 24, 33, 34, 36, 38, 39, 41, 48, 49, 50, 58, 59, 60, 62, 63, 64, 68, 73, 74, 78, 79, 80, 81, 83, 84, 86, 87, 89, 92, 94, 95, 96, 97, 100, 105, 108, 112, 113, 114, 118, 119, 125
+not available, , not available, not available,	400 null/placeholder	Check if missing values are expected (nullable column); enforce NOT NULL constraint if critical, or backfill from defaults.
+location	nulls	LOW	COMPLEX	313	
+1, 5, 7, 8, 9, 10, 11, 15, 17, 30, 32, 33, 38, 41, 43, 45, 47, 48, 51, 56, 58, 59, 60, 64, 69, 70, 78, 80, 82, 83, 84, 88, 90, 94, 96, 97, 99, 102, 103, 104, 116, 117, 122, 128, 134, 135, 137, 141, 143, 147
+unknown, , unknown, ,	313 null/placeholder	Check if missing values are expected (nullable column); enforce NOT NULL constraint if critical, or backfill from defaults.
+machine_name	all_caps_values	LOW	FIXABLE	194	
+3, 16, 21, 26, 33, 37, 53, 66, 70, 72, 78, 84, 87, 88, 90, 94, 98, 104, 108, 111, 114, 117, 123, 137, 142, 150, 153, 155, 164, 165, 169, 171, 173, 174, 178, 180, 181, 185, 188, 192, 193, 201, 202, 211, 212, 214, 218, 229, 233, 249
+WID-01, WID-01, N/A, WID-01, N/A	194 ALL-CAPS value(s) mixed with 714 mixed/lower-case	Inconsistent all-caps entries may indicate data entry from legacy systems; normalize case in ETL.
+machine_name	duplicate_insensitive_values	LOW	FIXABLE	2	(none)	['tool', 'Tool'], ['Widget', 'widget']	2 value(s) that differ only by case/whitespace — false uniqueness	Values that differ only by case/whitespace produce false uniqueness; deduplicate after normalization.
+location	duplicate_insensitive_values	LOW	FIXABLE	1	(none)	['mumbAI', 'Mumbai']	1 value(s) that differ only by case/whitespace — false uniqueness	Values that differ only by case/whitespace produce false uniqueness; deduplicate after normalization.
+
+File system
+abfss://04a585ce-f0ec-4a3a-9db2-e237711fd9e7@onelake.dfs.fabric.microsoft.com/abd8c72d-b5aa-4b58-83bd-fb97587de47e/Fi…
+
+.csv
+1 file(s)
+
+marketing.csv
+Profile & data quality
+1,000 rows
+5 cols
+DQ 65.6/100
+Filesystem path
+abfss://04a585ce-f0ec-4a3a-9db2-e237711fd9e7@onelake.dfs.fabric.microsoft.com/abd8c72d-b5aa-4b58-83bd-fb97587de47e/Files/raw/marketing_csv.csv
+Copy
+These counts are computed from overlapping HIGH/MEDIUM rows in this scan (see DQ verdict for context).
+
+Rows with no HIGH-severity finding
+950
+(of 1,000 sampled rows) ≈ 95.0% unaffected by HIGH severity
+Rows with no HIGH nor MEDIUM finding
+822
+(of 1,000 sampled rows) ≈ 82.2% unaffected after HIGH+MEDIUM remediation
+Profile
+Column	Type	Null %	Unique	Semantic	PK candidate
+campaign_id	object (string)	39.0%	610	categorical	false
+customer_name	object (string)	21.5%	8	categorical	false
+channel	object (string)	23.7%	6	categorical	false
+budget	object (string)	38.2%	415	categorical	false
+start_date	object (string)	40.5%	202	categorical	false
+Data quality
+marketing.csv — 17 issues (1 HIGH · 4 MEDIUM · 12 LOW)
+High severity
+Column	Issue	Sev	Fixability	Count	Rows	Samples	Problem	Recommendation
+[Row-level]	duplicate_primary_key	HIGH	NOT_FIXABLE	71	
+4, 7, 26, 54, 59, 63, 98, 117, 119, 130, 154, 177, 178, 185, 201, 224, 287, 296, 317, 342, 345, 359, 374, 380, 405, 406, 414, 426, 447, 473, 479, 482, 487, 489, 492, 511, 526, 530, 533, 571, 596, 602, 603, 606, 617, 625, 639, 652, 659, 676
+{'campaign_id': None, 'customer_name': 'mike', 'budget': None, 'start_date': '99/99/9999', 'channel': None}, {'campaign_id': None, 'customer_name': 'Sara', 'budget': None, 'start_date': None, 'channel': 'TV'}, {'campaign_id': None, 'customer_name': None, 'budget': 'unknown', 'start_date': None, 'channel': None}, {'campaign_id': None, 'customer_name': None, 'budget': None, 'start_date': '99/99/9999', 'channel': '123'}, {'campaign_id': None, 'customer_name': 'John', 'budget': None, 'start_date': '99/99/9999', 'channel': 'Radio'}, {'campaign_id': None, 'customer_name': 'R@hul', 'budget': None, 'start_date': '99/99/9999', 'channel': 'Radio'}, {'campaign_id': None, 'customer_name': ' jane ', 'budget': None, 'start_date': 'TBD', 'channel': 'Email'}, {'campaign_id': None, 'customer_name': 'R@hul', 'budget': None, 'start_date': '99/99/9999', 'channel': 'Radio'}, {'campaign_id': None, 'customer_name': None, 'budget': 'unknown', 'start_date': None, 'channel': None}, {'campaign_id': None, 'customer_name': 'John', 'budget': 'unknown', 'start_date': None, 'channel': 'TV'}	71 duplicate in candidate PK	Identify source of duplicate key generation; enforce UNIQUE constraint in database; apply deduplication filter in ETL.
+Medium severity
+Column	Issue	Sev	Fixability	Count	Rows	Samples	Problem	Recommendation
+customer_name	punctuation_only_value	MEDIUM	COMPLEX	110	
+1, 11, 12, 30, 33, 36, 42, 53, 62, 64, 79, 113, 118, 126, 128, 137, 138, 140, 144, 156, 158, 169, 181, 186, 212, 220, 227, 234, 244, 263, 269, 272, 281, 282, 290, 294, 299, 307, 308, 318, 341, 351, 356, 357, 361, 365, 377, 381, 397, 399
+???, ???, ???, ???, ???	110 punctuation-only value(s)	Replace symbol-only strings with NULL; investigate upstream export bugs.
+[Row-level]	near_duplicate_rows	MEDIUM	COMPLEX	662	
+2, 2, 2, 2, 2, 2, 2, 2, 4, 4, 4, 5, 5, 6, 6, 6, 6, 6, 7, 7, 7, 7, 7, 7, 9, 9, 9, 9, 10, 10, 10, 10, 11, 11, 11, 11, 12, 12, 12, 16, 16, 16, 16, 16, 16, 16, 16, 18, 18, 18
+{'row_index_a': 2, 'row_index_b': 82, 'similarity': 0.9361702127659575}, {'row_index_a': 2, 'row_index_b': 134, 'similarity': 1.0}, {'row_index_a': 2, 'row_index_b': 176, 'similarity': 0.9361702127659575}, {'row_index_a': 2, 'row_index_b': 544, 'similarity': 0.9361702127659575}, {'row_index_a': 2, 'row_index_b': 715, 'similarity': 0.9361702127659575}, {'row_index_a': 2, 'row_index_b': 795, 'similarity': 1.0}, {'row_index_a': 2, 'row_index_b': 812, 'similarity': 0.9361702127659575}, {'row_index_a': 2, 'row_index_b': 836, 'similarity': 1.0}, {'row_index_a': 4, 'row_index_b': 154, 'similarity': 1.0}, {'row_index_a': 4, 'row_index_b': 226, 'similarity': 1.0}	Found 662 pair(s) of near-duplicate rows withsimilarity >= 0.92	Rows that are identical except for one or two fields may be erroneous duplicates; deduplicate or merge.
+budget	string_with_only_digits_in_text_column	MEDIUM	COMPLEX	219	
+1, 3, 8, 13, 14, 21, 24, 38, 40, 45, 46, 47, 52, 53, 62, 65, 67, 68, 78, 87, 92, 94, 97, 101, 107, 114, 126, 135, 138, 139, 141, 143, 146, 152, 162, 164, 167, 169, 179, 180, 182, 189, 210, 211, 212, 213, 214, 218, 227, 233
+42949, 60852, 3239, 98190, 41035	35.4% of values are digits-only in a text column — possible schema mismatch	Text columns containing only digits may indicate a schema mismatch or misrouted data.
+channel	string_with_only_digits_in_text_column	MEDIUM	COMPLEX	128	
+1, 3, 13, 14, 15, 18, 19, 28, 29, 34, 54, 61, 70, 75, 77, 78, 79, 81, 87, 99, 101, 114, 123, 127, 131, 133, 136, 141, 144, 170, 185, 189, 202, 214, 223, 255, 264, 265, 267, 268, 281, 287, 299, 301, 304, 306, 308, 316, 317, 320
+123, 123, 123, 123, 123	16.8% of values are digits-only in a text column — possible schema mismatch	Text columns containing only digits may indicate a schema mismatch or misrouted data.
+Low severity
+Column	Issue	Sev	Fixability	Count	Rows	Samples	Problem	Recommendation
+campaign_id	nulls	LOW	COMPLEX	390	
+0, 1, 3, 4, 5, 6, 7, 8, 13, 14, 15, 17, 18, 21, 24, 25, 26, 29, 33, 36, 41, 42, 43, 44, 45, 46, 50, 52, 54, 58, 59, 63, 68, 70, 72, 74, 76, 77, 80, 83, 85, 94, 95, 98, 106, 108, 111, 114, 117, 118
+, , , , , , , , ,	390 null/placeholder	Check if missing values are expected (nullable column); enforce NOT NULL constraint if critical, or backfill from defaults.
+customer_name	nulls	LOW	COMPLEX	215	
+0, 3, 8, 14, 16, 23, 25, 26, 31, 39, 43, 47, 48, 49, 50, 54, 55, 56, 58, 60, 67, 69, 73, 76, 78, 81, 82, 83, 84, 86, 97, 101, 108, 109, 119, 123, 125, 129, 131, 141, 143, 145, 157, 161, 163, 164, 170, 174, 175, 176
+, , , , , , , , ,	215 null/placeholder	Check if missing values are expected (nullable column); enforce NOT NULL constraint if critical, or backfill from defaults.
+budget	nulls	LOW	COMPLEX	382	
+0, 2, 4, 5, 7, 9, 10, 12, 15, 16, 18, 19, 23, 25, 27, 28, 30, 35, 37, 39, 43, 44, 49, 54, 58, 59, 63, 64, 77, 79, 82, 86, 89, 91, 95, 98, 99, 100, 108, 109, 111, 112, 116, 117, 122, 127, 129, 131, 134, 136
+, , , , , , , , ,	382 null/placeholder	Check if missing values are expected (nullable column); enforce NOT NULL constraint if critical, or backfill from defaults.
+start_date	nulls	LOW	COMPLEX	405	
+2, 3, 7, 11, 12, 13, 17, 18, 19, 21, 23, 24, 26, 27, 29, 30, 32, 38, 39, 44, 55, 57, 58, 60, 61, 64, 65, 66, 67, 70, 73, 74, 75, 77, 82, 85, 87, 90, 91, 93, 96, 99, 101, 103, 104, 106, 108, 110, 113, 114
+, , , , , , , , ,	405 null/placeholder	Check if missing values are expected (nullable column); enforce NOT NULL constraint if critical, or backfill from defaults.
+channel	nulls	LOW	COMPLEX	237	
+0, 4, 5, 9, 11, 17, 22, 23, 24, 25, 26, 33, 36, 37, 41, 44, 45, 46, 50, 52, 60, 65, 68, 71, 90, 103, 104, 105, 106, 107, 108, 111, 113, 119, 120, 122, 126, 132, 142, 147, 148, 154, 159, 160, 163, 165, 166, 169, 173, 187
+, , , , , , , , ,	237 null/placeholder	Check if missing values are expected (nullable column); enforce NOT NULL constraint if critical, or backfill from defaults.
+customer_name	whitespace	LOW	FIXABLE	108	
+2, 6, 9, 10, 18, 19, 44, 68, 70, 95, 98, 99, 100, 104, 114, 120, 134, 135, 147, 165, 171, 182, 183, 191, 192, 194, 201, 202, 203, 206, 207, 223, 237, 259, 268, 280, 284, 286, 288, 305, 314, 336, 360, 370, 383, 389, 390, 396, 440, 444
+jane , jane , jane , jane , jane	108 leading/trailing spaces	Apply trim/strip operations in ETL to remove leading and trailing space; enforce validation on input.
+channel	whitespace	LOW	FIXABLE	133	
+8, 20, 35, 38, 39, 42, 51, 58, 64, 69, 83, 88, 95, 115, 125, 129, 138, 156, 168, 178, 195, 199, 200, 212, 213, 225, 232, 234, 235, 246, 248, 257, 261, 263, 270, 273, 275, 288, 296, 298, 302, 303, 311, 314, 319, 328, 338, 344, 346, 355
+email , email , email , email , email	133 leading/trailing spaces	Apply trim/strip operations in ETL to remove leading and trailing space; enforce validation on input.
+customer_name	nulls	LOW	COMPLEX	110	
+1, 11, 12, 30, 33, 36, 42, 53, 62, 64, 79, 113, 118, 126, 128, 137, 138, 140, 144, 156, 158, 169, 181, 186, 212, 220, 227, 234, 244, 263, 269, 272, 281, 282, 290, 294, 299, 307, 308, 318, 341, 351, 356, 357, 361, 365, 377, 381, 397, 399
+???, ???, ???, ???, ???	110 null/placeholder	Check if missing values are expected (nullable column); enforce NOT NULL constraint if critical, or backfill from defaults.
+budget	nulls	LOW	COMPLEX	204	
+6, 11, 17, 20, 26, 41, 55, 56, 60, 72, 73, 75, 76, 81, 83, 93, 106, 110, 113, 115, 118, 119, 120, 121, 123, 125, 128, 130, 133, 142, 151, 157, 170, 171, 173, 177, 185, 191, 194, 201, 216, 241, 243, 244, 247, 256, 260, 261, 275, 280
+unknown, unknown, unknown, unknown, unknown	204 null/placeholder	Check if missing values are expected (nullable column); enforce NOT NULL constraint if critical, or backfill from defaults.
+start_date	nulls	LOW	COMPLEX	188	
+5, 8, 9, 16, 20, 37, 40, 42, 45, 46, 47, 48, 69, 72, 88, 97, 98, 100, 109, 128, 142, 144, 145, 155, 158, 162, 175, 179, 180, 185, 191, 196, 200, 201, 202, 208, 219, 224, 234, 236, 238, 246, 247, 254, 257, 259, 260, 265, 270, 280
+TBD, TBD, TBD, TBD, TBD	188 null/placeholder	Check if missing values are expected (nullable column); enforce NOT NULL constraint if critical, or backfill from defaults.
+customer_name	all_caps_values	LOW	FIXABLE	94	
+20, 22, 28, 35, 51, 66, 111, 116, 121, 122, 132, 149, 173, 184, 185, 196, 204, 210, 228, 231, 236, 247, 277, 278, 287, 295, 317, 320, 324, 339, 366, 368, 371, 375, 400, 412, 415, 417, 433, 434, 449, 454, 456, 464, 492, 507, 547, 552, 569, 575
+ALICE, ALICE, ALICE, ALICE, ALICE	94 ALL-CAPS value(s) mixed with 691 mixed/lower-case	Inconsistent all-caps entries may indicate data entry from legacy systems; normalize case in ETL.
+channel	duplicate_insensitive_values	LOW	FIXABLE	1	(none)	['Email', 'email']	1 value(s) that differ only by case/whitespace — false uniqueness	Values that differ only by case/whitespace produce false uniqueness; deduplicate after normalization.
+
+File system
+abfss://04a585ce-f0ec-4a3a-9db2-e237711fd9e7@onelake.dfs.fabric.microsoft.com/abd8c72d-b5aa-4b58-83bd-fb97587de47e/Fi…
+
+.xml
+1 file(s)
+
+sales.xml
+Profile & data quality
+1,000 rows
+5 cols
+DQ 100.0/100
+Filesystem path
+abfss://04a585ce-f0ec-4a3a-9db2-e237711fd9e7@onelake.dfs.fabric.microsoft.com/abd8c72d-b5aa-4b58-83bd-fb97587de47e/Files/raw/sales_xml.xml
+Copy
+These counts are computed from overlapping HIGH/MEDIUM rows in this scan (see DQ verdict for context).
+
+Rows with no HIGH-severity finding
+1000
+(of 1,000 sampled rows) ≈ 100.0% unaffected by HIGH severity
+Rows with no HIGH nor MEDIUM finding
+1000
+(of 1,000 sampled rows) ≈ 100.0% unaffected after HIGH+MEDIUM remediation
+Profile
+Column	Type	Null %	Unique	Semantic	PK candidate
+sale_id	object (string)	41.0%	590	categorical	false
+region	object (string)	20.3%	8	categorical	false
+sale_date	object (string)	35.4%	220	categorical	false
+customer	object (string)	18.4%	8	categorical	false
+amount	object (string)	41.8%	385	categorical	false
+Data quality
+sales.xml — 1 issues (0 HIGH · 1 MEDIUM · 0 LOW)
+High severity
+Column	Issue	Sev	Fixability	Count	Rows	Samples	Problem	Recommendation
+(no issues)
+Medium severity
+Column	Issue	Sev	Fixability	Count	Rows	Samples	Problem	Recommendation
+amount	cross_field_non_negative	MEDIUM	—	3	(none)	(none)	Negative values in amount: 3 row(s)	Clip, nullify, or reject negatives per business policy.
+Low severity
+Column	Issue	Sev	Fixability	Count	Rows	Samples	Problem	Recommendation
+(no issues)
+
 Relationships
-Calculated measures
-Examples:
-1.Revenue
-2.Profit Margin
-3.Inventory Turnover
-4.Customer Acquisition Cost
- 
-3. Apply Business Semantics
-Fabric IQ can leverage semantic models to understand:
-1.Customer
-2.Sales
-3.Region
-4.Product
-5.Supplier
-6.Revenue
-instead of raw database columns.
- 
-4. Enable AI Understanding
-Users ask:
-Why did revenue decrease in South India?
- 
-rather than writing SQL.
-Fabric IQ interprets the business context and navigates the semantic layer. 
-Expected Outcome
-Business users receive:
-Natural-language insights
-KPI explanations
-Trend analysis
-Root-cause investigations
-Cross-domain intelligence
-without needing technical expertise.
- 
-could u explain me 
-
-Copilot said:
-Absolutely. Think of this task as moving from "cleaning data" (your ETL work) to "making data understandable to business users through AI."
-
-What you have done so far
-You just completed:
-
-
-
-
-Plain Text
-Raw CSV / SQL / SAP Data
-          ↓
-ETL Cleaning & Transformation
-          ↓
-Lakehouse Tables
-For example:
-
-
-
-
-Plain Text
-data_quality_issues_csv.csv
-        ↓
-data_quality_issues_csv_clean
-This solves the data engineering problem.
-
-What this new task is about
-The new objective is:
-
-Bring data from multiple systems into OneLake and allow users to ask business questions in natural language using Fabric IQ.
-
-Instead of:
-
-
-
-
-SQL
-SELECT SUM(sales_amount)
-FROM sales_fact
-WHERE region='South India'
-Business users should simply ask:
-
-"Why did revenue decrease in South India?"
-
-and Fabric IQ should understand:
-
-Revenue
-Region
-Time period
-Sales data
-Relationships between datasets
-without SQL.
-
-Architecture Explained
-Step 1: Source Systems
-Data comes from different places.
-
-
-
-
-Plain Text
-SAP
-CRM
-ERP
-SQL Database
-CSV Files
-REST APIs
-Excel
-Example:
-
-
-
-
-Plain Text
-SAP      -> Inventory
-CRM      -> Customers
-ERP      -> Orders
-SQL DB   -> Products
-CSV      -> Supplier Details
-Step 2: OneLake
-All data lands in Microsoft Fabric OneLake.
-
-
-
-
-Plain Text
-                 OneLake
-     ┌─────────────────────────┐
-     │ Customers               │
-     │ Orders                  │
-     │ Products                │
-     │ Inventory               │
-     │ Suppliers               │
-     └─────────────────────────┘
-Think of OneLake as:
-
-"One huge central storage location for the enterprise."
-
-Step 3: Curated Lakehouse / Warehouse
-Raw data is messy.
-
-So we create cleaned business tables:
-
-
-
-
-Plain Text
-Customer
-Product
-Sales
-Supplier
-Inventory
-Example:
-
-
-
-
-SQL
-sales_fact
-customer_dim
-product_dim
-region_dim
-supplier_dim
-This is where your ETL pipelines will load data.
-
-Step 4: Semantic Model
-This is the most important part.
-
-Without Semantic Model
-Fabric sees:
-
-
-
-
-Plain Text
-cust_id
-cust_nm
-prd_cd
-amt
-txn_dt
-Business users don't understand these.
-
-With Semantic Model
-You tell Fabric:
-
-
-
-
-Plain Text
-cust_nm = Customer Name
-amt = Revenue
-txn_dt = Sales Date
-prd_cd = Product
-and relationships:
-
-
-
-
-Plain Text
-Customer -> Sales
-Product -> Sales
-Region -> Sales
-Now Fabric understands business concepts.
-
-Example Semantic Model
-Tables
-
-
-
-Plain Text
-Customer
-Sales
-Product
-Region
-Relationships
-
-
-
-Plain Text
-CustomerID
-Customer
-      │
-      ▼
-Sales
-      ▲
-      │
-ProductID
-Product
-Business Measures
-Create measures like:
-
-
-
-
-DAX
-Revenue =
-SUM(Sales[Revenue])
-
-
-
-DAX
-Profit =
-SUM(Sales[Profit])
-
-
-
-DAX
-Profit Margin =
-DIVIDE(
-    [Profit],
-    [Revenue]
-)
-
-
-
-DAX
-Customer Count =
-DISTINCTCOUNT(Customer[CustomerID])
-These become business knowledge.
-
-Step 5: Fabric IQ
-Now Fabric IQ sits on top of the semantic model.
-
-
-
-
-Plain Text
-User
- ↓
-Fabric IQ
- ↓
-Semantic Model
- ↓
-Lakehouse Data
-Instead of SQL:
-
-
-
-
-SQL
-SELECT ...
-users ask:
-
-
-
-
-Plain Text
-Show top products by revenue.
-
-
-
-Plain Text
-Which supplier caused delayed deliveries?
-Fabric IQ translates these into:
-
-semantic understanding
-DAX queries
-graph relationships
-business context
-What Fabric IQ Understands
-Suppose we have:
-
-
-
-
-Plain Text
-Customer
-Region
-Product
-Supplier
-Revenue
-Cost
-Fabric IQ creates a knowledge graph like:
-
-
-
-
-Plain Text
-Customer
-   │
-   ▼
-Sales
-   ▲
-   │
-Product
-   │
-   ▼
-Supplier
-
-Sales
-   │
-   ▼
-Region
-
-Show more lines
-Now it can reason across domains.
-
-For example:
-
-Question:
-
-
-
-
-Plain Text
-Why did revenue decrease in South India?
-
-Fabric IQ may discover:
-
-
-
-
-Plain Text
-Revenue Down
-      │
-      ├── Product A sales down
-      │
-      ├── Inventory shortages
-      │
-      ├── Supplier delays
-      │
-      └── Customer churn
-This is AI-powered business analysis.
-
-Expected Deliverables for Your Project
-Typically you will need:
-
-1. Ingest Data
-Use:
-
-Data Factory Pipelines
-Dataflows Gen2
-Shortcuts
-Notebooks
-Load everything into OneLake.
-
-2. Create Curated Tables
-Example:
-
-
-
-
-Plain Text
-sales_fact
-customer_dim
-product_dim
-supplier_dim
-inventory_fact
-3. Create Semantic Model
-Define:
-
-Measures
-
-
-
-Plain Text
-Revenue
-Profit
-Margin
-Inventory Turnover
-CAC
-Relationships
-
-
-
-Plain Text
-Customer -> Sales
-Product -> Sales
-Supplier -> Inventory
-Region -> Sales
-KPIs
-
-
-
-Plain Text
-Revenue Growth %
-Profit Margin %
-Customer Retention %
-Inventory Turnover
-4. Enable Fabric IQ
-Point Fabric IQ to the semantic model.
-
-Add:
-
-
-
-
-Plain Text
-Business descriptions
-Table descriptions
-Column descriptions
-Measure definitions
-Synonyms
-Example:
-
-
-
-
-Plain Text
-Revenue
-Synonyms:
-Sales
-Turnover
-Income
-This improves AI understanding.
-
-Example End-to-End Scenario
-Data
-
-
-
-Plain Text
-SAP -> Inventory
-CRM -> Customer
-ERP -> Orders
-loaded into OneLake.
-
-Semantic Model
-
-
-
-Plain Text
-Revenue
-Profit
-Product
-Customer
-Region
-defined.
-
-User Query
-
-
-
-Plain Text
-Why did revenue decrease in South India?
-Fabric IQ:
-
-Finds revenue measure.
-Filters South India.
-Compares previous periods.
-Identifies products contributing to decline.
-Checks inventory issues.
-Generates explanation.
-Response:
-
-
-
-
-Plain Text
-Revenue declined by 12%.
-
-Primary causes:
-- Product A sales down 18%
-- Supplier delays increased 22%
-- Inventory shortages in Chennai warehouse
-- Customer retention dropped 5%
-without the user writing a single SQL query.
-
-In one sentence
-Your ETL task built the data foundation in OneLake. This new Fabric IQ task builds the business knowledge layer (Semantic Model + AI understanding) so business users can ask questions in plain English and receive insights, explanations, trends, and root-cause analysis instead of querying raw tables.
+No cross-dataset column overlaps detected (same column name, case-insensitive).
+
+
+Global quality
+Orphan key rows (which dataset / column / rows)
+(none)
+
+Relationship model warnings
+(none)
+
+Orphan values (set difference, no row index)
+(none)
+
+Cross-dataset inconsistencies
+Dataset	Column	Problem	Recommendation
+marketing.csv	campaign_id	Mixed numeric/text values (parse=41.6%)	Standardize to one type in staging: coerce numerics after validation, or split into _raw and _numeric columns.
+marketing.csv	budget	Mixed numeric/text values (parse=41.4%)	Standardize to one type in staging: coerce numerics after validation, or split into _raw and _numeric columns.
+factory.json	factory_id	Mixed numeric/text values (parse=39.9%)	Standardize to one type in staging: coerce numerics after validation, or split into _raw and _numeric columns.
+factory.json	production_qty	Mixed numeric/text values (parse=39.1%)	Standardize to one type in staging: coerce numerics after validation, or split into _raw and _numeric columns.
+sales.xml	sale_id	Mixed numeric/text values (parse=39.1%)	Standardize to one type in staging: coerce numerics after validation, or split into _raw and _numeric columns.
+sales.xml	amount	Mixed numeric/text values (parse=38.5%)	Standardize to one type in staging: coerce numerics after validation, or split into _raw and _numeric columns.
+Cross-dataset consistency insights
+(none)
